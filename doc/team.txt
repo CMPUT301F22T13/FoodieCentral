@@ -1,7 +1,7 @@
 CCID		    GitHubUserName
 Sagebert 	  ScottGebert
 schopra1      shivchopra
-irehmani      Ishaan Rehmani
+irehmani      Irehmani
 ssraza        samirraza09 
 albuquer      albuquer-ualberta
 lthimer       thimerlogan
