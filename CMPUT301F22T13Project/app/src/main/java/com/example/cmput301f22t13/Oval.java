@@ -2,6 +2,6 @@ package com.example.cmput301f22t13;
 
 public class Oval extends Shape{
     
-String color = "Violet"
+String color = "blue"
 
 }
