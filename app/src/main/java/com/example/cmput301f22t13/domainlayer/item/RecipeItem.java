@@ -190,13 +190,4 @@ public class RecipeItem {
     public void deleteIngredient(IngredientItem ingredientItem) {
         ingredients.remove(ingredientItem);
     }
-
-    /**
-     * Edit an ingredient in a recipe
-     * @param index Position of ingredient in arraylist
-     * @param ingredientItem Ingredient to edit
-     */
-    public void editIngredient(int index, IngredientItem ingredientItem) {
-        ingredients.set(index, ingredientItem);
-    }
 }
