@@ -132,6 +132,9 @@ public class IngredientStorageMainFragment extends Fragment {
                 if (!popupWindow.isShowing()) {
                     popupWindow.showAtLocation(fragView, Gravity.BOTTOM, 0, 0);
                 }
+                else {
+                    popupWindow.dismiss(); // close popup if sort button is pressed and the popup is open
+                }
             }
         });
 

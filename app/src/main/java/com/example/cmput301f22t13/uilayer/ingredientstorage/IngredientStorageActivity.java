@@ -47,8 +47,8 @@ public class IngredientStorageActivity extends AppCompatActivity implements AddE
         item2.setName("Pear");
         item2.setDescription("This is a Pear");
         testList = new ArrayList<>();
-        testList.add(item1);
-        testList.add(item2);
+        //testList.add(item1);
+        //testList.add(item2);
 
         setSupportActionBar(binding.toolbar);
 
