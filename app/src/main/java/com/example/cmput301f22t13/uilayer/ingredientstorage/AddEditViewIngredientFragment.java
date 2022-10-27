@@ -1,15 +1,23 @@
 package com.example.cmput301f22t13.uilayer.ingredientstorage;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.EditText;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContract;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
@@ -61,7 +69,7 @@ public class AddEditViewIngredientFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         if (ingredient != null) {
-            binding.doneIngredientButton.setVisibility(View.GONE);
+            binding.doneIngredientButton.setVisibility(View.INVISIBLE);
             if (ingredient.getName() != null) {
                 binding.ingredientNameEdittext.setText(ingredient.getName());
             }
@@ -84,13 +92,12 @@ public class AddEditViewIngredientFragment extends Fragment {
 
             // TODO: Add getLocation and getBestBeforeDate
 
-            binding.ingredientNameEdittext.setFocusable(false);
-            binding.ingredientDescriptionEdittext.setFocusable(false);
-            binding.ingredientAmountEdittext.setFocusable(false);
-            binding.ingredientUnitEdittext.setFocusable(false);
-            binding.ingredientCategoryEdittext.setFocusable(false);
-            binding.ingredientLocationEdittext.setFocusable(false);
-            binding.ingredientBbdEdittext.setFocusable(false);
+            binding.ingredientNameEdittext.setInputType(InputType.TYPE_NULL);
+            binding.ingredientDescriptionEdittext.setInputType(InputType.TYPE_NULL);
+            binding.ingredientAmountEdittext.setInputType(InputType.TYPE_NULL);
+            binding.ingredientUnitEdittext.setInputType(InputType.TYPE_NULL);
+            binding.ingredientCategoryEdittext.setInputType(InputType.TYPE_NULL);
+            binding.ingredientLocationEdittext.setInputType(InputType.TYPE_NULL);
         }
         else {
             ingredient = new IngredientItem();
@@ -103,7 +110,15 @@ public class AddEditViewIngredientFragment extends Fragment {
             public void onClick(View view) {
                 ingredient.setName(binding.ingredientNameEdittext.getText().toString());
                 ingredient.setDescription(binding.ingredientDescriptionEdittext.getText().toString());
-                ingredient.setAmount(Integer.valueOf(binding.ingredientAmountEdittext.getText().toString()));
+
+                // in case nothing was entered in the edit text
+                try {
+                    ingredient.setAmount(Integer.valueOf(binding.ingredientAmountEdittext.getText().toString()));
+                }
+                catch(NumberFormatException e) {
+                    ingredient.setAmount(0);
+                }
+
                 ingredient.setUnit(binding.ingredientUnitEdittext.getText().toString());
                 ingredient.setCategory(binding.ingredientCategoryEdittext.getText().toString());
                 listener.onDonePressed(ingredient);
@@ -123,13 +138,14 @@ public class AddEditViewIngredientFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 binding.doneIngredientButton.setVisibility(View.VISIBLE);
-                binding.ingredientNameEdittext.setFocusable(true);
-                binding.ingredientDescriptionEdittext.setFocusable(true);
-                binding.ingredientAmountEdittext.setFocusable(true);
-                binding.ingredientUnitEdittext.setFocusable(true);
-                binding.ingredientCategoryEdittext.setFocusable(true);
-                binding.ingredientLocationEdittext.setFocusable(true);
-                binding.ingredientBbdEdittext.setFocusable(true);
+                binding.ingredientNameEdittext.setInputType(InputType.TYPE_CLASS_TEXT);
+                binding.ingredientDescriptionEdittext.setInputType(InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+                binding.ingredientAmountEdittext.setInputType(InputType.TYPE_CLASS_NUMBER);
+                binding.ingredientUnitEdittext.setInputType(InputType.TYPE_CLASS_TEXT);
+                binding.ingredientCategoryEdittext.setInputType(InputType.TYPE_CLASS_TEXT);
+                binding.ingredientLocationEdittext.setInputType(InputType.TYPE_CLASS_TEXT);
+                binding.deleteIngredientButton.setVisibility(View.GONE);
+                binding.editIngredientButton.setVisibility(View.GONE);
             }
         });
 
@@ -149,6 +165,27 @@ public class AddEditViewIngredientFragment extends Fragment {
                     }
                 }, initialDate.get(Calendar.YEAR), initialDate.get(Calendar.MONTH), initialDate.get(Calendar.DAY_OF_MONTH));
                 datePickerDialog.show();
+            }
+        });
+
+        ActivityResultLauncher<Intent> selectImageLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+            @Override
+            public void onActivityResult(ActivityResult result) {
+                if (result.getResultCode() == Activity.RESULT_OK) {
+                    binding.ingredientImageImageview.setImageURI(result.getData().getData());
+                }
+                else {
+                    Log.d("AddEditViewIngred", String.valueOf(result.getResultCode()));
+                }
+            }
+        });
+        binding.ingredientImageImageview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent();
+                intent.setType("image/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                selectImageLauncher.launch(Intent.createChooser(intent, "Select Image"));
             }
         });
     }

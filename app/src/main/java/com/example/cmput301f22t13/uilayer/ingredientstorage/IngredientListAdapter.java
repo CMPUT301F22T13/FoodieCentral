@@ -40,8 +40,6 @@ public class IngredientListAdapter extends ArrayAdapter<IngredientItem> {
 
         IngredientItem item = ingredients.get(position);
 
-        Log.d("IngredientAdapter", item.getName());
-
         TextView ingredientName = view.findViewById(R.id.ingredient_name_textview);
         TextView ingredientDescription = view.findViewById(R.id.ingredient_description_textview);
         ImageView image = view.findViewById(R.id.ingredient_picture_imageview);
@@ -49,11 +47,8 @@ public class IngredientListAdapter extends ArrayAdapter<IngredientItem> {
         ingredientName.setText(item.getName());
         ingredientDescription.setText(item.getDescription());
 
-        Log.d("IngredientAdapter", "Name Text: " + ingredientName.getText());
-        Log.d("IngredientAdapter", "Desc Text: " + ingredientDescription.getText());
-
         // TODO: figure out how the image is stored and set the image accordingly
-        //image.setImageBitmap();
+        //image.setUri(item.getImageUri());
 
         return view;
     }

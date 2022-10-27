@@ -81,7 +81,9 @@ public class IngredientStorageActivity extends AppCompatActivity implements AddE
     @Override
     public void onDonePressed(IngredientItem ingredientItem) {
         Log.d("IngredientStorage", "onDonePressed");
-        testList.add(ingredientItem);
+        if (!testList.contains(ingredientItem)) {
+            testList.add(ingredientItem);
+        }
     }
 
     @Override

@@ -12,6 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:text="Brief Description"
+        android:textSize="16sp"
         app:layout_constraintBaseline_toBaselineOf="@+id/ingredient_description_edittext"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -21,6 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:text="Ingredient Name"
+        android:textSize="16sp"
         app:layout_constraintBaseline_toBaselineOf="@+id/ingredient_name_edittext"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -60,6 +62,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:text="Best Before Data"
+        android:textSize="16sp"
         app:layout_constraintBaseline_toBaselineOf="@+id/ingredient_bbd_edittext"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -69,6 +72,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:text="Location"
+        android:textSize="16sp"
         app:layout_constraintBaseline_toBaselineOf="@+id/ingredient_location_edittext"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -78,6 +82,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:text="Amount"
+        android:textSize="16sp"
         app:layout_constraintBaseline_toBaselineOf="@+id/ingredient_amount_edittext"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -87,6 +92,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:text="Unit"
+        android:textSize="16sp"
         app:layout_constraintBaseline_toBaselineOf="@+id/ingredient_unit_edittext"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -96,6 +102,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:text="Ingredient Category"
+        android:textSize="16sp"
         app:layout_constraintBaseline_toBaselineOf="@+id/ingredient_category_edittext"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -105,8 +112,9 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:text="Ingredient Image"
-        app:layout_constraintBottom_toBottomOf="@+id/ingredient_image_imageview"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/ingredient_image_imageview" />
 
     <EditText
         android:id="@+id/ingredient_name_edittext"
@@ -123,11 +131,12 @@
         android:id="@+id/ingredient_description_edittext"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:ems="10"
         android:gravity="start|top"
         android:inputType="textMultiLine"
+        android:singleLine="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ingredient_name_edittext" />
 
@@ -135,7 +144,7 @@
         android:id="@+id/ingredient_bbd_edittext"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:ems="10"
         android:inputType="textPersonName"
@@ -146,7 +155,7 @@
         android:id="@+id/ingredient_location_edittext"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:ems="10"
         android:inputType="textPersonName"
@@ -157,7 +166,7 @@
         android:id="@+id/ingredient_amount_edittext"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:ems="10"
         android:inputType="number"
@@ -168,7 +177,7 @@
         android:id="@+id/ingredient_unit_edittext"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:ems="10"
         android:inputType="textPersonName"
@@ -179,7 +188,7 @@
         android:id="@+id/ingredient_category_edittext"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:ems="10"
         android:inputType="textPersonName"
@@ -189,9 +198,12 @@
     <ImageView
         android:id="@+id/ingredient_image_imageview"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
         android:src="@android:drawable/ic_menu_gallery"
-        app:layout_constraintStart_toStartOf="@+id/ingredient_category_edittext"
+        app:layout_constraintBottom_toTopOf="@+id/done_ingredient_button"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ingredient_category_edittext" />
 </androidx.constraintlayout.widget.ConstraintLayout>

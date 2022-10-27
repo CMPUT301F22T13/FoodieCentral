@@ -86,14 +86,13 @@ public class IngredientStorageMainFragment extends Fragment {
 
         Context context = getContext();
         View fragView = view;
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
+        View popupView = inflater.inflate(R.layout.content_ingredient_sort_popup, null);
+        PopupWindow popupWindow = new PopupWindow(popupView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
         binding.sortIngredientButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                LayoutInflater inflater = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
-                View popupView = inflater.inflate(R.layout.content_ingredient_sort_popup, null);
-                PopupWindow popupWindow = new PopupWindow(popupView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-
                 TextView description = popupView.findViewById(R.id.ingredient_sort_description);
                 description.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -130,7 +129,9 @@ public class IngredientStorageMainFragment extends Fragment {
                     }
                 });
 
-                popupWindow.showAtLocation(fragView, Gravity.BOTTOM, 0, 0);
+                if (!popupWindow.isShowing()) {
+                    popupWindow.showAtLocation(fragView, Gravity.BOTTOM, 0, 0);
+                }
             }
         });
 
