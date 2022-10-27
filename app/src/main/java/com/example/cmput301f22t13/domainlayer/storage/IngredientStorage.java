@@ -29,7 +29,7 @@ public class IngredientStorage {
      * */
     public void addIngredientToStorage(IngredientItem i) {
         try {
-            // TODO: Implement IngredientDL.removeIngredient(item)
+            // TODO: Implement IngredientDL.addIngredientToStorage(item)
             // IngredientDL.addIngredientToStorage(item);
 
             ingredients.add(i);
@@ -46,7 +46,7 @@ public class IngredientStorage {
             if (!ingredients.contains(item))
                 throw new NullPointerException(); // Think this is the right exception
 
-            // TODO: Implement IngredientDL.removeIngredient(item)
+            // TODO: Implement IngredientDL.removeIngredientFromStorage(item)
             // IngredientDL.removeIngredientFromStorage(item);
             ingredients.remove(item);
         } catch (Exception e) {
@@ -62,7 +62,7 @@ public class IngredientStorage {
             if (index > ingredients.size())
                 throw new ArrayIndexOutOfBoundsException();
 
-            // TODO: Implement IngredientDL.removeIngredient(item)
+            // TODO: Implement IngredientDL.removeIngredientFromStorage(item)
             //IngredientDL.removeIngredientFromStorage(ingredients.get(index));
             ingredients.remove(index);
         } catch (Exception e) {
