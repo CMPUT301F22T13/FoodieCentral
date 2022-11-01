@@ -22,6 +22,11 @@
             />
 
         <activity
+            android:name=".uilayer.recipes.RecipeStorageActivity"
+            android:exported="true"
+            android:label="CMPUT301F22T13"/>
+
+        <activity
             android:name=".MainActivity"
             android:exported="true"
             android:label="@string/app_name"

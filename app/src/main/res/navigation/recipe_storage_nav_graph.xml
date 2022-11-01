@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/recipe_storage_nav_graph.xml"
+    app:startDestination="@id/viewRecipeFragment3">
+    <dialog
+        android:id="@+id/viewRecipeFragment3"
+        android:name="com.example.cmput301f22t13.uilayer.recipes.ViewRecipeFragment"
+        android:label="ViewRecipeFragment" >
+        <action
+            android:id="@+id/action_viewRecipeFragment3_to_addEditViewIngredientFragment"
+            app:destination="@id/addEditViewIngredientFragment" />
+    </dialog>
+    <fragment
+        android:id="@+id/addEditViewIngredientFragment"
+        android:name="com.example.cmput301f22t13.uilayer.ingredientstorage.AddEditViewIngredientFragment"
+        android:label="fragment_add_edit_view_ingredient"
+        tools:layout="@layout/fragment_add_edit_view_ingredient" />
+</navigation>
