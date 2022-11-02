@@ -40,22 +40,12 @@ public class IngredientStorageActivity extends AppCompatActivity implements AddE
 
         ingredientStorage = new IngredientStorage();
 
-        IngredientItem item1 = new IngredientItem();
-        item1.setName("Apple");
-        item1.setDescription("This is an apple");
-        IngredientItem item2 = new IngredientItem();
-        item2.setName("Pear");
-        item2.setDescription("This is a Pear");
-        testList = new ArrayList<>();
-        //testList.add(item1);
-        //testList.add(item2);
-
         setSupportActionBar(binding.toolbar);
 
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_ingredient_storage);
 
         Bundle bundle = new Bundle();
-        bundle.putSerializable("arraylist", testList);
+        bundle.putSerializable("arraylist", ingredientStorage.getIngredients());
         navController.setGraph(R.navigation.ingredient_storage_nav_graph, bundle);
         appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
@@ -81,19 +71,18 @@ public class IngredientStorageActivity extends AppCompatActivity implements AddE
     @Override
     public void onDonePressed(IngredientItem ingredientItem) {
         Log.d("IngredientStorage", "onDonePressed");
-        if (!testList.contains(ingredientItem)) {
-            testList.add(ingredientItem);
+        if (!getIngredients().contains(ingredientItem)) {
+            ingredientStorage.addIngredientToStorage(ingredientItem);
         }
     }
 
     @Override
     public void onDeletePressed(IngredientItem ingredientItem) {
         Log.d("IngredientStorage", "onDeletePressed");
-        testList.remove(ingredientItem);
+        ingredientStorage.removeIngredientFromStorage(ingredientItem);
     }
 
     public ArrayList<IngredientItem> getIngredients() {
-        // TODO: Add call to ingredient storage to get ingredients
-        return testList;
+        return ingredientStorage.getIngredients();
     }
 }
