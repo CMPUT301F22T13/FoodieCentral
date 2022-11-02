@@ -1,9 +1,10 @@
 package com.example.cmput301f22t13.domainlayer.item;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 
-public class RecipeItem {
+public class RecipeItem implements Serializable {
 
     private String title;
     private int prepTime;
