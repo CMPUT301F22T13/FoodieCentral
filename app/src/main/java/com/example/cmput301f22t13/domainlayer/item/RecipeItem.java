@@ -1,7 +1,14 @@
 package com.example.cmput301f22t13.domainlayer.item;
 
 import java.io.Serializable;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Date;
+
+import com.example.cmput301f22t13.domainlayer.utils.Utils;
+import com.google.firebase.Timestamp;
 import java.util.GregorianCalendar;
 
 public class RecipeItem implements Serializable {
@@ -13,6 +20,7 @@ public class RecipeItem implements Serializable {
     private String comments;
     private String photo;
     private ArrayList<IngredientItem> ingredients;
+    private String hashId;
 
     /**
      * Constructor to create a recipe
@@ -41,6 +49,19 @@ public class RecipeItem implements Serializable {
         this.comments = comments;
         this.photo = photo;
         this.ingredients = ingredients;
+
+        int timestamp = new Timestamp(new Date()).getNanoseconds();
+        String timeStampString = Integer.toString(timestamp);
+        MessageDigest digest = null;
+        try {
+            digest = MessageDigest.getInstance("SHA-256");
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        byte[] encodedhash = digest.digest(
+                timeStampString.getBytes(StandardCharsets.UTF_8));
+
+        this.hashId = Utils.bytesToHex(encodedhash);
     }
 
     /**
@@ -55,6 +76,23 @@ public class RecipeItem implements Serializable {
         this.photo = "";
         this.ingredients = new ArrayList<IngredientItem>();
     }
+
+    /**
+     * Id for hashing the recipe item
+     * @return Hashed Id
+     */
+    public String getHashId() {
+        return hashId;
+    }
+
+    /**
+     * Setting the hashed Id
+     * @param hashId
+     */
+    public void setHashId(String hashId) {
+        this.hashId = hashId;
+    }
+
 
     /**
      * Get title of recipe
