@@ -152,7 +152,7 @@ public class AddEditViewRecipeFragment extends Fragment {
                 @Override
                 public void onClick(View view) {
                     NavHostFragment.findNavController(AddEditViewRecipeFragment.this)
-                            .navigate(R.id.edit_r_view_i);
+                            .navigate(R.id.action_addEditViewRecipeFragment_to_ingredient_storage_nav_graph);
                 }
             });
 
