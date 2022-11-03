@@ -15,7 +15,7 @@ public class IngredientItem implements Serializable {
     private Integer amount;
     private String unit;
     private String category;
-    private GregorianCalendar bbd;
+    private String bbd;
     private String location;
     private String imagelink;
     private String hashid;
@@ -29,7 +29,7 @@ public class IngredientItem implements Serializable {
         this.amount = 0;
         this.unit = "";
         this.category = "";
-        this.bbd = new GregorianCalendar(0, 0, 0);
+        this.bbd = "";
         this.location = "";
         this.imagelink = "";
         this.hashid = "";
@@ -48,7 +48,7 @@ public class IngredientItem implements Serializable {
      * @param hashid the hash ID for uniquely identifying ingredients
      * @param location the location of the ingredient stored
      */
-    public IngredientItem (String name, String description, Integer amount, String unit, String category, GregorianCalendar bbd, String imagelink, String location, String hashid) {
+    public IngredientItem (String name, String description, Integer amount, String unit, String category, String bbd, String imagelink, String location, String hashid) {
         this.name = name;
         this.description = description;
         this.amount = amount;
@@ -143,14 +143,14 @@ public class IngredientItem implements Serializable {
      * Gets the best before date the ingredient
      * @return bbd
      */
-    public GregorianCalendar getBbd() {
+    public String getBbd() {
         return bbd;
     }
     /**
      * Sets the best before date of the ingredient it belongs to
      * @param bbd new bbd
      */
-    public void setBbd(GregorianCalendar bbd) {
+    public void setBbd(String bbd) {
         this.bbd = bbd;
     }
     /**
