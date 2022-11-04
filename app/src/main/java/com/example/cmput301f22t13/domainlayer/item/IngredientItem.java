@@ -14,6 +14,10 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Comparator;
 
+/** Public class representing an ingredient - options for constructing, getting and setting
+*
+*  */
+
 public class IngredientItem implements Serializable {
     private String name;
     private String description;
@@ -50,7 +54,6 @@ public class IngredientItem implements Serializable {
      * @param category the category that this ingredient belongs to
      * @param bbd the best before date that this ingredient has
      * @param photo the uri string for storing images for the ingredient
-     * @param hashId the hash ID for uniquely identifying ingredients
      * @param location the location of the ingredient stored
      */
     public IngredientItem (String name, String description, Integer amount, String unit, String category, GregorianCalendar bbd, String photo, String location) {

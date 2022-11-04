@@ -59,7 +59,6 @@ public class AddEditViewIngredientFragment extends Fragment {
 
     // the ingredient item to be modified/created
     private IngredientItem ingredient;
-    private IngredientDL ingredientDL = IngredientDL.getInstance();
 
     private DatePickerDialog datePickerDialog; // used to select a date
     private GregorianCalendar selectedDate;

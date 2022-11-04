@@ -24,9 +24,12 @@ import java.util.Map;
 public  class FireBaseDL {
 
     //FireBaseDL has static functionalities so it can be referenced by the Login and Sign up Activites in the UI layer
-    FirebaseAuth auth;
-    FirebaseFirestore fstore;
+    public FirebaseAuth auth;
+    public FirebaseFirestore fstore;
     static private FireBaseDL firebaseDL;
+
+    /** Gets or creates current instance of the firebase DL
+     * */
     public static FireBaseDL getFirebaseDL(){
         if(firebaseDL==null){
             firebaseDL = new FireBaseDL();
