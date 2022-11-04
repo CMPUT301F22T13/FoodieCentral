@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.example.cmput301f22t13.R;
 import com.example.cmput301f22t13.datalayer.FireBaseDL;
+import com.example.cmput301f22t13.uilayer.ingredientstorage.IngredientStorageActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -97,7 +98,8 @@ public class Register extends AppCompatActivity {
                 FireBaseDL.getFirebaseDL().userRegister(email, password, "", new ResultListener() {
                     @Override
                     public void onSuccess() {
-                            progressBar.setVisibility(View.INVISIBLE);
+                        progressBar.setVisibility(View.INVISIBLE);
+                        startActivity(new Intent(getApplicationContext(), IngredientStorageActivity.class));
                     }
                     @Override
                     public void onFailure(Exception e) {

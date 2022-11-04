@@ -39,7 +39,6 @@ import java.util.Map;
 /** Inherits from the FireBaseDL and is responsible for tasks related to adding,deleting,getting and updating Ingredient items
  * */
 
-
 public class IngredientDL extends FireBaseDL {
     static private IngredientDL ingredientDL;
     private static FireBaseDL fb;
