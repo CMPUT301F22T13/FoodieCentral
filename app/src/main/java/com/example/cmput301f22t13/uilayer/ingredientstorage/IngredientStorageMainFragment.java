@@ -33,6 +33,8 @@ import java.util.Comparator;
 /**
  * Main fragment for ingredient storage. Shows a list of all ingredients in the storage and allows
  * the user to add/edit/delete ingredients by calling upon the {@link AddEditViewIngredientFragment}
+ *
+ * @author Logan Thimer
  */
 public class IngredientStorageMainFragment extends Fragment {
 
@@ -42,7 +44,6 @@ public class IngredientStorageMainFragment extends Fragment {
     public static final String ARG_INGREDIENT_LIST = "ARG_INGREDIENT_LIST";
 
     private ArrayAdapter<IngredientItem> ingredientListAdapter;
-    private ListView ingredientListView;
     private ArrayList<IngredientItem> ingredients = ingredientDL.getIngredients();
 
     @Override
@@ -147,6 +148,15 @@ public class IngredientStorageMainFragment extends Fragment {
                         ingredientListAdapter.sort(new Comparator<IngredientItem>() {
                             @Override
                             public int compare(IngredientItem t1, IngredientItem t2) {
+                                if (t1.getBbd() == null && t2.getBbd() == null) {
+                                    return 0;
+                                }
+                                else if (t1.getBbd() == null) {
+                                    return 1;
+                                }
+                                else if (t2.getBbd() == null) {
+                                    return -1;
+                                }
                                 return t1.getBbd().compareTo(t2.getBbd());
                             }
                         });
