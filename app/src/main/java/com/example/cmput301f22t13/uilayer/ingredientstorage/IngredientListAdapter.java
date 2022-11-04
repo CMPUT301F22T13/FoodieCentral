@@ -19,6 +19,9 @@ import com.example.cmput301f22t13.domainlayer.item.IngredientItem;
 import java.util.ArrayList;
 import java.util.Comparator;
 
+/**
+ * List adapter for displaying ingredient items on ingredient storage activity
+ */
 public class IngredientListAdapter extends ArrayAdapter<IngredientItem> {
 
     private ArrayList<IngredientItem> ingredients;

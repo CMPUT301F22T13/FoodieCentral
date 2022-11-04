@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-/** Inherits from the FireBaseDL and is responsible for tasks related to adding,deleting,getting and updating recipe items
+/** Will become Singleton class in the future - is responsible for tasks related to adding,deleting,getting and updating Ingredient items
  * */
 
 public class RecipeDL extends FireBaseDL {

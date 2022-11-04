@@ -29,14 +29,12 @@ import com.google.firebase.auth.FirebaseAuth;
  * */
 
 //TODO couple issues with the login UI - progress bar and toast visibility
-
-
 public class Login extends AppCompatActivity {
-    EditText loginEmail,loginPassword;
-    Button loginBtn;
-    TextView createBtn, forgotPasswordBtn;
-    ProgressBar loginProgressBar;
-    FirebaseAuth auth;
+    private EditText loginEmail,loginPassword;
+    private Button loginBtn;
+    private TextView createBtn, forgotPasswordBtn;
+    private ProgressBar loginProgressBar;
+    private FireBaseDL fb = FireBaseDL.getFirebaseDL();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +48,6 @@ public class Login extends AppCompatActivity {
         createBtn = findViewById(R.id.createClick);
         forgotPasswordBtn = findViewById(R.id.forgetPasswordBtn);
         loginProgressBar = findViewById(R.id.loginProgressBar);
-        auth = FirebaseAuth.getInstance();
 
 
        //User clicks the login button
@@ -82,7 +79,7 @@ public class Login extends AppCompatActivity {
                 loginProgressBar.setVisibility(View.INVISIBLE);
 
                 //Authenticates user based on method in FireBaseDL
-                FireBaseDL.getFirebaseDL().userSignIn(email,password, new ResultListener() {
+                fb.getFirebaseDL().userSignIn(email,password, new ResultListener() {
                     @Override
                     public void onSuccess() {
                         loginProgressBar.setVisibility(View.INVISIBLE);
@@ -124,7 +121,7 @@ public class Login extends AppCompatActivity {
                         String email = resetEmail.getText().toString();
 
                         //Authenticates user based on method in FireBaseDL
-                        FireBaseDL.getFirebaseDL().userForgotPassword(email, new ResultListener() {
+                        fb.userForgotPassword(email, new ResultListener() {
                             @Override
                             public void onSuccess() {
                                 Log.d("TAG", "Email has been sent ");

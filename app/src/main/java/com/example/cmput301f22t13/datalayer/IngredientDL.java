@@ -36,16 +36,22 @@ import java.util.List;
 import java.util.Map;
 
 
-/** Inherits from the FireBaseDL and is responsible for tasks related to adding,deleting,getting and updating Ingredient items
+/** Singleton class - is responsible for tasks related to adding,deleting,getting and updating Ingredient items
  * */
-
 public class IngredientDL extends FireBaseDL {
     static private IngredientDL ingredientDL;
     private static FireBaseDL fb;
+
+    /** Listens for changes to the arraylist
+     * */
     public static ResultListener listener;
 
+    /** Stores ingredients
+     * */
     public static ArrayList<IngredientItem> ingredientStorage = new ArrayList<IngredientItem>();
 
+    /** Gets or creates current instance of the firebase DL
+     * */
     public static IngredientDL getInstance(){
         if(ingredientDL==null){
             ingredientDL = new IngredientDL();
@@ -57,6 +63,10 @@ public class IngredientDL extends FireBaseDL {
         return ingredientDL;
     }
 
+
+    /** populateIngredientsOnStartup - called when first instance of IngredientDL is made
+     * listens for db changes and updates the ingredient storage accordingly
+     * */
     private static void populateIngredientsOnStartup() {
         CollectionReference getIngredients = fb.fstore.collection("Users")
         .document(fb.auth.getCurrentUser().getUid())
@@ -102,8 +112,7 @@ public class IngredientDL extends FireBaseDL {
 
 
     /** Add/Edit item recieved from Domain Layer into FireStore Ingredient storage collection
-     * @Input: IngredientItem item - item added is an ingredient item,
-     *         String uniqueKey - A unique key string to store ingredient item in a unique Firestore document
+     * @Input: IngredientItem item - item to add or edit
      * */
     public void ingredientFirebaseAddEdit(IngredientItem item) {
         //Initializing data value from item object
@@ -152,7 +161,6 @@ public class IngredientDL extends FireBaseDL {
 
     /** Deletes data from Firestore for a particular passed in ingredient item - by doing so the ingredient document is deleted from Firestore
      *  @param item - Ingredient item to be deleted from Firestore
-     *  Current status - Complete
      * */
     public void ingredientFirebaseDelete(IngredientItem item){
         //Referencing wanted document from correct location in Firestore database

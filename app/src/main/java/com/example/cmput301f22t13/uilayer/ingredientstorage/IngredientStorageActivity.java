@@ -24,6 +24,10 @@ import com.example.cmput301f22t13.R;
 
 import java.util.ArrayList;
 
+/** Activity to handle ingredient storage,
+ * utilizes 2 fragments for displaying ingredients and adding and editing ingredients
+ *
+ * */
 public class IngredientStorageActivity extends AppCompatActivity implements AddEditViewIngredientFragment.OnIngredientItemChangeListener {
     private IngredientDL ingredientDL = IngredientDL.getInstance();
     private AppBarConfiguration appBarConfiguration;
@@ -89,12 +93,6 @@ public class IngredientStorageActivity extends AppCompatActivity implements AddE
     public void onDonePressed(IngredientItem ingredientItem) {
         Log.d("IngredientStorage", "onDonePressed");
         ingredientDL.ingredientFirebaseAddEdit(ingredientItem);
-//        if (!ingredientDL.ingredientStorage.contains(ingredientItem)) {
-//            // ingredientDL.ingredientStorage.add(ingredientItem);
-//            ingredientDL.ingredientFirebaseAddEdit(ingredientItem);
-//        } else {
-//            ingredientDL.ingredientFirebaseEdit(ingredientItem);
-//        }
     }
 
     @Override
@@ -103,7 +101,4 @@ public class IngredientStorageActivity extends AppCompatActivity implements AddE
         ingredientDL.ingredientFirebaseDelete(ingredientItem);
     }
 
-//    public ArrayList<IngredientItem> getIngredients() {
-//        return  ingredientDL.ingredientStorage;
-//    }
 }

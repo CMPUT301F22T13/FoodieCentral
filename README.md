@@ -14,4 +14,4 @@ Once our app is moved from production to release, you can find it on the android
 
 Authority and License 
 
-This app is being developed by Ishaan Rehmani, Logan Timer, Neville Albuquerque, Samir Raza, Shiv Chopra and Scott Geber as part of a group project deliverable for Computing Science 301 at the University of Alberta. 
+This app is being developed by Ishaan Rehmani, Logan Timer, Neville Albuquerque, Samir Raza, Shiv Chopra and Scott Gebert as part of a group project deliverable for Computing Science 301 at the University of Alberta. 

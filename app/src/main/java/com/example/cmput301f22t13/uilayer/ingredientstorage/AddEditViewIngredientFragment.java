@@ -59,7 +59,6 @@ public class AddEditViewIngredientFragment extends Fragment {
 
     // the ingredient item to be modified/created
     private IngredientItem ingredient;
-    private IngredientDL ingredientDL = IngredientDL.getInstance();
 
     private DatePickerDialog datePickerDialog; // used to select a date
     private GregorianCalendar selectedDate;
@@ -89,6 +88,9 @@ public class AddEditViewIngredientFragment extends Fragment {
 
     }
 
+    /** Mainfunction that handles creating the fragment and taking user input
+     *
+     * */
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
@@ -267,6 +269,9 @@ public class AddEditViewIngredientFragment extends Fragment {
         binding = null;
     }
 
+    /** setIngredientImage -sets the ingredient item image
+     *
+     * */
     private void setIngredientImage(Uri imageUri) {
         // https://stackoverflow.com/questions/38352148/get-image-from-the-gallery-and-show-in-imageview
         try {
@@ -280,6 +285,9 @@ public class AddEditViewIngredientFragment extends Fragment {
         }
     }
 
+    /** OnIngredientItemChangeListener - interface for button presses
+     *
+     * */
     public interface OnIngredientItemChangeListener {
         void onDonePressed(IngredientItem ingredientItem);
         void onDeletePressed(IngredientItem ingredientItem);
