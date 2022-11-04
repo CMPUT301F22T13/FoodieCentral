@@ -22,6 +22,7 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.cmput301f22t13.R;
 import com.example.cmput301f22t13.databinding.FragmentIngredientStorageMainBinding;
+import com.example.cmput301f22t13.datalayer.IngredientDL;
 import com.example.cmput301f22t13.domainlayer.item.IngredientItem;
 import com.example.cmput301f22t13.uilayer.recipestorage.RecipeStorageActivity;
 
@@ -35,12 +36,13 @@ import java.util.Comparator;
 public class IngredientStorageMainFragment extends Fragment {
 
     private FragmentIngredientStorageMainBinding binding;
+    private IngredientDL ingredientDL = IngredientDL.getInstance();
 
     public static final String ARG_INGREDIENT_LIST = "ARG_INGREDIENT_LIST";
 
     private ArrayAdapter<IngredientItem> ingredientListAdapter;
     private ListView ingredientListView;
-    private ArrayList<IngredientItem> ingredients;
+    private ArrayList<IngredientItem> ingredients = ingredientDL.getIngredients();
 
     @Override
     public View onCreateView(
@@ -50,20 +52,20 @@ public class IngredientStorageMainFragment extends Fragment {
 
         binding = FragmentIngredientStorageMainBinding.inflate(inflater, container, false);
 
-        Bundle bundle = getArguments();
-        if (bundle != null) {
-            ingredients = (ArrayList<IngredientItem>) bundle.getSerializable(ARG_INGREDIENT_LIST);
-        }
-        else {
-            Log.d("IngredientStorageMain", "bundle null");
-            try {
-                ingredients = ((IngredientStorageActivity)getActivity()).getIngredients();
-            }
-            catch (NullPointerException e) {
-                Log.d("IngredientStorageMain", "could not get ingredients from ingredient storage activity");
-            }
-
-        }
+//        Bundle bundle = getArguments();
+//        if (bundle != null) {
+//            ingredients = (ArrayList<IngredientItem>) bundle.getSerializable(ARG_INGREDIENT_LIST);
+//        }
+//        else {
+//            Log.d("IngredientStorageMain", "bundle null");
+//            try {
+//                ingredients = ingredientDL.getIngredients();
+//            }
+//            catch (NullPointerException e) {
+//                Log.d("IngredientStorageMain", "could not get ingredients from ingredient storage activity");
+//            }
+//
+//        }
 
         return binding.getRoot();
 

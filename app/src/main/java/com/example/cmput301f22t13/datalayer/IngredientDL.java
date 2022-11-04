@@ -4,6 +4,7 @@ import android.os.Build;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
 import com.example.cmput301f22t13.domainlayer.item.IngredientItem;
@@ -15,7 +16,10 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import org.checkerframework.checker.units.qual.A;
@@ -34,7 +38,7 @@ public class IngredientDL extends FireBaseDL {
     static private IngredientDL ingredientDL;
     private static FireBaseDL fb;
 
-    private ArrayList<IngredientItem> ingredientStorage = new ArrayList<IngredientItem>();
+    public static ArrayList<IngredientItem> ingredientStorage = new ArrayList<IngredientItem>();
 
     public static IngredientDL getInstance(){
         if(ingredientDL==null){
@@ -55,7 +59,40 @@ public class IngredientDL extends FireBaseDL {
         getIngredients.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                ArrayList<DocumentSnapshot> result = (ArrayList<DocumentSnapshot>) task.getResult().getDocuments();
+                for (DocumentSnapshot ds: result) {
+                    String name = ds.getString("Name");
+                    String description = ds.getString("Description");
+
+                    IngredientItem i = new IngredientItem();
+                    i.setName(name);
+                    i.setDescription(description);
+                    i.setHashId(ds.getId());
+
+                    ingredientStorage.add(i);
+
+                }
                 Log.d("INGREDIENTDL", "onComplete: ");
+            }
+        });
+
+        getIngredients.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable
+                    FirebaseFirestoreException error) {
+                ingredientStorage.clear();
+                for(QueryDocumentSnapshot doc: queryDocumentSnapshots)
+                {
+                    String hash = doc.getId();
+                    String name = (String) doc.getData().get("Name");
+                    String description = (String) doc.getData().get("Description");
+
+                    IngredientItem i = new IngredientItem();
+                    i.setName(name);
+                    i.setDescription(description);
+                    i.setHashId(hash);
+                    ingredientStorage.add(i);
+                }
             }
         });
     }
