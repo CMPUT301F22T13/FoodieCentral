@@ -4,6 +4,11 @@ package com.example.cmput301f22t13.uilayer.userlogin;
  * */
 
 public interface ResultListener {
+    /** method to be overridden and fired on successful firebase operation
+     *  */
     void onSuccess();
+
+    /** method to be overridden and fired on unsuccessful firebase operation
+     *  */
     void onFailure(Exception e);
 }

@@ -25,16 +25,12 @@ import com.google.firebase.firestore.FirebaseFirestore;
  * - ProgressBar to show that a particular action is being performed
  * - FirebaseAuth - authenticating Firebase and referencing current user
  * */
-
 public class Register extends AppCompatActivity {
+    private EditText userFullName, userEmail, userPassword;
+    private Button registerBtn;
+    private TextView loginBtn;
+    private ProgressBar progressBar;
 
-    EditText userFullName, userEmail, userPassword;
-    Button registerBtn;
-    TextView loginBtn;
-    FirebaseAuth auth;
-    ProgressBar progressBar;
-    FirebaseFirestore fstore;
-    String userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,9 +44,7 @@ public class Register extends AppCompatActivity {
         registerBtn = findViewById(R.id.registerBtn);
         loginBtn= findViewById(R.id.loginClick);
 
-        auth = FirebaseAuth.getInstance();
         progressBar = findViewById(R.id.progressBar);
-        fstore = FirebaseFirestore.getInstance();
 
 
         // Checks if user opening the app is a returning user - based on method in FireBaseDL

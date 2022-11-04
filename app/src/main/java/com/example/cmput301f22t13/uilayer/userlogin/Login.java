@@ -29,14 +29,11 @@ import com.google.firebase.auth.FirebaseAuth;
  * */
 
 //TODO couple issues with the login UI - progress bar and toast visibility
-
-
 public class Login extends AppCompatActivity {
-    EditText loginEmail,loginPassword;
-    Button loginBtn;
-    TextView createBtn, forgotPasswordBtn;
-    ProgressBar loginProgressBar;
-    FirebaseAuth auth;
+    private EditText loginEmail,loginPassword;
+    private Button loginBtn;
+    private TextView createBtn, forgotPasswordBtn;
+    private ProgressBar loginProgressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +47,6 @@ public class Login extends AppCompatActivity {
         createBtn = findViewById(R.id.createClick);
         forgotPasswordBtn = findViewById(R.id.forgetPasswordBtn);
         loginProgressBar = findViewById(R.id.loginProgressBar);
-        auth = FirebaseAuth.getInstance();
 
 
        //User clicks the login button
