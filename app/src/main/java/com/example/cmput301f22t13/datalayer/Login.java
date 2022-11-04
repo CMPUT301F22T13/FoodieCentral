@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -31,10 +32,12 @@ public class Login extends AppCompatActivity {
     Button loginBtn;
     TextView createBtn, forgotPasswordBtn;
     ProgressBar loginProgressBar;
-    FirebaseAuth auth;
+    //FirebaseAuth auth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
@@ -46,7 +49,8 @@ public class Login extends AppCompatActivity {
         forgotPasswordBtn = findViewById(R.id.forgetPasswordBtn);
 
         loginProgressBar = findViewById(R.id.loginProgressBar);
-        auth = FirebaseAuth.getInstance();
+        FireBaseDL fb = FireBaseDL.getInstance();
+       // auth = FirebaseAuth.getInstance();
 
 
         //Login button click
@@ -73,8 +77,7 @@ public class Login extends AppCompatActivity {
                 loginProgressBar.setVisibility(View.VISIBLE);
 
                 //Authenticate user
-
-                auth.signInWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                fb.userSignIn(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()){
@@ -113,7 +116,7 @@ public class Login extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         //get email and send reset link
                         String email = resetEmail.getText().toString();
-                        auth.sendPasswordResetEmail(email).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        fb.userForgotPassword(email).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void unused) {
                                 Toast.makeText(Login.this, "Reset Link has been sent to your email", Toast.LENGTH_SHORT).show();

@@ -35,15 +35,14 @@ public class Register extends AppCompatActivity {
     EditText userFullname, userEmail, userPassword;
     Button regsiterBtn;
     TextView loginBtn;
-    FirebaseAuth auth;
     ProgressBar progressBar;
-    FirebaseFirestore fstore;
     String userId;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        FireBaseDL fb = FireBaseDL.getInstance();
         setContentView(R.layout.activity_register);
 
         //Initilizers
@@ -53,10 +52,9 @@ public class Register extends AppCompatActivity {
         regsiterBtn = findViewById(R.id.registerBtn);
         loginBtn= findViewById(R.id.loginClick);
 
-        auth = FirebaseAuth.getInstance();
         progressBar = findViewById(R.id.progressBar);
         //Instantiate firebase firestore
-        fstore = FirebaseFirestore.getInstance();
+
 
 
 //        //Check if user is a returning user and send to main activity
@@ -92,32 +90,33 @@ public class Register extends AppCompatActivity {
 
 
                 //register the user in Firebase
-                auth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if(task.isSuccessful()){
-                            Toast.makeText(Register.this, "User created", Toast.LENGTH_SHORT).show();
-                            //Storing in firebase - get user id and create a document
-                            userId = auth.getCurrentUser().getUid();
-                            DocumentReference documentReference = fstore.collection("Users").document(userId);
-                            //Creating user data using hash map
-                            Map<String,Object> user = new HashMap<>();
-                            user.put("Name" , name);
-                            user.put("Email", email);
-                            documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void unused) {
-                                    Log.d("TAG", "onSuccess: user profile is created in firebase with uid " + userId);
-                                }
-                            });
-                            //Send to ingredient activity
-                            //startActivity(new Intent(getApplicationContext(),MainActivity.class));
-                        }else{
-                            Toast.makeText(Register.this, "User not created - error" + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                            progressBar.setVisibility(View.INVISIBLE);
-                        }
-                    }
-                });
+                fb.userRegister(email,password, name );
+//                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<AuthResult> task) {
+//                        if(task.isSuccessful()){
+//                            Toast.makeText(Register.this, "User created", Toast.LENGTH_SHORT).show();
+//                            //Storing in firebase - get user id and create a document
+//                            userId = auth.getCurrentUser().getUid();
+//                            DocumentReference documentReference = fstore.collection("Users").document(userId);
+//                            //Creating user data using hash map
+//                            Map<String,Object> user = new HashMap<>();
+//                            user.put("Name" , name);
+//                            user.put("Email", email);
+//                            documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
+//                                @Override
+//                                public void onSuccess(Void unused) {
+//                                    Log.d("TAG", "onSuccess: user profile is created in firebase with uid " + userId);
+//                                }
+//                            });
+//                            //Send to ingredient activity
+//                            //startActivity(new Intent(getApplicationContext(),MainActivity.class));
+//                        }else{
+//                            Toast.makeText(Register.this, "User not created - error" + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+//                            progressBar.setVisibility(View.INVISIBLE);
+//                        }
+//                    }
+//                });
             }
         });
 
