@@ -25,6 +25,7 @@ import androidx.navigation.fragment.NavHostFragment;
 import com.example.cmput301f22t13.R;
 import com.example.cmput301f22t13.databinding.FragmentAddEditViewIngredientBinding;
 import com.example.cmput301f22t13.domainlayer.item.IngredientItem;
+import com.example.cmput301f22t13.uilayer.recipestorage.RecipeStorageActivity;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -122,7 +123,13 @@ public class AddEditViewIngredientFragment extends Fragment {
                 ingredient.setUnit(binding.ingredientUnitEdittext.getText().toString());
                 ingredient.setCategory(binding.ingredientCategoryEdittext.getText().toString());
                 listener.onDonePressed(ingredient);
-                NavHostFragment.findNavController(AddEditViewIngredientFragment.this).navigateUp();
+                if (getActivity() instanceof RecipeStorageActivity) {
+                    NavHostFragment.findNavController(AddEditViewIngredientFragment.this).popBackStack(R.id.addEditViewRecipeFragment, false);
+                }
+                else {
+                    NavHostFragment.findNavController(AddEditViewIngredientFragment.this).popBackStack();
+                }
+
             }
         });
 

@@ -1,3 +1,4 @@
+/*
 package com.example.cmput301f22t13;
 
 import androidx.test.espresso.contrib.PickerActions;
@@ -58,7 +59,9 @@ public class IngredientStorageActivityTest {
         onView(withId(R.id.servings_edit)).perform(click()).perform(click());
         onView(isAssignableFrom(DatePicker.class)).perform(PickerActions.setDate(2022, 11, 1));
         onView(withText("OK")).inRoot(isDialog()).perform(click());
-        onView(withId(R.id.servings_edit)).check(matches(withText("2022/11/1")));
+        onView(wi*/
+/*//*
+thId(R.id.servings_edit)).check(matches(withText("2022/11/1")));
         onView(withId(R.id.category_edit)).perform(typeText("Pantry"), closeSoftKeyboard());
         onView(withId(R.id.category_edit)).check(matches(withText("Pantry")));
         onView(withId(R.id.comments_edit)).perform(typeText("2"), closeSoftKeyboard());
@@ -74,3 +77,4 @@ public class IngredientStorageActivityTest {
 
 
 }
+*/

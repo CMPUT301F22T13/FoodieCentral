@@ -2,7 +2,6 @@ package com.example.cmput301f22t13.uilayer.ingredientstorage;
 
 import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 
-import android.app.ActionBar;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,7 +12,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.PopupMenu;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
@@ -26,7 +24,6 @@ import com.example.cmput301f22t13.databinding.FragmentIngredientStorageMainBindi
 import com.example.cmput301f22t13.domainlayer.item.IngredientItem;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 
 public class IngredientStorageMainFragment extends Fragment {
 
@@ -83,7 +80,6 @@ public class IngredientStorageMainFragment extends Fragment {
                         .navigate(R.id.action_MainIngredient_to_AddEditView);
             }
         });
-
         Context context = getContext();
         View fragView = view;
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
@@ -93,7 +89,7 @@ public class IngredientStorageMainFragment extends Fragment {
         binding.sortIngredientButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                TextView description = popupView.findViewById(R.id.ingredient_sort_description);
+                TextView description = popupView.findViewById(R.id.recipe_sort_title);
                 description.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -102,7 +98,7 @@ public class IngredientStorageMainFragment extends Fragment {
                     }
                 });
 
-                TextView bestBeforeDate = popupView.findViewById(R.id.ingredient_sort_bbf);
+                TextView bestBeforeDate = popupView.findViewById(R.id.recipe_sort_preparation_time);
                 bestBeforeDate.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -111,7 +107,7 @@ public class IngredientStorageMainFragment extends Fragment {
                     }
                 });
 
-                TextView location = popupView.findViewById(R.id.ingredient_sort_location);
+                TextView location = popupView.findViewById(R.id.recipe_sort_servings);
                 location.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -120,7 +116,7 @@ public class IngredientStorageMainFragment extends Fragment {
                     }
                 });
 
-                TextView category = popupView.findViewById(R.id.ingredient_sort_category);
+                TextView category = popupView.findViewById(R.id.recipe_sort_category);
                 category.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
