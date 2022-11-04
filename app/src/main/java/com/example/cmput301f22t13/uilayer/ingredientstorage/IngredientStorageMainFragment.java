@@ -13,28 +13,30 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.PopupMenu;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Lifecycle;
 import androidx.navigation.fragment.NavHostFragment;
-import androidx.navigation.ui.NavigationUI;
 
 import com.example.cmput301f22t13.R;
 import com.example.cmput301f22t13.databinding.FragmentIngredientStorageMainBinding;
 import com.example.cmput301f22t13.domainlayer.item.IngredientItem;
-import com.example.cmput301f22t13.domainlayer.storage.IngredientStorage;
 import com.example.cmput301f22t13.uilayer.recipestorage.RecipeStorageActivity;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 
+/**
+ * Main fragment for ingredient storage. Shows a list of all ingredients in the storage and allows
+ * the user to add/edit/delete ingredients by calling upon the {@link AddEditViewIngredientFragment}
+ */
 public class IngredientStorageMainFragment extends Fragment {
 
     private FragmentIngredientStorageMainBinding binding;
+
+    public static final String ARG_INGREDIENT_LIST = "ARG_INGREDIENT_LIST";
 
     private ArrayAdapter<IngredientItem> ingredientListAdapter;
     private ListView ingredientListView;
@@ -48,9 +50,9 @@ public class IngredientStorageMainFragment extends Fragment {
 
         binding = FragmentIngredientStorageMainBinding.inflate(inflater, container, false);
 
-        /*Bundle bundle = getArguments();
+        Bundle bundle = getArguments();
         if (bundle != null) {
-            ingredients = (ArrayList<IngredientItem>) bundle.getSerializable("arraylist");
+            ingredients = (ArrayList<IngredientItem>) bundle.getSerializable(ARG_INGREDIENT_LIST);
         }
         else {
             Log.d("IngredientStorageMain", "bundle null");
@@ -61,8 +63,8 @@ public class IngredientStorageMainFragment extends Fragment {
                 Log.d("IngredientStorageMain", "could not get ingredients from ingredient storage activity");
             }
 
-        }*/
-        Log.d("IngredientStorageMain", "onCreateView()");
+        }
+
         return binding.getRoot();
 
     }
@@ -70,7 +72,7 @@ public class IngredientStorageMainFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        ingredientListAdapter = new IngredientListAdapter(getActivity(), IngredientStorage.getInstance().getIngredients());
+        ingredientListAdapter = new IngredientListAdapter(getActivity(), ingredients);
         binding.ingredientListview.setAdapter(ingredientListAdapter);
         binding.ingredientListview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -112,7 +114,13 @@ public class IngredientStorageMainFragment extends Fragment {
                 description.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        // TODO: add call to adapter sort
+                        ingredientListAdapter.sort(new Comparator<IngredientItem>() {
+                            @Override
+                            public int compare(IngredientItem t1, IngredientItem t2) {
+                                return t1.getDescription().compareTo(t2.getDescription());
+                            }
+                        });
+                        ingredientListAdapter.notifyDataSetChanged();
                         popupWindow.dismiss();
                     }
                 });
@@ -121,7 +129,13 @@ public class IngredientStorageMainFragment extends Fragment {
                 bestBeforeDate.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        // TODO: add call to adapter sort
+                        ingredientListAdapter.sort(new Comparator<IngredientItem>() {
+                            @Override
+                            public int compare(IngredientItem t1, IngredientItem t2) {
+                                return t1.getBbd().compareTo(t2.getBbd());
+                            }
+                        });
+                        ingredientListAdapter.notifyDataSetChanged();
                         popupWindow.dismiss();
                     }
                 });
@@ -130,7 +144,13 @@ public class IngredientStorageMainFragment extends Fragment {
                 location.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        // TODO: add call to adapter sort
+                        ingredientListAdapter.sort(new Comparator<IngredientItem>() {
+                            @Override
+                            public int compare(IngredientItem t1, IngredientItem t2) {
+                                return t1.getLocation().compareTo(t2.getLocation());
+                            }
+                        });
+                        ingredientListAdapter.notifyDataSetChanged();
                         popupWindow.dismiss();
                     }
                 });
@@ -139,7 +159,13 @@ public class IngredientStorageMainFragment extends Fragment {
                 category.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        // TODO: add call to adapter sort
+                        ingredientListAdapter.sort(new Comparator<IngredientItem>() {
+                            @Override
+                            public int compare(IngredientItem t1, IngredientItem t2) {
+                                return t1.getCategory().compareTo(t2.getCategory());
+                            }
+                        });
+                        ingredientListAdapter.notifyDataSetChanged();
                         popupWindow.dismiss();
                     }
                 });
