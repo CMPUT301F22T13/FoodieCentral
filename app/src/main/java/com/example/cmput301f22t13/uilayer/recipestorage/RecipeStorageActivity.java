@@ -72,6 +72,15 @@ public class RecipeStorageActivity extends AppCompatActivity implements AddEditV
         sampleRecipe.setComments("This is a sample recipe");
         sampleRecipe.setCategory("Dessert");
 
+        IngredientItem item1 = new IngredientItem();
+        item1.setName("Eggs");
+
+        IngredientItem item2 = new IngredientItem();
+        item2.setName("Batter");
+
+        sampleRecipe.addIngredient(item1);
+        sampleRecipe.addIngredient(item2);
+
         recipeDataList = new ArrayList<RecipeItem>();
         recipeDataList.add(sampleRecipe);
 
