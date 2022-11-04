@@ -25,6 +25,7 @@ import com.example.cmput301f22t13.databinding.FragmentIngredientStorageMainBindi
 import com.example.cmput301f22t13.datalayer.IngredientDL;
 import com.example.cmput301f22t13.domainlayer.item.IngredientItem;
 import com.example.cmput301f22t13.uilayer.recipestorage.RecipeStorageActivity;
+import com.example.cmput301f22t13.uilayer.userlogin.ResultListener;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -76,6 +77,18 @@ public class IngredientStorageMainFragment extends Fragment {
 
         ingredientListAdapter = new IngredientListAdapter(getActivity(), ingredients);
         binding.ingredientListview.setAdapter(ingredientListAdapter);
+        ingredientDL.listener = new ResultListener() {
+            @Override
+            public void onSuccess() {
+                ingredientListAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+
+            }
+        };
+
         binding.ingredientListview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {

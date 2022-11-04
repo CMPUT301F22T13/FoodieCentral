@@ -92,15 +92,19 @@ public class IngredientStorageActivity extends AppCompatActivity implements AddE
     @Override
     public void onDonePressed(IngredientItem ingredientItem) {
         Log.d("IngredientStorage", "onDonePressed");
-        if (!ingredientDL.ingredientStorage.contains(ingredientItem)) {
-            ingredientDL.ingredientStorage.add(ingredientItem);
-        }
+        ingredientDL.ingredientFirebaseAddEdit(ingredientItem);
+//        if (!ingredientDL.ingredientStorage.contains(ingredientItem)) {
+//            // ingredientDL.ingredientStorage.add(ingredientItem);
+//            ingredientDL.ingredientFirebaseAddEdit(ingredientItem);
+//        } else {
+//            ingredientDL.ingredientFirebaseEdit(ingredientItem);
+//        }
     }
 
     @Override
     public void onDeletePressed(IngredientItem ingredientItem) {
         Log.d("IngredientStorage", "onDeletePressed");
-        ingredientDL.ingredientStorage.add(ingredientItem);
+        ingredientDL.ingredientFirebaseDelete(ingredientItem);
     }
 
 //    public ArrayList<IngredientItem> getIngredients() {

@@ -161,11 +161,6 @@ public class AddEditViewIngredientFragment extends Fragment {
 
                 listener.onDonePressed(ingredient);
 
-                // Make call to ingredientDL
-                ingredient.setHashId(Utils.getUniqueHash());
-                ingredientDL.ingredientFirebaseAdd(ingredient);
-
-
                 if (getActivity() instanceof RecipeStorageActivity) {
                     ((RecipeStorageActivity)getActivity()).onDonePressed(ingredient);
                     NavHostFragment.findNavController(AddEditViewIngredientFragment.this).popBackStack(R.id.addEditViewRecipeFragment, false);
