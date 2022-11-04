@@ -15,10 +15,10 @@ public class IngredientItem implements Serializable {
     private Integer amount;
     private String unit;
     private String category;
-    private String bbd;
+    private GregorianCalendar bbd;
     private String location;
-    private String imagelink;
-    private String hashid;
+    private String photo;
+    private String hashId;
 
     /**
      * Constructor that initializes all ingredient fields to default values
@@ -29,10 +29,10 @@ public class IngredientItem implements Serializable {
         this.amount = 0;
         this.unit = "";
         this.category = "";
-        this.bbd = "";
+        this.bbd = new GregorianCalendar(0,0,0);
         this.location = "";
-        this.imagelink = "";
-        this.hashid = "";
+        this.photo = "";
+        this.hashId = "";
     }
 
 
@@ -44,20 +44,20 @@ public class IngredientItem implements Serializable {
      * @param unit unit type for the ingredient (eg. kg, lb)
      * @param category the category that this ingredient belongs to
      * @param bbd the best before date that this ingredient has
-     * @param imagelink the uri string for storing images for the ingredient
-     * @param hashid the hash ID for uniquely identifying ingredients
+     * @param photo the uri string for storing images for the ingredient
+     * @param hashId the hash ID for uniquely identifying ingredients
      * @param location the location of the ingredient stored
      */
-    public IngredientItem (String name, String description, Integer amount, String unit, String category, String bbd, String imagelink, String location, String hashid) {
+    public IngredientItem (String name, String description, Integer amount, String unit, String category, GregorianCalendar bbd, String photo, String location, String hashId) {
         this.name = name;
         this.description = description;
         this.amount = amount;
         this.unit = unit;
         this.category = category;
         this.bbd = bbd;
-        this.imagelink = imagelink;
+        this.photo = photo;
         this.location = location;
-        this.hashid = hashid;
+        this.hashId = hashId;
     }
 
     /**
@@ -143,14 +143,14 @@ public class IngredientItem implements Serializable {
      * Gets the best before date the ingredient
      * @return bbd
      */
-    public String getBbd() {
+    public GregorianCalendar getBbd() {
         return bbd;
     }
     /**
      * Sets the best before date of the ingredient it belongs to
      * @param bbd new bbd
      */
-    public void setBbd(String bbd) {
+    public void setBbd(GregorianCalendar bbd) {
         this.bbd = bbd;
     }
     /**
@@ -169,31 +169,31 @@ public class IngredientItem implements Serializable {
     }
     /**
      * Gets the uri image string of the ingredient it belongs to
-     * @return imagelink
+     * @return photo
      */
-    public String getImagelink() {
-        return imagelink;
+    public String getPhoto() {
+        return photo;
     }
     /**
      * Sets the uri string for the image of the ingredient it belongs to
-     * @param imagelink new imagelink
+     * @param photo new photo
      */
-    public void setImagelink(String imagelink) {
-        this.imagelink = imagelink;
+    public void setPhoto(String photo) {
+        this.photo = photo;
     }
     /**
      * Gets the hash ID of this ingredient it belongs to
-     * @return hashid
+     * @return hashId
      */
-    public String getHashid() {
-        return hashid;
+    public String getHashId() {
+        return hashId;
     }
     /**
-     * Sets the hashid of the ingredient it belongs to
-     * @param hashid new hashid
+     * Sets the hashId of the ingredient it belongs to
+     * @param hashId new hashId
      */
-    public void setHashid(String hashid) {
-        this.hashid = hashid;
+    public void setHashId(String hashId) {
+        this.hashId = hashId;
     }
 
 
