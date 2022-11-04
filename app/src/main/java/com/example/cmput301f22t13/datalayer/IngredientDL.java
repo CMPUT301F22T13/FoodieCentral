@@ -14,6 +14,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.checkerframework.checker.units.qual.A;
 
@@ -28,19 +29,28 @@ import java.util.Map;
 
 
 public class IngredientDL extends FireBaseDL {
+    static private IngredientDL ingredientDL;
+    private static FireBaseDL fb;
 
+    private ArrayList<IngredientItem> ingredientStorage = new ArrayList<IngredientItem>();
 
-    /** Add recipe received from Domain Layer into FireStore Recipe storage collection
-     * @param  item - item added is an ingredient item
-     *@param hashKey - A unique hash for every item that differentiates one item from another. Used for unique item storage in Firebase
-     *Current status - Complete
+    public static IngredientDL getInstance(){
+        if(ingredientDL==null){
+            ingredientDL = new IngredientDL();
+            fb = FireBaseDL.getFirebaseDL();
+            // Populate ingredients here
+
+        }
+        return ingredientDL;
+    }
+
+    /** Add item recieved from Domain Layer into FireStore Ingredient storage collection
+     * @Input: IngredientItem item - item added is an ingredient item,
+     *         String uniqueKey - A unique key string to store ingredient item in a unique Firestore document
      * */
 
-    public void ingridientFirebaseAdd(IngredientItem item, String hashKey) {
-
-
-        auth = FirebaseAuth.getInstance();
-        //Initializing and storing data value from passed in Ingredient item
+    public void ingredientFirebaseAdd(IngredientItem item) {
+        //Initializing data value from item object
         String ing_name = item.getName();
         String ing_description = item.getDescription();
         GregorianCalendar ing_bestBefore = item.getBbd();
@@ -63,11 +73,11 @@ public class IngredientDL extends FireBaseDL {
         ingredientItems.put("Category", ing_category);
         ingredientItems.put("Image", ing_image);
 
-        //Storing data in Hashmap to correct location in Firebase using hashKey as document reference
-        DocumentReference ingredientStorage = fstore.collection("Users")
-                .document(auth.getCurrentUser().getUid())
+        //Storing data in Hashmap to correct location in Firebase using uniqueKey as document reference
+        DocumentReference ingredientStorage = fb.fstore.collection("Users")
+                .document(fb.auth.getCurrentUser().getUid())
                 .collection("Ingredient Storage")
-                .document(hashKey);
+                .document(item.getHashId());
 
         ingredientStorage.set(ingredientItems).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
@@ -89,6 +99,11 @@ public class IngredientDL extends FireBaseDL {
      */
     public void ingrideintFirebaseGet(String hashKey) {
 
+    /** Gets values from FireStore for perticular ingredient and returns an IngredientItem object
+     * @Input: uniqueKey - A unique key string to store ingredient item in a unique Firestore document
+     * */
+    public void ingredientFirebaseGet(String hashId) {
+
         //Referencing wanted document from correct location in Firestore database
         DocumentReference getIngredients = fstore.collection("Users")
                 .document(auth.getCurrentUser().getUid())
@@ -105,6 +120,16 @@ public class IngredientDL extends FireBaseDL {
                             //If document is not empty then store values in IngredientItem object
 
                             if (document.exists()) {
+//                                ArrayList<String> ingredientId = new ArrayList<>();
+//                                //Adding to ingredients arrayList
+                           //     ingredientId.add(document.getd("Name"));
+//                                ingredientId.add(document.getString("Description"));
+//                                ingredientId.add(document.getString("Best Before"));
+//                                ingredientId.add(document.getString("Location"));
+//                                ingredientId.add(document.getString("Amount"));
+//                                ingredientId.add(document.getString("Unit"));
+//                                ingredientId.add(document.getString("Category"));
+//                                ingredientId.add(document.getString("Image"));
 
 
                                 Map<String,Object> ingredientMap = document.getData();
@@ -177,6 +202,16 @@ public class IngredientDL extends FireBaseDL {
             }
         });
     }
+
+    /** Getter for ingredient storage
+     * @Returns: ArrayList<IngredientItem> representing ingredients in storage
+     * */
+    public ArrayList<IngredientItem> getIngredients() {
+        return ingredientStorage;
+    }
+
+
+
 
 }
 

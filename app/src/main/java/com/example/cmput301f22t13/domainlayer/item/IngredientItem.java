@@ -1,5 +1,7 @@
 package com.example.cmput301f22t13.domainlayer.item;
 
+import com.example.cmput301f22t13.domainlayer.utils.Utils;
+
 import java.io.Serializable;
 import java.util.GregorianCalendar;
 import java.util.Locale;
@@ -33,7 +35,7 @@ public class IngredientItem implements Serializable {
         this.bbd = new GregorianCalendar();
         this.location = "";
         this.photo = "";
-        this.hashId = "";
+        this.hashId = Utils.getUniqueHash();
     }
 
 

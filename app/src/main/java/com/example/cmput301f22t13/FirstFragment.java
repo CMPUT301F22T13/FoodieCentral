@@ -40,8 +40,8 @@ public class FirstFragment extends Fragment {
         binding.gotorecipes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                NavHostFragment.findNavController(FirstFragment.this)
-                        .navigate(R.id.first_fragment_to_recipes);
+//                NavHostFragment.findNavController(FirstFragment.this)
+//                        .navigate(R.id.first_fragment_to_recipes);
             }
         });
     }

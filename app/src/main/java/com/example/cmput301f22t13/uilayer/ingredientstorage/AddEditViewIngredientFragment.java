@@ -5,6 +5,7 @@ import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
@@ -20,12 +21,15 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContract;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.cmput301f22t13.R;
 import com.example.cmput301f22t13.databinding.FragmentAddEditViewIngredientBinding;
+import com.example.cmput301f22t13.datalayer.IngredientDL;
 import com.example.cmput301f22t13.domainlayer.item.IngredientItem;
+import com.example.cmput301f22t13.domainlayer.utils.Utils;
 import com.example.cmput301f22t13.uilayer.recipestorage.RecipeStorageActivity;
 
 import java.net.URI;
@@ -41,6 +45,7 @@ public class AddEditViewIngredientFragment extends Fragment {
 
     private OnIngredientItemChangeListener listener;
     private IngredientItem ingredient;
+    private IngredientDL ingredientDL = IngredientDL.getInstance();
 
     private DatePickerDialog datePickerDialog;
     private GregorianCalendar selectedDate;
@@ -125,6 +130,7 @@ public class AddEditViewIngredientFragment extends Fragment {
         }
 
         binding.doneIngredientButton.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onClick(View view) {
                 ingredient.setName(binding.ingredientNameEdittext.getText().toString());
@@ -154,6 +160,11 @@ public class AddEditViewIngredientFragment extends Fragment {
                 }
 
                 listener.onDonePressed(ingredient);
+
+                // Make call to ingredientDL
+                ingredient.setHashId(Utils.getUniqueHash());
+                ingredientDL.ingredientFirebaseAdd(ingredient);
+
 
                 if (getActivity() instanceof RecipeStorageActivity) {
                     ((RecipeStorageActivity)getActivity()).onDonePressed(ingredient);
