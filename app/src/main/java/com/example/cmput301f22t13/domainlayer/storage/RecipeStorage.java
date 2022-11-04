@@ -8,6 +8,9 @@ import com.example.cmput301f22t13.domainlayer.item.RecipeItem;
 
 import java.util.ArrayList;
 
+/** Will be deleted in next sprint when RecipeDL is refactored
+ *
+ * */
 public class RecipeStorage {
     private static final String TAG = "RecipeStorageDL";
     /** ArrayList of RecipeItems representing the recipes in storage
