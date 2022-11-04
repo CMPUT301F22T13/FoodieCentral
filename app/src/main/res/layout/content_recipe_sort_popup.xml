@@ -21,7 +21,7 @@
             android:minHeight="48dp"
             android:paddingLeft="10dp"
             android:paddingTop="15dp"
-            android:text="Sort ingredients list by"
+            android:text="Sort recipes list by"
             android:textAlignment="viewStart"
             android:textSize="20sp" />
 
@@ -33,7 +33,7 @@
             android:gravity="center"
             android:minHeight="48dp"
             android:paddingLeft="15dp"
-            android:text="Description"
+            android:text="Title"
             android:textAlignment="viewStart"
             android:textSize="20sp" />
 
@@ -45,7 +45,7 @@
             android:gravity="center"
             android:minHeight="48dp"
             android:paddingLeft="15dp"
-            android:text="Best before date"
+            android:text="Preparation Time"
             android:textAlignment="viewStart"
             android:textSize="20sp" />
 
@@ -57,7 +57,7 @@
             android:gravity="center"
             android:minHeight="48dp"
             android:paddingLeft="15dp"
-            android:text="Location"
+            android:text="Servings"
             android:textAlignment="viewStart"
             android:textSize="20sp" />
 
@@ -69,7 +69,7 @@
             android:gravity="center"
             android:minHeight="48dp"
             android:paddingLeft="15dp"
-            android:text="Ingredient category"
+            android:text="Recipe category"
             android:textAlignment="viewStart"
             android:textSize="20sp" />
     </LinearLayout>

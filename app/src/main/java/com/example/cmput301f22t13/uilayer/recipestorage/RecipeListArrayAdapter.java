@@ -15,7 +15,6 @@ import java.util.ArrayList;
 
 /**
  * This class creates an array adapter for the list of recipes which are of type {@link RecipeItem}.
- * @author Shiv Chopra
  * @version 1.0
  */
 
@@ -26,13 +25,16 @@ public class RecipeListArrayAdapter extends ArrayAdapter<RecipeItem> {
      */
     private Context context;
 
+    /**
+     * This variable is an {@link ArrayList<RecipeItem>}.
+     */
+
     private ArrayList<RecipeItem> recipes;
 
     /**
      * This variable stores the resource id of type {@link Integer} that is used for instantiating views.
      */
     private int resource;
-
 
     /**
      * This is the constructor to create the Recipe list array adapter.
@@ -52,24 +54,20 @@ public class RecipeListArrayAdapter extends ArrayAdapter<RecipeItem> {
      * @param parent Of type {@link ViewGroup}
      * @return The return type is {@link View}
      */
-   public View getView(int position, View convertView, ViewGroup parent) {
-       View view = convertView;
+    public View getView(int position, View convertView, ViewGroup parent) {
+        View view = convertView;
 
-       if (view == null) {
-           view = LayoutInflater.from(context).inflate(R.layout.content_recipe_list, parent, false);
-       }
+        if (view == null) {
+            view = LayoutInflater.from(context).inflate(R.layout.content_recipe_list, parent, false);
+        }
 
-       RecipeItem item = recipes.get(position);
-       TextView recipeName = view.findViewById(R.id.recipe_name_for_view);
-       recipeName.setText(item.getTitle());
+        RecipeItem item = recipes.get(position);
+        TextView recipeName = view.findViewById(R.id.recipe_name_for_view);
+        recipeName.setText(item.getTitle());
 
-       ImageView recipeImage = view.findViewById(R.id.recipe_image);
-       return view;
-
-
-   }
+        ImageView recipeImage = view.findViewById(R.id.recipe_image);
+        return view;
 
 
-
-
+    }
 }

@@ -34,10 +34,10 @@ public class IngredientItem implements Serializable {
         this.amount = 0;
         this.unit = "";
         this.category = "";
-        this.bbd = new GregorianCalendar(0,0,0);
+        this.bbd = new GregorianCalendar();
         this.location = "";
         this.photo = "";
-        this.hashId = "";
+        this.hashId = Utils.getUniqueHash();
     }
 
 
@@ -212,62 +212,6 @@ public class IngredientItem implements Serializable {
     public void setHashId(String hashId) {
         this.hashId = hashId;
     }
-
-
 }
 
 
-/**
- * Comparator class to sort ingredient item by description
- */
-class SortIngredientByDescription implements Comparator<IngredientItem> {
-    @Override
-    /**
-     * Override compare method for description sorting
-     */
-    public int compare(IngredientItem t1, IngredientItem t2) {
-        return t1.getDescription().compareTo(t2.getDescription());
-    }
-}
-
-/**
- * Comparator class to sort ingredient item by best before date
- */
-//    TODO Implment once ii has been updated to have bbfd
-class SortIngredientByBbfd implements Comparator<IngredientItem> {
-    @Override
-    /**
-     * Override compare method for best before date
-     */
-    public int compare(IngredientItem t1, IngredientItem t2) {
-        return 0;
-    }
-}
-
-/**
- * Comparator class to sort ingredient item by category
- */
-//    TODO Implment once ii has been updated to have location
-class SortIngredientByLocation implements Comparator<IngredientItem> {
-    @Override
-    /**
-     * Override compare method for category
-     */
-    public int compare(IngredientItem t1, IngredientItem t2) {
-        return 0;
-    }
-}
-
-/**
- * Comparator class to sort ingredient item by category
- */
-class SortIngredientByCategory implements Comparator<IngredientItem> {
-    @Override
-    /**
-     * Override compare method for category
-     */
-
-    public int compare(IngredientItem t1, IngredientItem t2) {
-        return t1.getCategory().compareTo(t2.getCategory());
-    }
-}
