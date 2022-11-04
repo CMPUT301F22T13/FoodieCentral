@@ -34,6 +34,7 @@ public class Login extends AppCompatActivity {
     private Button loginBtn;
     private TextView createBtn, forgotPasswordBtn;
     private ProgressBar loginProgressBar;
+    private FireBaseDL fb = FireBaseDL.getFirebaseDL();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,7 +79,7 @@ public class Login extends AppCompatActivity {
                 loginProgressBar.setVisibility(View.INVISIBLE);
 
                 //Authenticates user based on method in FireBaseDL
-                FireBaseDL.getFirebaseDL().userSignIn(email,password, new ResultListener() {
+                fb.getFirebaseDL().userSignIn(email,password, new ResultListener() {
                     @Override
                     public void onSuccess() {
                         loginProgressBar.setVisibility(View.INVISIBLE);
@@ -120,7 +121,7 @@ public class Login extends AppCompatActivity {
                         String email = resetEmail.getText().toString();
 
                         //Authenticates user based on method in FireBaseDL
-                        FireBaseDL.getFirebaseDL().userForgotPassword(email, new ResultListener() {
+                        fb.userForgotPassword(email, new ResultListener() {
                             @Override
                             public void onSuccess() {
                                 Log.d("TAG", "Email has been sent ");

@@ -30,6 +30,7 @@ public class Register extends AppCompatActivity {
     private Button registerBtn;
     private TextView loginBtn;
     private ProgressBar progressBar;
+    private FireBaseDL fb = FireBaseDL.getFirebaseDL();
 
 
     @Override
@@ -48,7 +49,7 @@ public class Register extends AppCompatActivity {
 
 
         // Checks if user opening the app is a returning user - based on method in FireBaseDL
-        FireBaseDL.getFirebaseDL().userReturning(new ResultListener() {
+        fb.userReturning(new ResultListener() {
             @Override
             public void onSuccess() {
                 Toast.makeText(Register.this, "Congrats you have logged in again", Toast.LENGTH_SHORT).show();
@@ -89,7 +90,7 @@ public class Register extends AppCompatActivity {
                 progressBar.setVisibility(View.VISIBLE);
 
                 // Registers user based on method in FireBaseDL
-                FireBaseDL.getFirebaseDL().userRegister(email, password, "", new ResultListener() {
+                fb.userRegister(email, password, "", new ResultListener() {
                     @Override
                     public void onSuccess() {
                         progressBar.setVisibility(View.INVISIBLE);
