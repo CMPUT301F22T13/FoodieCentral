@@ -2,6 +2,7 @@ package com.example.cmput301f22t13.uilayer.recipestorage;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
@@ -12,15 +13,17 @@ import androidx.navigation.ui.NavigationUI;
 import com.example.cmput301f22t13.R;
 import com.example.cmput301f22t13.databinding.ActivityRecipeStorageBinding;
 
+import com.example.cmput301f22t13.domainlayer.item.IngredientItem;
 import com.example.cmput301f22t13.domainlayer.item.RecipeItem;
 
 
 import com.example.cmput301f22t13.domainlayer.storage.RecipeStorage;
+import com.example.cmput301f22t13.uilayer.ingredientstorage.AddEditViewIngredientFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
-public class RecipeStorageActivity extends AppCompatActivity implements AddEditViewRecipeFragment.OnRecipeItemChangedListener {
+public class RecipeStorageActivity extends AppCompatActivity implements AddEditViewRecipeFragment.OnRecipeItemChangedListener, AddEditViewIngredientFragment.OnIngredientItemChangeListener {
 
     private AppBarConfiguration appBarConfiguration;
     private ActivityRecipeStorageBinding binding;
@@ -73,6 +76,16 @@ public class RecipeStorageActivity extends AppCompatActivity implements AddEditV
     @Override
     public void onDeletePressed(RecipeItem recipe) {
         recipeDataList.remove(recipe);
+
+    }
+
+    @Override
+    public void onDonePressed(IngredientItem ingredientItem) {
+        Log.d("RecipeStorage", "onDonePressed");
+    }
+
+    @Override
+    public void onDeletePressed(IngredientItem ingredientItem) {
 
     }
 }

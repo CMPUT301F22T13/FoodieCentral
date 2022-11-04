@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
@@ -25,7 +26,10 @@ import androidx.navigation.fragment.NavHostFragment;
 import com.example.cmput301f22t13.R;
 import com.example.cmput301f22t13.databinding.FragmentAddEditViewIngredientBinding;
 import com.example.cmput301f22t13.domainlayer.item.IngredientItem;
+import com.example.cmput301f22t13.uilayer.recipestorage.RecipeStorageActivity;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
@@ -90,6 +94,21 @@ public class AddEditViewIngredientFragment extends Fragment {
                 binding.ingredientCategoryEdittext.setText(ingredient.getCategory());
             }
 
+            if (ingredient.getPhoto() != null) {
+
+            }
+
+            if (ingredient.getLocation() != null) {
+                binding.ingredientLocationEdittext.setText(ingredient.getLocation());
+            }
+
+            if (ingredient.getBbd() != null) {
+                binding.ingredientBbdEdittext.setText(
+                        ingredient.getBbd().get(Calendar.YEAR) + "/" +
+                                (ingredient.getBbd().get(Calendar.MONTH) + 1) + "/"+
+                                ingredient.getBbd().get(Calendar.DAY_OF_MONTH));
+            }
+
             // TODO: Add getLocation and getBestBeforeDate
 
             binding.ingredientNameEdittext.setInputType(InputType.TYPE_NULL);
@@ -119,10 +138,31 @@ public class AddEditViewIngredientFragment extends Fragment {
                     ingredient.setAmount(0);
                 }
 
+                try {
+                    ingredient.setBbd(selectedDate);
+                }
+                catch (Exception e) {
+                    // TODO: how to handle null best before date
+                }
+
                 ingredient.setUnit(binding.ingredientUnitEdittext.getText().toString());
                 ingredient.setCategory(binding.ingredientCategoryEdittext.getText().toString());
+                ingredient.setLocation(binding.ingredientLocationEdittext.getText().toString());
+                //ingredient.setPhoto(binding.ingredientImageImageview.getTag().toString());
+                if (selectedDate != null) {
+                    ingredient.setBbd(selectedDate);
+                }
+
                 listener.onDonePressed(ingredient);
-                NavHostFragment.findNavController(AddEditViewIngredientFragment.this).navigateUp();
+
+                if (getActivity() instanceof RecipeStorageActivity) {
+                    ((RecipeStorageActivity)getActivity()).onDonePressed(ingredient);
+                    NavHostFragment.findNavController(AddEditViewIngredientFragment.this).popBackStack(R.id.addEditViewRecipeFragment, false);
+                }
+                else if (getActivity() instanceof IngredientStorageActivity) {
+                    NavHostFragment.findNavController(AddEditViewIngredientFragment.this).popBackStack();
+
+                }
             }
         });
 
@@ -154,9 +194,9 @@ public class AddEditViewIngredientFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 GregorianCalendar initialDate = new GregorianCalendar();
-                /*if (ingredient.getBestBeforeDate() != null) {
-                    initialDate = ingredient.getBestBeforeDate();
-                }*/
+                if (ingredient.getBbd() != null) {
+                    initialDate = ingredient.getBbd();
+                }
                 datePickerDialog = new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker datePicker, int year, int month, int day) {
@@ -172,7 +212,9 @@ public class AddEditViewIngredientFragment extends Fragment {
             @Override
             public void onActivityResult(ActivityResult result) {
                 if (result.getResultCode() == Activity.RESULT_OK) {
+
                     binding.ingredientImageImageview.setImageURI(result.getData().getData());
+                    //binding.ingredientImageImageview.setTag(result.getData().getData().toString());
                 }
                 else {
                     Log.d("AddEditViewIngred", String.valueOf(result.getResultCode()));
