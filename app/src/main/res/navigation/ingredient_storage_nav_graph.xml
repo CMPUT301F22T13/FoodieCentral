@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ingredient_storage_nav_graph"
+    app:startDestination="@id/IngredientStorageMainFragment">
+
+    <fragment
+        android:id="@+id/IngredientStorageMainFragment"
+        android:name="com.example.cmput301f22t13.uilayer.ingredientstorage.IngredientStorageMainFragment"
+        android:label="Ingredients"
+        tools:layout="@layout/fragment_ingredient_storage_main">
+
+        <action
+            android:id="@+id/action_MainIngredient_to_AddEditView"
+            app:destination="@id/AddEditViewIngredientFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/AddEditViewIngredientFragment"
+        android:name="com.example.cmput301f22t13.uilayer.ingredientstorage.AddEditViewIngredientFragment"
+        android:label="Edit Ingredient"
+        tools:layout="@layout/fragment_add_edit_view_ingredient">
+        <argument
+            android:name="ingredient"
+            android:defaultValue="@null"
+            app:argType="com.example.cmput301f22t13.domainlayer.item.IngredientItem"
+            app:nullable="true" />
+    </fragment>
+</navigation>

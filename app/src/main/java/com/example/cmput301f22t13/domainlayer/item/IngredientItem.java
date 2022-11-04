@@ -1,6 +1,8 @@
 package com.example.cmput301f22t13.domainlayer.item;
 
-public class IngredientItem {
+import java.io.Serializable;
+
+public class IngredientItem implements Serializable {
     private String name;
     private String description;
     private Integer amount;
