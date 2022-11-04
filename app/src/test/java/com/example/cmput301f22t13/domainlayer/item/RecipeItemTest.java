@@ -5,11 +5,9 @@ import junit.framework.TestCase;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
 
 public class RecipeItemTest extends TestCase {
-    private RecipeItem InitalizeRecipeItem() {
-        return new RecipeItem();
-    }
 
     @Test
     public void testRecipeItemGettersAndSetters() {
@@ -26,7 +24,7 @@ public class RecipeItemTest extends TestCase {
         assertEquals(r.getPrepTime(), 2);
 
         r.setComments("This is my fav!");
-        assertEquals(r.getTitle(), "This is my fav!");
+        assertEquals(r.getComments(), "This is my fav!");
 
         // Will need a test photo url for this
         //r.setPhoto();
@@ -39,7 +37,18 @@ public class RecipeItemTest extends TestCase {
     @Test
     public void testRecipeItemAddIngredient() {
         RecipeItem r = new RecipeItem();
-        IngredientItem i = new IngredientItem("Bacon", "pig bacon", 2, "k/g", "Meat");
+        GregorianCalendar gcal = new GregorianCalendar(0, 0, 0);
+        IngredientItem i = new IngredientItem(
+                "Bacon",
+                "pig bacon",
+                2,
+                "k/g",
+                "Meat",
+                gcal,
+                "photoLink",
+                "Fridge"
+        );
+
         r.addIngredient(i);
         assertEquals(i, r.getIngredients().get(0));
     }
@@ -48,7 +57,17 @@ public class RecipeItemTest extends TestCase {
     public void testRecipeItemDeleteIngredient() {
         RecipeItem r = new RecipeItem();
         ArrayList<IngredientItem> ingredientItems = new ArrayList<IngredientItem>();
-        ingredientItems.add(new IngredientItem("Bacon", "pig bacon", 2, "k/g", "Meat"));
+        GregorianCalendar gcal = new GregorianCalendar(0, 0, 0);
+        ingredientItems.add(new IngredientItem(
+                "Bacon",
+                "pig bacon",
+                2,
+                "k/g",
+                "Meat",
+                gcal,
+                "photoLink",
+                "Fridge"
+        ));
         r.setIngredients(ingredientItems);
         assertEquals(ingredientItems, r.getIngredients());
 
@@ -62,7 +81,17 @@ public class RecipeItemTest extends TestCase {
     public void testRecipeItemDeleteIngredientIndex() {
         RecipeItem r = new RecipeItem();
         ArrayList<IngredientItem> ingredientItems = new ArrayList<IngredientItem>();
-        ingredientItems.add(new IngredientItem("Bacon", "pig bacon", 2, "k/g", "Meat"));
+        GregorianCalendar gcal = new GregorianCalendar(0, 0, 0);
+        ingredientItems.add(new IngredientItem(
+                "Bacon",
+                "pig bacon",
+                2,
+                "k/g",
+                "Meat",
+                gcal,
+                "photoLink",
+                "Fridge"
+        ));
         r.setIngredients(ingredientItems);
         assertEquals(ingredientItems, r.getIngredients());
 
