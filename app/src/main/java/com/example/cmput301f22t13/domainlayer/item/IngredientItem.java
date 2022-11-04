@@ -1,6 +1,14 @@
 package com.example.cmput301f22t13.domainlayer.item;
 
 import java.io.Serializable;
+import java.util.GregorianCalendar;
+import java.util.Locale;
+import java.util.TimeZone;
+import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Comparator;
 
 public class IngredientItem implements Serializable {
     private String name;
@@ -8,6 +16,10 @@ public class IngredientItem implements Serializable {
     private Integer amount;
     private String unit;
     private String category;
+    private GregorianCalendar bbd;
+    private String location;
+    private String photo;
+    private String hashId;
 
     /**
      * Constructor that initializes all ingredient fields to default values
@@ -18,7 +30,12 @@ public class IngredientItem implements Serializable {
         this.amount = 0;
         this.unit = "";
         this.category = "";
+        this.bbd = new GregorianCalendar(0,0,0);
+        this.location = "";
+        this.photo = "";
+        this.hashId = "";
     }
+
 
     /**
      * Constructor that initializes all ingredient fields to values that are passed in as arguments
@@ -27,13 +44,21 @@ public class IngredientItem implements Serializable {
      * @param amount number of units of this ingredient
      * @param unit unit type for the ingredient (eg. kg, lb)
      * @param category the category that this ingredient belongs to
+     * @param bbd the best before date that this ingredient has
+     * @param photo the uri string for storing images for the ingredient
+     * @param hashId the hash ID for uniquely identifying ingredients
+     * @param location the location of the ingredient stored
      */
-    public IngredientItem (String name, String description, Integer amount, String unit, String category) {
+    public IngredientItem (String name, String description, Integer amount, String unit, String category, GregorianCalendar bbd, String photo, String location, String hashId) {
         this.name = name;
         this.description = description;
         this.amount = amount;
         this.unit = unit;
         this.category = category;
+        this.bbd = bbd;
+        this.photo = photo;
+        this.location = location;
+        this.hashId = hashId;
     }
 
     /**
@@ -115,5 +140,118 @@ public class IngredientItem implements Serializable {
     public void setCategory(String category) {
         this.category = category;
     }
+    /**
+     * Gets the best before date the ingredient
+     * @return bbd
+     */
+    public GregorianCalendar getBbd() {
+        return bbd;
+    }
+    /**
+     * Sets the best before date of the ingredient it belongs to
+     * @param bbd new bbd
+     */
+    public void setBbd(GregorianCalendar bbd) {
+        this.bbd = bbd;
+    }
+    /**
+     * Gets the location of this ingredient it belongs to
+     * @return location
+     */
+    public String getLocation() {
+        return location;
+    }
+    /**
+     * Sets the location of the ingredient it belongs to
+     * @param location new location
+     */
+    public void setLocation(String location) {
+        this.location = location;
+    }
+    /**
+     * Gets the uri image string of the ingredient it belongs to
+     * @return photo
+     */
+    public String getPhoto() {
+        return photo;
+    }
+    /**
+     * Sets the uri string for the image of the ingredient it belongs to
+     * @param photo new photo
+     */
+    public void setPhoto(String photo) {
+        this.photo = photo;
+    }
+    /**
+     * Gets the hash ID of this ingredient it belongs to
+     * @return hashId
+     */
+    public String getHashId() {
+        return hashId;
+    }
+    /**
+     * Sets the hashId of the ingredient it belongs to
+     * @param hashId new hashId
+     */
+    public void setHashId(String hashId) {
+        this.hashId = hashId;
+    }
 
+
+}
+
+
+/**
+ * Comparator class to sort ingredient item by description
+ */
+class SortIngredientByDescription implements Comparator<IngredientItem> {
+    @Override
+    /**
+     * Override compare method for description sorting
+     */
+    public int compare(IngredientItem t1, IngredientItem t2) {
+        return t1.getDescription().compareTo(t2.getDescription());
+    }
+}
+
+/**
+ * Comparator class to sort ingredient item by best before date
+ */
+//    TODO Implment once ii has been updated to have bbfd
+class SortIngredientByBbfd implements Comparator<IngredientItem> {
+    @Override
+    /**
+     * Override compare method for best before date
+     */
+    public int compare(IngredientItem t1, IngredientItem t2) {
+        return 0;
+    }
+}
+
+/**
+ * Comparator class to sort ingredient item by category
+ */
+//    TODO Implment once ii has been updated to have location
+class SortIngredientByLocation implements Comparator<IngredientItem> {
+    @Override
+    /**
+     * Override compare method for category
+     */
+    public int compare(IngredientItem t1, IngredientItem t2) {
+        return 0;
+    }
+}
+
+/**
+ * Comparator class to sort ingredient item by category
+ */
+class SortIngredientByCategory implements Comparator<IngredientItem> {
+    @Override
+    /**
+     * Override compare method for category
+     */
+
+    public int compare(IngredientItem t1, IngredientItem t2) {
+        return t1.getCategory().compareTo(t2.getCategory());
+    }
 }
