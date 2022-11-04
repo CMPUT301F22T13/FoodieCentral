@@ -1,6 +1,10 @@
 package com.example.cmput301f22t13.domainlayer.item;
 
+import com.example.cmput301f22t13.domainlayer.utils.Utils;
+import com.google.firebase.Timestamp;
+
 import java.io.Serializable;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 import java.util.TimeZone;
@@ -49,7 +53,7 @@ public class IngredientItem implements Serializable {
      * @param hashId the hash ID for uniquely identifying ingredients
      * @param location the location of the ingredient stored
      */
-    public IngredientItem (String name, String description, Integer amount, String unit, String category, GregorianCalendar bbd, String photo, String location, String hashId) {
+    public IngredientItem (String name, String description, Integer amount, String unit, String category, GregorianCalendar bbd, String photo, String location) {
         this.name = name;
         this.description = description;
         this.amount = amount;
@@ -58,7 +62,19 @@ public class IngredientItem implements Serializable {
         this.bbd = bbd;
         this.photo = photo;
         this.location = location;
-        this.hashId = hashId;
+
+        int timestamp = new Timestamp(new Date()).getNanoseconds();
+        String timeStampString = Integer.toString(timestamp);
+        MessageDigest digest = null;
+        try {
+            digest = MessageDigest.getInstance("SHA-256");
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        byte[] encodedhash = digest.digest(
+                timeStampString.getBytes(StandardCharsets.UTF_8));
+
+        this.hashId = Utils.bytesToHex(encodedhash);
     }
 
     /**
