@@ -18,45 +18,46 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+/** Inherits from the FireBaseDL and is responsible for tasks related to adding,deleting,getting and updating recipe items
+ * */
+
 public class RecipeDL extends FireBaseDL {
 
-    /** Add recepie recieved from Domain Layer into FireStore Ingredient storage collection
-     * @Input: RecepieItem item - item added is an ingredient item,
-     *         String uniqueKey - A unique key string to store ingredient item in a unique Firestore document
+    /** Add recipe received from Domain Layer into FireStore Recipe storage collection
+     * @param  item - item added is an Recipe item
+     *@param hashKey - A unique hash for every item that differentiates one item from another. Used for unique recipe storage in Firebase
+     *Current status - Incomplete, need to store the arrayList of ingredient items - will be part of our upcoming Sprint plan
      * */
 
-    public void recepiesFirebaseAdd(RecipeItem item, String uniqueKey) {
+    public void recepiesFirebaseAdd(RecipeItem item, String hashKey) {
 
-        //Initializing data value from item object
-        //TODO figure out how to store the array of ingredient items - are those coming from ingredient storage?
         auth = FirebaseAuth.getInstance();
-        String recepie_title = item.getTitle();
-        Integer recepie_prepTime = item.getPrepTime();
-        Integer recepie_servings = item.getServings();
-        String recepie_category = item.getCategory();
-        String recepie_comments = item.getComments();
-        String recepie_photo = item.getPhoto();
+        //Initializing and storing data value from passed in Recipe item
+        String recipe_title = item.getTitle();
+        Integer recipe_prepTime = item.getPrepTime();
+        Integer recipe_servings = item.getServings();
+        String recipe_category = item.getCategory();
+        String recipe_comments = item.getComments();
+        String recipe_photo = item.getPhoto();
         ArrayList<IngredientItem> ingredientItems = item.getIngredients();
 
         //Storing data collected from object in a HashMap
-
-
         Map<String, Object> ingredients = new HashMap<>();
-        ingredients.put("Title", recepie_title);
-        ingredients.put("Prep Time", recepie_prepTime);
-        ingredients.put("Servings", recepie_servings);
-        ingredients.put("Category", recepie_category);
-        ingredients.put("Comments", recepie_comments);
-        ingredients.put("Photo", recepie_photo);
-        //Storing ArrayList of ingredients
+        ingredients.put("Title", recipe_title);
+        ingredients.put("Prep Time", recipe_prepTime);
+        ingredients.put("Servings", recipe_servings);
+        ingredients.put("Category", recipe_category);
+        ingredients.put("Comments", recipe_comments);
+        ingredients.put("Photo", recipe_photo);
+        //TODO implement storage for arrayList of ingredientItems
 
-        //Storing data in Hashmap to correct location in Firebase using uniqueKey as document reference
+
+        //Storing data in Hashmap to correct location in Firebase using hashKey as document reference
         DocumentReference recepieStorage = fstore.collection("Users")
                 .document(auth.getCurrentUser().getUid())
                 .collection("Recepie Storage")
-                .document(uniqueKey);
+                .document(hashKey);
 
-        //onSucessListener to validate task completion
         recepieStorage.set(ingredientItems).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void unused) {
@@ -65,23 +66,25 @@ public class RecipeDL extends FireBaseDL {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Log.d("TAG", "firebaseAdd does not work");
+                Log.d("TAG", "FirebaseAdd does not work");
             }
         });
 
     }
 
 
-    /** Gets values from FireStore for perticular recepie and returns an RecepieItem object
-     * @Input: uniqueKey - A unique key string to store ingredient item in a unique Firestore document
-     * */
-    public void ingrideintFirebaseGet(String uniqueKey) {
+    /**  Gets data stored from Firestore for a wanted recipe and returns a RecipeItem object
+     * @param  hashKey - A unique hash for every recipe that differentiates one item from another - Used to accomplish unique recipe storage in Firebase
+     * Current status - Incomplete, need to incorporate query for object retrieval and returning the object to the domain layer - will be part of up coming Sprint plan
+     */
+
+    public void ingrideintFirebaseGet(String hashKey) {
 
         //Referencing wanted document from correct location in Firestore database
         DocumentReference getRecepies= fstore.collection("Users")
                 .document(auth.getCurrentUser().getUid())
-                .collection("Recepie Storage")
-                .document(uniqueKey);
+                .collection("Recipe Storage")
+                .document(hashKey);
 
         //Getting contents of the document and assigning an onSuccessLister to validate task completion
         getRecepies.get()
@@ -91,34 +94,10 @@ public class RecipeDL extends FireBaseDL {
                         if (task.isSuccessful()) {
                             DocumentSnapshot document = task.getResult();
                             //If document is not empty then store values in IngredientItem object
-                            //TODO discuss with team if they want result in ArrayList (show output) OR in IngredientItem object
                             if (document.exists()) {
-//                                ArrayList<String> ingredientId = new ArrayList<>();
-//                                //Adding to ingredients arrayList
-//                                ingredientId.add(document.getString("Name"));
-//                                ingredientId.add(document.getString("Description"));
-//                                ingredientId.add(document.getString("Best Before"));
-//                                ingredientId.add(document.getString("Location"));
-//                                ingredientId.add(document.getString("Amount"));
-//                                ingredientId.add(document.getString("Unit"));
-//                                ingredientId.add(document.getString("Category"));
-//                                ingredientId.add(document.getString("Image"));
-                                //TODO need to work with RecepieItem to initilize all recepie feilds as Strings
-                                //TODO need to figure out how to get ingredient items
-                                //Need to wrap up
-//                                RecipeItem result = new RecipeItem(
-//                                        document.getString("Title"),
-//                                        document.getString("Category"),
-//                                        document.getString("Comments"),
-//                                        document.getString("Photo")
-//
-//                                )
-                                //document.getString("Prep Time"), document.getString("Servings")
-
-
+                                    //Initialize recepie getting
 
                                 //TODO need to have a callback to the recepieDL to update ingredient storage
-                                //Need to have a callback to have recepieDl update storage
 
                                 Log.d("TAG", "onComplete: Got from firebase");
                             } else {
@@ -131,6 +110,67 @@ public class RecipeDL extends FireBaseDL {
                 });
     }
 
+    //Delete
+
+    /** Deletes data from Firestore for a particular passed in Recipe item - by doing so the recipe document is deleted from Firestore
+     *  @param item - Recipe item to be deleted from Firestore
+     *  @param hashKey - A unique key string to store ingredient item in a unique Firestore document
+     *  Current status - Complete
+     * */
+
+    public void recipeFirebaseDelete(RecipeItem item, String hashKey){
+        //Referencing wanted document from correct location in Firestore database
+        DocumentReference deleteIngredient = fstore.collection("Users")
+                .document(auth.getCurrentUser().getUid())
+                .collection("Recipe Storage")
+                .document(hashKey);
+
+        deleteIngredient.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                Log.d("tag", "Recipe item successfully deleted from Firebase");
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d("TAG", "Ingredient item not deleted");
+            }
+        });
+    }
+
+    //Update
+
+    /** Updates recipe items in Firestore based on parameters received from the Domain Layer.
+     *     *@param  item - item to be updated is a Recipe item
+     *     *@param hashKey - A unique hash for every item that differentiates one item from another. Used for unique item reference in Firestore
+     *     *Current status - Incomplete, need to incorporate query for ingredient item traversal and update
+     * */
+
+    public void recipeFirebaseUpdate(RecipeItem item, String hashId){
+        //Referencing wanted document from correct location in Firestore database
+        DocumentReference updateIngredients = fstore.collection("Users")
+                .document(auth.getCurrentUser().getUid())
+                .collection("Recipe Storage")
+                .document(hashId);
+
+
+        updateIngredients.update("Title", item.getTitle(), "Comments", item.getComments(),
+                        "Prep Time", item.getPrepTime(), "Servings", item.getServings(), "Category", item.getCategory(),
+                        "Photo", item.getPhoto())
+
+
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Log.d("TAG", "Successfully updated Ingredients");
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d("TAG", "Document update unsuccessful");
+                    }
+                });
+    }
 
 
 }

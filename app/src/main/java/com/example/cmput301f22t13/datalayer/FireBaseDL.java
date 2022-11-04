@@ -1,21 +1,10 @@
 package com.example.cmput301f22t13.datalayer;
 
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.cmput301f22t13.uilayer.userlogin.ResultListener;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -27,15 +16,14 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.BlockingDeque;
-
-//TODO Figure out where login activity is created and how it would refrence values from FirebaseDL
 
 
-/** FireBaseDL initiaties connection with Firebase and handles user login,signup and forget password functionalities
+/** FireBaseDL initiates connection with Firebase and handles user login,signup and forget password functionalities
  * */
 
 public  class FireBaseDL {
+
+    //FireBaseDL has static functionalities so it can be referenced by the Login and Sign up Activites in the UI layer
     FirebaseAuth auth;
     FirebaseFirestore fstore;
     static private FireBaseDL firebaseDL;
@@ -48,20 +36,16 @@ public  class FireBaseDL {
         return firebaseDL;
     }
 
-//    public FireBaseDL() {
-//        auth = FirebaseAuth.getInstance();
-//        fstore = FirebaseFirestore.getInstance();
-//    }
 
-    /** Authenticates user(Signs in user) into Firestore email and password authentication
-     * @Input: String email - Users email
-     *         String password - Users password
+    /** Authenticates user SignIn - runs a check against the data in Firestore to see if User has an account made by validating email and password
+     * @param: email - Users email
+     * @param  password - Users password
+     * @param  listener - Interface that helps check is a particular method called in UI works as expected
+     * Current status - Completed, one enhancement that is in progress which is to encrypt passwords in Firestore from plaintext -> encrypted value in order to preserve security
      * */
-    //TODO passwords passed in should be encrypted/hashed (also dehashed and decrypted) for proper security posture - V2
-
-    public void userSignIn(String email, String password){
+    public void userSignIn(String email, String password, ResultListener listener){
         //User signs in email and password - adding onComplete to signify valid task completion
-        auth.signInWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+        firebaseDL.auth.signInWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
@@ -73,15 +57,14 @@ public  class FireBaseDL {
         });
     }
 
-    /** Sends email to valid user if password is forgotten
-     * @Input: String email - Users email for password reset to be sent
-     *
+    /** Gives user the option to reset their password if they have forgot it. Uses dialog box to send capture new user email and send a recovery email to this specified email
+     * @param  email - User email address to which forgot password procedure can be initialized
+     * @param  listener - Interface that helps check if a particular method called in UI works as expected
+     * Current status - Completed
      * */
-
-    public void userForgotPassword(String email) {
-        //user inputs email for password reset prompt to be sent - adding onSuccessListener & onFailureListener to signify valid
-        //task completion
-        auth.sendPasswordResetEmail(email).addOnSuccessListener(new OnSuccessListener<Void>() {
+    public void userForgotPassword(String email, ResultListener listener) {
+        //user inputs email for password reset prompt to be sent
+        firebaseDL.auth.sendPasswordResetEmail(email).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void unused) {
                 Log.d("TAG", "Sent email for forgot password");
@@ -94,11 +77,13 @@ public  class FireBaseDL {
         });
     }
 
-    /** Checks if user that opens the app is an already established user in DB
+    /** Checks if user logging into the app is a "pre exising user" - meaning they are on the Firestore database. If so it automatically logs them into the app
+     * @param  listener - Interface that helps check if a particular method called in UI works as expected
+     * Current status - Completed
      * */
-    public void userReturning() {
+    public void userReturning(ResultListener listener) {
         //checks if current user is an already existing user
-        if(auth.getCurrentUser()!=null) {
+        if(firebaseDL.auth.getCurrentUser()!=null) {
             Log.d("TAG", "This is a returning user");
         }
         else {
@@ -106,24 +91,24 @@ public  class FireBaseDL {
         }
     }
 
-
-    /** Registers new users in Firestore
-     * @Input: String email - User email for registering user,
-     *         String password - User password for registering user,
-     *         String name - User name for registering user
+    /** If a User is a new user this method registers them into the system using their name,email and password
+     * @param email - User email for registering user
+     * @param password - User password for registering user
+     * @param name - Users name for registering user
+     * @param  listener - Interface that helps check if a particular method called in UI works as expected
+     * Current status - Completed, one enhancement that is in progress which is to encrypt passwords in Firestore from plaintext -> encrypted value in order to preserve security
      * */
-
     //TODO passwords passed in should be encrypted/hashed (also dehashed and decrypted) for proper security posture - V2
     public void userRegister(String email, String password, String name, ResultListener listener) {
         //User enters email and password for registration - adding onComplete to signify valid task completion
-        auth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+        firebaseDL.auth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
                     Log.d("TAG", "User created");
                     //Passing user id to store unique documents for each user in FireStore
-                    String userId = auth.getCurrentUser().getUid();
-                    DocumentReference documentReference = fstore.collection("Users").document(userId);
+                    String userId = firebaseDL.auth.getCurrentUser().getUid();
+                    DocumentReference documentReference = firebaseDL.fstore.collection("Users").document(userId);
 
                     //Storing user name and email in Firestore
                     Map<String,Object> user = new HashMap<>();
@@ -149,13 +134,12 @@ public  class FireBaseDL {
         });
     };
 
-    /** Logging users out of application
+    /** Logs the user out of the app onto the Login page
+     * @param  listener - Interface that helps check if a particular method called in UI works as expected
+     * Current status - Completed, needs to be implemented on the UI layer
      * */
-    public void userLogout(){
+    public void userLogout(ResultListener listener){
         FirebaseAuth.getInstance().signOut();
     }
 
-    protected void onCreate(Bundle savedInstanceState) {
-        new Login();
-    }
 };
