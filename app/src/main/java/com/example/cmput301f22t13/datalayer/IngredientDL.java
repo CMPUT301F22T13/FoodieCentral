@@ -22,19 +22,25 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Map;
 
+
+/** Inherits from the FireBaseDL and is responsible for tasks related to adding,deleting,getting and updating Ingredient items
+ * */
+
+
 public class IngredientDL extends FireBaseDL {
 
-    /** Add item recieved from Domain Layer into FireStore Ingredient storage collection
-     * @Input: IngredientItem item - item added is an ingredient item,
-     *         String uniqueKey - A unique key string to store ingredient item in a unique Firestore document
+
+    /** Add recipe received from Domain Layer into FireStore Recipe storage collection
+     * @param  item - item added is an ingredient item
+     *@param hashKey - A unique hash for every item that differentiates one item from another. Used for unique item storage in Firebase
+     *Current status - Complete
      * */
-    @RequiresApi(api = Build.VERSION_CODES.N)
 
-    public void ingridientFirebaseAdd(IngredientItem item, String hashId) {
+    public void ingridientFirebaseAdd(IngredientItem item, String hashKey) {
 
-        //Initializing data value from item object
 
         auth = FirebaseAuth.getInstance();
+        //Initializing and storing data value from passed in Ingredient item
         String ing_name = item.getName();
         String ing_description = item.getDescription();
         GregorianCalendar ing_bestBefore = item.getBbd();
@@ -47,7 +53,6 @@ public class IngredientDL extends FireBaseDL {
 
 
         //Storing data collected from object in a HashMap
-
         Map<String, Object> ingredientItems = new HashMap<>();
         ingredientItems.put("Name", ing_name);
         ingredientItems.put("Description", ing_description);
@@ -58,13 +63,12 @@ public class IngredientDL extends FireBaseDL {
         ingredientItems.put("Category", ing_category);
         ingredientItems.put("Image", ing_image);
 
-        //Storing data in Hashmap to correct location in Firebase using uniqueKey as document reference
+        //Storing data in Hashmap to correct location in Firebase using hashKey as document reference
         DocumentReference ingredientStorage = fstore.collection("Users")
                 .document(auth.getCurrentUser().getUid())
                 .collection("Ingredient Storage")
-                .document(hashId);
+                .document(hashKey);
 
-        //onSucessListener to validate task completion
         ingredientStorage.set(ingredientItems).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void unused) {
@@ -79,17 +83,17 @@ public class IngredientDL extends FireBaseDL {
 
     }
 
-
-    /** Gets values from FireStore for perticular ingredient and returns an IngredientItem object
-     * @Input: uniqueKey - A unique key string to store ingredient item in a unique Firestore document
-     * */
-    public void ingrideintFirebaseGet(String hashId) {
+    /** Gets data stored from Firestore for a wanted ingredient and returns a Ingredient Item object
+     * @param hashKey - A unique hash for every ingredient that differentiates one ingredient from another - Used to accomplish unique ingredient storage in Firebase
+     * Current status - Incomplete, need to incorporate query for object retrieval and returning the object to the domain layer - will be part of up coming Sprint plan
+     */
+    public void ingrideintFirebaseGet(String hashKey) {
 
         //Referencing wanted document from correct location in Firestore database
         DocumentReference getIngredients = fstore.collection("Users")
                 .document(auth.getCurrentUser().getUid())
                 .collection("Ingredient Storage")
-                .document(hashId);
+                .document(hashKey);
 
         //Getting contents of the document and assigning an onSuccessLister to validate task completion
         getIngredients.get()
@@ -101,49 +105,9 @@ public class IngredientDL extends FireBaseDL {
                             //If document is not empty then store values in IngredientItem object
 
                             if (document.exists()) {
-//                                ArrayList<String> ingredientId = new ArrayList<>();
-//                                //Adding to ingredients arrayList
-//                                ingredientId.add(document.getString("Name"));
-//                                ingredientId.add(document.getString("Description"));
-//                                ingredientId.add(document.getString("Best Before"));
-//                                ingredientId.add(document.getString("Location"));
-//                                ingredientId.add(document.getString("Amount"));
-//                                ingredientId.add(document.getString("Unit"));
-//                                ingredientId.add(document.getString("Category"));
-//                                ingredientId.add(document.getString("Image"));
 
 
                                 Map<String,Object> ingredientMap = document.getData();
-
-
-
-
-
-
-
-
-//                                ArrayList<String> userEmail;
-//                                userEmail = new ArrayList<>();
-//                                IngredientItem result = new IngredientItem(
-////                                        document.get("Name"),
-////                                        document.get("Description"),
-////                                        document.get("Best before"),
-////                                        document.get("Location"),
-////                                        document.get("Amount"),
-////                                        document.get("Unit"),
-////                                        document.get("Category"),
-////                                        document.get("Image")
-//
-//                                );
-
-
-
-
-                                //TODO need to have a callback to the ingredientDL to update ingredient storage
-
-
-                                //Need to have a callback to have ingreidentDl update storage
-
 
                                 Log.d("TAG", "onComplete: Got from firebase");
                             } else {
@@ -157,21 +121,18 @@ public class IngredientDL extends FireBaseDL {
     }
 
 
-    /** Update values from FireStore for perticular ingredient
-     * @Input:  IngredientItem item - item added is an ingredient item,
-     *          uniqueKey - A unique key string to store ingredient item in a unique Firestore document
+    /** Updates ingredient items in Firestore based on parameters received from the Domain Layer.
+     *     *@param  item - item to be updated is an ingredient item
+     *     *@param hashKey - A unique hash for every item that differentiates one item from another. Used for unique item refrence in Firestore
+     *     *Current status - Complete
      * */
 
-    public void ingrideintFirebaseUpdatet(IngredientItem item, String hashId){
+    public void ingrideintFirebaseUpdate(IngredientItem item, String hashId){
         //Referencing wanted document from correct location in Firestore database
         DocumentReference updateIngredients = fstore.collection("Users")
                 .document(auth.getCurrentUser().getUid())
                 .collection("Ingredient Storage")
                 .document(hashId);
-
-
-        //Updating all the ingredient value irregardless of if values have changed or not
-        //TODO need to intilize Best Before, Location and Image instances in IngredientItem and have getters and setters for them
 
         updateIngredients.update("Name", item.getName(), "Description", item.getDescription(),
                         "Amount", item.getAmount(), "Unit", item.getUnit().toString(), "Category", item.getCategory(),
@@ -191,24 +152,23 @@ public class IngredientDL extends FireBaseDL {
                 });
     }
 
-    /** Deletes ingredient from FireStore
-     * @Input:  IngredientItem item - item added is an ingredient item,
-     *          uniqueKey - A unique key string to store ingredient item in a unique Firestore document
+    /** Deletes data from Firestore for a particular passed in ingredient item - by doing so the ingredient document is deleted from Firestore
+     *  @param item - Ingredient item to be deleted from Firestore
+     *  @param hashKey - A unique key string to store ingredient item in a unique Firestore document
+     *  Current status - Complete
      * */
 
-    public void ingredientFirebaseDelete(IngredientItem item, String hashId){
+    public void ingredientFirebaseDelete(IngredientItem item, String hashKey){
         //Referencing wanted document from correct location in Firestore database
         DocumentReference deleteIngredient = fstore.collection("Users")
                 .document(auth.getCurrentUser().getUid())
                 .collection("Ingredient Storage")
-                .document(hashId);
+                .document(hashKey);
 
-        //Delete ingredient document from Firebase, adding an onSuccessListener & onFailureListener
-        // to signify valid task completion
         deleteIngredient.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void unused) {
-                Log.d("tag", "Ingredient item succesfully deleted from Firebase");
+                Log.d("tag", "Ingredient item successfully deleted from Firebase");
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -217,9 +177,6 @@ public class IngredientDL extends FireBaseDL {
             }
         });
     }
-
-
-
 
 }
 

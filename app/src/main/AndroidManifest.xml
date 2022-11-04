@@ -14,9 +14,12 @@
         android:name=".MyApplication"
         android:theme="@style/Theme.CMPUT301F22T13"
         tools:targetApi="31">
+
+
         <activity
-            android:name=".userLogin"
+            android:name=".uilayer.userlogin.Register"
             android:exported="false" />
+
         <activity
             android:name=".uilayer.ingredientstorage.IngredientStorageActivity"
             android:exported="true"
@@ -40,7 +43,7 @@
         </activity>
         <activity
             android:exported="true"
-            android:name=".datalayer.Register">
+            android:name=".uilayer.userlogin.Login">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

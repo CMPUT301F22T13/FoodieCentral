@@ -1,6 +1,5 @@
-package com.example.cmput301f22t13.datalayer;
+package com.example.cmput301f22t13.uilayer.userlogin;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -8,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,87 +16,89 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.cmput301f22t13.R;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
+import com.example.cmput301f22t13.datalayer.FireBaseDL;
 import com.google.firebase.auth.FirebaseAuth;
 
+/** UI layer for user Login it contains the following:
+ * - EditTexts for getting user email and password
+ * - Button for login validate
+ * - TextViews to go the Register activity (in case user doesn't have an account) or forgot password steps
+ * - ProgressBar to show that a perticular action is being performed
+ * - FirebaseAuth - authenticating Firebase and referencing current user
+ * */
 
-
-
-
-
-//Login user code engulfed with UI logic, refer to xml for UI template
+//TODO couple issues with the login UI - progress bar and toast visibility
 
 
 public class Login extends AppCompatActivity {
-    EditText loginEmail, loginPassword;
+    EditText loginEmail,loginPassword;
     Button loginBtn;
     TextView createBtn, forgotPasswordBtn;
     ProgressBar loginProgressBar;
     FirebaseAuth auth;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        //Initilizers
+        //Initializing objects used within the UI
         loginEmail = findViewById(R.id.loginEmail);
         loginPassword = findViewById(R.id.loginPassword);
         loginBtn = findViewById(R.id.loginBtn);
         createBtn = findViewById(R.id.createClick);
         forgotPasswordBtn = findViewById(R.id.forgetPasswordBtn);
-
         loginProgressBar = findViewById(R.id.loginProgressBar);
         auth = FirebaseAuth.getInstance();
 
 
-        //Login button click
+       //User clicks the login button
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //Gets String value for email and password
                 String email = loginEmail.getText().toString();
                 String password = loginPassword.getText().toString();
 
+
+                //Error checking
+
+                //Empty email passed
                 if(TextUtils.isEmpty(email)){
                     loginEmail.setError("Email is required");
                     return;
                 }
-                //Password field is empty
+                //Empty Password passed
                 if(TextUtils.isEmpty(password)){
                     loginPassword.setError("Password is required");
                 }
-                //Password length
+                //Password length is less than 6 characters
                 if(password.length() < 6){
                     loginPassword.setError("Password must be greater than 6 characters");
                 }
 
-                //Progress visible - spin
-                loginProgressBar.setVisibility(View.VISIBLE);
+                //Progress visible - issue with this
+                loginProgressBar.setVisibility(View.INVISIBLE);
 
-                //Authenticate user
-
-                auth.signInWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                //Authenticates user based on method in FireBaseDL
+                FireBaseDL.getFirebaseDL().userSignIn(email,password, new ResultListener() {
                     @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if(task.isSuccessful()){
-                            Toast.makeText(Login.this, "Welcome Back - Logged in successfully", Toast.LENGTH_SHORT).show();
-                            //Send to ingredient activity
-                            //startActivity(new Intent(getApplicationContext(),MainActivity.class));
-                        }else{
-                            Toast.makeText(Login.this, "Invalid login -error" + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                            loginProgressBar.setVisibility(View.INVISIBLE);
-                        }
+                    public void onSuccess() {
+                        loginProgressBar.setVisibility(View.INVISIBLE);
+                        Toast.makeText(Login.this, "Welcome back!", Toast.LENGTH_SHORT).show();
+                    }
+                    @Override
+                    public void onFailure(Exception e) {
+                        loginProgressBar.setVisibility(View.INVISIBLE);
+                        Toast.makeText(Login.this, "Couldn't authenticate you - please create a profile if you don't have one already!", Toast.LENGTH_SHORT).show();
+
                     }
                 });
             }
         });
 
-        //Create button
+
+        //Create button clicked - Register activity intent
         createBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -104,7 +106,7 @@ public class Login extends AppCompatActivity {
             }
         });
 
-        //Forgot password - reset email
+        //Forgot password clicked - reset password dialog along side reset email conditon
         forgotPasswordBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -113,27 +115,27 @@ public class Login extends AppCompatActivity {
                 passwordResetDialog.setTitle("Reset Password? ");
                 passwordResetDialog.setMessage("Enter your email to recieve reset link");
                 passwordResetDialog.setView(resetEmail);
-
                 passwordResetDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        //get email and send reset link
+                        //Get email and send reset link
                         String email = resetEmail.getText().toString();
-                        auth.sendPasswordResetEmail(email).addOnSuccessListener(new OnSuccessListener<Void>() {
+
+                        //Authenticates user based on method in FireBaseDL
+                        FireBaseDL.getFirebaseDL().userForgotPassword(email, new ResultListener() {
                             @Override
-                            public void onSuccess(Void unused) {
+                            public void onSuccess() {
+                                Log.d("TAG", "Email has been sent ");
                                 Toast.makeText(Login.this, "Reset Link has been sent to your email", Toast.LENGTH_SHORT).show();
                             }
-                        }).addOnFailureListener(new OnFailureListener() {
                             @Override
-                            public void onFailure(@NonNull Exception e) {
+                            public void onFailure(Exception e) {
                                 Toast.makeText(Login.this, "Password reset Unsuccessful" + e.getMessage(), Toast.LENGTH_SHORT).show();
                             }
                         });
                     }
-                });
-
-                passwordResetDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                }) ;
+            passwordResetDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         //Close diaglog
