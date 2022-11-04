@@ -27,6 +27,7 @@ import com.example.cmput301f22t13.uilayer.recipestorage.RecipeStorageActivity;
 import com.example.cmput301f22t13.uilayer.userlogin.ResultListener;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 
 /**
  * Main fragment for ingredient storage. Shows a list of all ingredients in the storage and allows
@@ -51,22 +52,6 @@ public class IngredientStorageMainFragment extends Fragment {
     ) {
 
         binding = FragmentIngredientStorageMainBinding.inflate(inflater, container, false);
-
-//        Bundle bundle = getArguments();
-//        if (bundle != null) {
-//            ingredients = (ArrayList<IngredientItem>) bundle.getSerializable(ARG_INGREDIENT_LIST);
-//        }
-//        else {
-//            Log.d("IngredientStorageMain", "bundle null");
-//            try {
-//                ingredients = ingredientDL.getIngredients();
-//            }
-//            catch (NullPointerException e) {
-//                Log.d("IngredientStorageMain", "could not get ingredients from ingredient storage activity");
-//            }
-//
-//        }
-
         return binding.getRoot();
 
     }
