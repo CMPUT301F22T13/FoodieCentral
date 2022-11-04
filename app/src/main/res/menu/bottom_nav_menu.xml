@@ -1,15 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/person"
-        android:title="Person"
-        android:icon="@drawable/recipes_foreground"/>
+        android:id="@+id/mealPlanning"
+        android:icon="@drawable/recipes_foreground"
+        android:title="Meal Planning" />
+    <item
+        android:id="@+id/shoppingList"
+        android:icon="@drawable/recipes_foreground"
+        android:title="Shopping List" />
     <item
         android:id="@+id/home"
         android:title="Home"
         android:icon="@drawable/recipes_foreground"/>
     <item
-        android:id="@+id/settings"
-        android:title="Settings"
+        android:id="@+id/recipes"
+        android:title="Recipes"
+        android:icon="@drawable/recipes_foreground"/>
+    <item
+        android:id="@+id/ingredientStorage"
+        android:title="Ingredient Storage"
         android:icon="@drawable/recipes_foreground"/>
 </menu>
