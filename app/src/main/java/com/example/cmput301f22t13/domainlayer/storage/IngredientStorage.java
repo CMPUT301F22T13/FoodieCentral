@@ -71,6 +71,26 @@ public class IngredientStorage {
 
     }
 
+    /** Removes ingredient from storage
+     * @Input: int index - index of item to update
+     * @Input: IngredientItem toUpdate - item to update
+     * */
+    public void updateIngredientInStorage(int index, IngredientItem toUpdate) {
+        try {
+            if (index > ingredients.size())
+                throw new ArrayIndexOutOfBoundsException();
+
+            // TODO: Implement IngredientDL.updateIngredient(item)
+            // IngredientDL.updateIngredient(index, toUpdate);
+            ingredients.remove(index); // Remove old
+            ingredients.add(toUpdate); // Add new
+        } catch (Exception e) {
+            Log.e(TAG, "updateIngredientInStorage: ", e);
+        }
+
+    }
+
+
     /** Getter for ingredient storage
      * @Returns: ArrayList<IngredientItem> representing ingredients in storage
      * */
