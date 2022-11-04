@@ -49,8 +49,10 @@ public  class FireBaseDL {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
+                    listener.onSuccess();
                     Log.d("TAG", "User authentication is successful");
                 } else {
+                    listener.onFailure(new Exception());
                     Log.d("TAG", "User authentication is unsuccessful");
                 }
             }

@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.example.cmput301f22t13.R;
 import com.example.cmput301f22t13.datalayer.FireBaseDL;
+import com.example.cmput301f22t13.uilayer.ingredientstorage.IngredientStorageActivity;
 import com.google.firebase.auth.FirebaseAuth;
 
 /** UI layer for user Login it contains the following:
@@ -86,6 +87,7 @@ public class Login extends AppCompatActivity {
                     public void onSuccess() {
                         loginProgressBar.setVisibility(View.INVISIBLE);
                         Toast.makeText(Login.this, "Welcome back!", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(getApplicationContext(), IngredientStorageActivity.class));
                     }
                     @Override
                     public void onFailure(Exception e) {

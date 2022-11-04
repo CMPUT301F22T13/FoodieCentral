@@ -12,9 +12,11 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import org.checkerframework.checker.units.qual.A;
 
@@ -39,9 +41,23 @@ public class IngredientDL extends FireBaseDL {
             ingredientDL = new IngredientDL();
             fb = FireBaseDL.getFirebaseDL();
             // Populate ingredients here
+            populateIngredientsOnStartup();
 
         }
         return ingredientDL;
+    }
+
+    private static void populateIngredientsOnStartup() {
+        CollectionReference getIngredients = fb.fstore.collection("Users")
+        .document(fb.auth.getCurrentUser().getUid())
+        .collection("Ingredient Storage");
+
+        getIngredients.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                Log.d("INGREDIENTDL", "onComplete: ");
+            }
+        });
     }
 
     /** Add item recieved from Domain Layer into FireStore Ingredient storage collection
@@ -66,7 +82,7 @@ public class IngredientDL extends FireBaseDL {
         Map<String, Object> ingredientItems = new HashMap<>();
         ingredientItems.put("Name", ing_name);
         ingredientItems.put("Description", ing_description);
-        ingredientItems.put("Best Before", ing_bestBefore.toString());
+        //ingredientItems.put("Best Before", ing_bestBefore.toString());
         ingredientItems.put("Location", ing_location);
         ingredientItems.put("Amount", ing_amount.toString());
         ingredientItems.put("Unit", ing_unit);
@@ -97,52 +113,52 @@ public class IngredientDL extends FireBaseDL {
      * @param hashKey - A unique hash for every ingredient that differentiates one ingredient from another - Used to accomplish unique ingredient storage in Firebase
      * Current status - Incomplete, need to incorporate query for object retrieval and returning the object to the domain layer - will be part of up coming Sprint plan
      */
-    public void ingrideintFirebaseGet(String hashKey) {
+    //public void ingrideintFirebaseGet(String hashKey) {
 
     /** Gets values from FireStore for perticular ingredient and returns an IngredientItem object
      * @Input: uniqueKey - A unique key string to store ingredient item in a unique Firestore document
      * */
     public void ingredientFirebaseGet(String hashId) {
-
-        //Referencing wanted document from correct location in Firestore database
-        DocumentReference getIngredients = fstore.collection("Users")
-                .document(auth.getCurrentUser().getUid())
-                .collection("Ingredient Storage")
-                .document(hashKey);
-
-        //Getting contents of the document and assigning an onSuccessLister to validate task completion
-        getIngredients.get()
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if (task.isSuccessful()) {
-                            DocumentSnapshot document = task.getResult();
-                            //If document is not empty then store values in IngredientItem object
-
-                            if (document.exists()) {
-//                                ArrayList<String> ingredientId = new ArrayList<>();
-//                                //Adding to ingredients arrayList
-                           //     ingredientId.add(document.getd("Name"));
-//                                ingredientId.add(document.getString("Description"));
-//                                ingredientId.add(document.getString("Best Before"));
-//                                ingredientId.add(document.getString("Location"));
-//                                ingredientId.add(document.getString("Amount"));
-//                                ingredientId.add(document.getString("Unit"));
-//                                ingredientId.add(document.getString("Category"));
-//                                ingredientId.add(document.getString("Image"));
-
-
-                                Map<String,Object> ingredientMap = document.getData();
-
-                                Log.d("TAG", "onComplete: Got from firebase");
-                            } else {
-                                Log.d("TAG", "No such document");
-                            }
-                        } else {
-                            Log.d("TAG", "get function failed with", task.getException());
-                        }
-                    }
-                });
+//
+//        //Referencing wanted document from correct location in Firestore database
+//        DocumentReference getIngredients = fstore.collection("Users")
+//                .document(auth.getCurrentUser().getUid())
+//                .collection("Ingredient Storage")
+//                .document(hashKey);
+//
+//        //Getting contents of the document and assigning an onSuccessLister to validate task completion
+//        getIngredients.get()
+//                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+//                        if (task.isSuccessful()) {
+//                            DocumentSnapshot document = task.getResult();
+//                            //If document is not empty then store values in IngredientItem object
+//
+//                            if (document.exists()) {
+////                                ArrayList<String> ingredientId = new ArrayList<>();
+////                                //Adding to ingredients arrayList
+//                           //     ingredientId.add(document.getd("Name"));
+////                                ingredientId.add(document.getString("Description"));
+////                                ingredientId.add(document.getString("Best Before"));
+////                                ingredientId.add(document.getString("Location"));
+////                                ingredientId.add(document.getString("Amount"));
+////                                ingredientId.add(document.getString("Unit"));
+////                                ingredientId.add(document.getString("Category"));
+////                                ingredientId.add(document.getString("Image"));
+//
+//
+//                                Map<String,Object> ingredientMap = document.getData();
+//
+//                                Log.d("TAG", "onComplete: Got from firebase");
+//                            } else {
+//                                Log.d("TAG", "No such document");
+//                            }
+//                        } else {
+//                            Log.d("TAG", "get function failed with", task.getException());
+//                        }
+//                    }
+//                });
     }
 
 
