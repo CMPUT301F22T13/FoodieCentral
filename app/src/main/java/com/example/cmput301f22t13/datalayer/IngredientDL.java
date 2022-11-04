@@ -15,6 +15,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 
+import org.checkerframework.checker.units.qual.A;
+
+import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Map;
@@ -27,29 +30,30 @@ public class IngredientDL extends FireBaseDL {
      * */
     @RequiresApi(api = Build.VERSION_CODES.N)
 
-    public void ingridientFirebaseAdd(IngredientItem item, String uniqueKey) {
+    public void ingridientFirebaseAdd(IngredientItem item, String hashId) {
 
         //Initializing data value from item object
-        //TODO work with person in ingridient item class to initialize/pass values for bestbefore,location,image
-        //TODO need to pass in a unique id for that perticular ingredient item so it can be stored according to that in firebase
+
         auth = FirebaseAuth.getInstance();
         String ing_name = item.getName();
         String ing_description = item.getDescription();
         GregorianCalendar ing_bestBefore = item.getBbd();
         String ing_location = item.getLocation();
-        String ing_amount = item.getAmount().toString();
+        Integer ing_amount = item.getAmount();
         String ing_unit = item.getUnit();
         String ing_category = item.getCategory();
         String ing_image = item.getPhoto();
 
+
+
         //Storing data collected from object in a HashMap
-        //TODO currently bestbefore,location,image is blank as no data is being passed in
+
         Map<String, Object> ingredientItems = new HashMap<>();
         ingredientItems.put("Name", ing_name);
         ingredientItems.put("Description", ing_description);
-        ingredientItems.put("Best Before", ing_bestBefore);
+        ingredientItems.put("Best Before", ing_bestBefore.toString());
         ingredientItems.put("Location", ing_location);
-        ingredientItems.put("Amount", ing_amount);
+        ingredientItems.put("Amount", ing_amount.toString());
         ingredientItems.put("Unit", ing_unit);
         ingredientItems.put("Category", ing_category);
         ingredientItems.put("Image", ing_image);
@@ -58,7 +62,7 @@ public class IngredientDL extends FireBaseDL {
         DocumentReference ingredientStorage = fstore.collection("Users")
                 .document(auth.getCurrentUser().getUid())
                 .collection("Ingredient Storage")
-                .document(uniqueKey);
+                .document(hashId);
 
         //onSucessListener to validate task completion
         ingredientStorage.set(ingredientItems).addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -79,13 +83,13 @@ public class IngredientDL extends FireBaseDL {
     /** Gets values from FireStore for perticular ingredient and returns an IngredientItem object
      * @Input: uniqueKey - A unique key string to store ingredient item in a unique Firestore document
      * */
-    public void ingrideintFirebaseGet(String uniqueKey) {
+    public void ingrideintFirebaseGet(String hashId) {
 
         //Referencing wanted document from correct location in Firestore database
         DocumentReference getIngredients = fstore.collection("Users")
                 .document(auth.getCurrentUser().getUid())
                 .collection("Ingredient Storage")
-                .document(uniqueKey);
+                .document(hashId);
 
         //Getting contents of the document and assigning an onSuccessLister to validate task completion
         getIngredients.get()
@@ -95,7 +99,7 @@ public class IngredientDL extends FireBaseDL {
                         if (task.isSuccessful()) {
                             DocumentSnapshot document = task.getResult();
                             //If document is not empty then store values in IngredientItem object
-                            //TODO discuss with team if they want result in ArrayList (show output) OR in IngredientItem object
+
                             if (document.exists()) {
 //                                ArrayList<String> ingredientId = new ArrayList<>();
 //                                //Adding to ingredients arrayList
@@ -107,21 +111,37 @@ public class IngredientDL extends FireBaseDL {
 //                                ingredientId.add(document.getString("Unit"));
 //                                ingredientId.add(document.getString("Category"));
 //                                ingredientId.add(document.getString("Image"));
-                                //TODO need to work with IngredientItem person to construct getters
-                                // and setters for IngredientItem and initilize all ingrident feilds as Strings
 
-                                //Need to change value from int to string right here
-//                                IngredientItem result = new IngredientItem(document.getString("Name"),
-//                                        document.getString("Description"),
-//                                        Integer.parseInt(document.getString("Amount")),
-//                                        document.getString("Unit"),
-//                                        document.getString("Category"));
-//                                                    document.getString("Best Before"),
-//                                            document.getString("Location"),
-//                                                    document.getString("Image");
+
+                                Map<String,Object> ingredientMap = document.getData();
+
+
+
+
+
+
+
+
+//                                ArrayList<String> userEmail;
+//                                userEmail = new ArrayList<>();
+//                                IngredientItem result = new IngredientItem(
+////                                        document.get("Name"),
+////                                        document.get("Description"),
+////                                        document.get("Best before"),
+////                                        document.get("Location"),
+////                                        document.get("Amount"),
+////                                        document.get("Unit"),
+////                                        document.get("Category"),
+////                                        document.get("Image")
+//
+//                                );
+
+
 
 
                                 //TODO need to have a callback to the ingredientDL to update ingredient storage
+
+
                                 //Need to have a callback to have ingreidentDl update storage
 
 
@@ -142,20 +162,20 @@ public class IngredientDL extends FireBaseDL {
      *          uniqueKey - A unique key string to store ingredient item in a unique Firestore document
      * */
 
-    public void ingrideintFirebaseUpdatet(IngredientItem item, String uniqueKey){
+    public void ingrideintFirebaseUpdatet(IngredientItem item, String hashId){
         //Referencing wanted document from correct location in Firestore database
         DocumentReference updateIngredients = fstore.collection("Users")
                 .document(auth.getCurrentUser().getUid())
                 .collection("Ingredient Storage")
-                .document(uniqueKey);
+                .document(hashId);
 
 
         //Updating all the ingredient value irregardless of if values have changed or not
         //TODO need to intilize Best Before, Location and Image instances in IngredientItem and have getters and setters for them
 
         updateIngredients.update("Name", item.getName(), "Description", item.getDescription(),
-                        "Amount", item.getAmount(), "Unit", item.getUnit(), "Category", item.getCategory())
-                //"Best Before", item.getBestBefore(), "Location", item.getLocation(), "Image", item.getImage());
+                        "Amount", item.getAmount(), "Unit", item.getUnit().toString(), "Category", item.getCategory(),
+                "Best Before", item.getBbd().toString(), "Location", item.getLocation(), "Image", item.getPhoto())
 
                 //Adding an onSuccessListener & onFailureListener to this event to signify valid task completion
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -176,12 +196,12 @@ public class IngredientDL extends FireBaseDL {
      *          uniqueKey - A unique key string to store ingredient item in a unique Firestore document
      * */
 
-    public void ingredientFirebaseDelete(IngredientItem item, String uniqueKey){
+    public void ingredientFirebaseDelete(IngredientItem item, String hashId){
         //Referencing wanted document from correct location in Firestore database
         DocumentReference deleteIngredient = fstore.collection("Users")
                 .document(auth.getCurrentUser().getUid())
                 .collection("Ingredient Storage")
-                .document(uniqueKey);
+                .document(hashId);
 
         //Delete ingredient document from Firebase, adding an onSuccessListener & onFailureListener
         // to signify valid task completion
@@ -198,10 +218,6 @@ public class IngredientDL extends FireBaseDL {
         });
     }
 
-
-    /** for testing purposes random unique key generator for unique storage on Firestore
-     * @Input:  none
-     * */
 
 
 

@@ -35,14 +35,23 @@ import java.util.concurrent.BlockingDeque;
 /** FireBaseDL initiaties connection with Firebase and handles user login,signup and forget password functionalities
  * */
 
-public abstract class FireBaseDL {
+public  class FireBaseDL {
     FirebaseAuth auth;
     FirebaseFirestore fstore;
-
-
-    public FireBaseDL() {
-        auth = FirebaseAuth.getInstance();
+    static private FireBaseDL firebaseDL;
+    public static FireBaseDL getFirebaseDL(){
+        if(firebaseDL==null){
+            firebaseDL = new FireBaseDL();
+            firebaseDL.auth = FirebaseAuth.getInstance();
+            firebaseDL.fstore = FirebaseFirestore.getInstance();
+        }
+        return firebaseDL;
     }
+
+//    public FireBaseDL() {
+//        auth = FirebaseAuth.getInstance();
+//        fstore = FirebaseFirestore.getInstance();
+//    }
 
     /** Authenticates user(Signs in user) into Firestore email and password authentication
      * @Input: String email - Users email
@@ -105,7 +114,7 @@ public abstract class FireBaseDL {
      * */
 
     //TODO passwords passed in should be encrypted/hashed (also dehashed and decrypted) for proper security posture - V2
-    public void userRegister(String email, String password, String name) {
+    public void userRegister(String email, String password, String name, ResultListener listener) {
         //User enters email and password for registration - adding onComplete to signify valid task completion
         auth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
@@ -125,12 +134,14 @@ public abstract class FireBaseDL {
                     documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void unused) {
+                            listener.onSuccess();
                             Log.d("TAG", "onSuccess: user profile is created in firebase with uid " + userId);
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
                             Log.d("TAG", "User profile not created" );
+                            listener.onFailure(e);
                         }
                     });
                 }
@@ -144,4 +155,7 @@ public abstract class FireBaseDL {
         FirebaseAuth.getInstance().signOut();
     }
 
+    protected void onCreate(Bundle savedInstanceState) {
+        new Login();
+    }
 };

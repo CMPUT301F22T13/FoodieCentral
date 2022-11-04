@@ -14,6 +14,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.cmput301f22t13.MyApplication;
 import com.example.cmput301f22t13.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -90,34 +91,44 @@ public class Register extends AppCompatActivity {
                 progressBar.setVisibility(View.VISIBLE);
 
 
-
-                //register the user in Firebase
-                auth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                FireBaseDL.getFirebaseDL().userRegister(email, password, "", new ResultListener() {
                     @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if(task.isSuccessful()){
-                            Toast.makeText(Register.this, "User created", Toast.LENGTH_SHORT).show();
-                            //Storing in firebase - get user id and create a document
-                            userId = auth.getCurrentUser().getUid();
-                            DocumentReference documentReference = fstore.collection("Users").document(userId);
-                            //Creating user data using hash map
-                            Map<String,Object> user = new HashMap<>();
-                            user.put("Name" , name);
-                            user.put("Email", email);
-                            documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void unused) {
-                                    Log.d("TAG", "onSuccess: user profile is created in firebase with uid " + userId);
-                                }
-                            });
-                            //Send to ingredient activity
-                            //startActivity(new Intent(getApplicationContext(),MainActivity.class));
-                        }else{
-                            Toast.makeText(Register.this, "User not created - error" + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                    public void onSuccess() {
                             progressBar.setVisibility(View.INVISIBLE);
-                        }
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+                            progressBar.setVisibility(View.INVISIBLE);
                     }
                 });
+//                //register the user in Firebase
+//                auth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<AuthResult> task) {
+//                        if(task.isSuccessful()){
+//                            Toast.makeText(Register.this, "User created", Toast.LENGTH_SHORT).show();
+//                            //Storing in firebase - get user id and create a document
+//                            userId = auth.getCurrentUser().getUid();
+//                            DocumentReference documentReference = fstore.collection("Users").document(userId);
+//                            //Creating user data using hash map
+//                            Map<String,Object> user = new HashMap<>();
+//                            user.put("Name" , name);
+//                            user.put("Email", email);
+//                            documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
+//                                @Override
+//                                public void onSuccess(Void unused) {
+//                                    Log.d("TAG", "onSuccess: user profile is created in firebase with uid " + userId);
+//                                }
+//                            });
+//                            //Send to ingredient activity
+//                            //startActivity(new Intent(getApplicationContext(),MainActivity.class));
+//                        }else{
+//                            Toast.makeText(Register.this, "User not created - error" + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+//                            progressBar.setVisibility(View.INVISIBLE);
+//                        }
+//                    }
+//                });
             }
         });
 

@@ -23,7 +23,12 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
-////Login user code engulfed with UI logic, refer to xml for UI template
+
+
+
+
+
+//Login user code engulfed with UI logic, refer to xml for UI template
 
 
 public class Login extends AppCompatActivity {
@@ -32,6 +37,7 @@ public class Login extends AppCompatActivity {
     TextView createBtn, forgotPasswordBtn;
     ProgressBar loginProgressBar;
     FirebaseAuth auth;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
