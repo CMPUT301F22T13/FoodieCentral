@@ -1,6 +1,7 @@
 package com.example.cmput301f22t13.uilayer.ingredientstorage;
 
 import android.content.Context;
+import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -47,8 +48,7 @@ public class IngredientListAdapter extends ArrayAdapter<IngredientItem> {
         ingredientName.setText(item.getName());
         ingredientDescription.setText(item.getDescription());
 
-        // TODO: figure out how the image is stored and set the image accordingly
-        //image.setUri(item.getImageUri());
+        image.setImageURI(Uri.parse(item.getPhoto()));
 
         return view;
     }
