@@ -6,9 +6,7 @@ import android.os.Bundle;
 import com.example.cmput301f22t13.databinding.ActivityIngredientStorageBinding;
 import com.example.cmput301f22t13.datalayer.IngredientDL;
 import com.example.cmput301f22t13.domainlayer.item.IngredientItem;
-import com.example.cmput301f22t13.domainlayer.storage.IngredientStorage;
 import com.example.cmput301f22t13.uilayer.recipestorage.RecipeStorageActivity;
-import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -25,7 +23,6 @@ import androidx.navigation.ui.NavigationUI;
 import com.example.cmput301f22t13.R;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class IngredientStorageActivity extends AppCompatActivity implements AddEditViewIngredientFragment.OnIngredientItemChangeListener {
     private IngredientDL ingredientDL = IngredientDL.getInstance();
@@ -34,7 +31,6 @@ public class IngredientStorageActivity extends AppCompatActivity implements AddE
 
     private ArrayList<IngredientItem> testList;
 
-    IngredientStorage ingredientStorage = new IngredientStorage();
     private ArrayAdapter<IngredientItem> ingredientListAdapter;
     private ListView ingredientListView;
 
