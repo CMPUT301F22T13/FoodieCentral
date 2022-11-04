@@ -9,6 +9,7 @@ import java.util.Date;
 
 import com.example.cmput301f22t13.domainlayer.utils.Utils;
 import com.google.firebase.Timestamp;
+import java.util.Comparator;
 import java.util.GregorianCalendar;
 
 public class RecipeItem implements Serializable {
@@ -228,5 +229,67 @@ public class RecipeItem implements Serializable {
      */
     public void deleteIngredient(IngredientItem ingredientItem) {
         ingredients.remove(ingredientItem);
+    }
+}
+
+/**
+ * Comparator class to sort ingredient item by title
+ */
+class SortRecipeByTitle implements Comparator<RecipeItem> {
+    @Override
+    /**
+     * Override compare method for title sorting
+     */
+    public int compare(RecipeItem r1, RecipeItem r2) {
+        return r1.getTitle().compareTo(r2.getTitle());
+    }
+}
+
+/**
+ * Comparator class to sort ingredient item by prep time
+ */
+class SortRecipeByTime implements Comparator<RecipeItem> {
+    @Override
+    /**
+     * Override compare method for prep time sorting
+     */
+    public int compare(RecipeItem r1, RecipeItem r2) {
+        if (r1.getPrepTime() > r2.getPrepTime())
+            return 1;
+        else if (r1.getPrepTime() < r2.getPrepTime())
+            return -1;
+        else
+            return 0;
+    }
+}
+
+/**
+ * Comparator class to sort ingredient item by number of servings
+ */
+class SortRecipeByServingCount implements Comparator<RecipeItem> {
+    @Override
+    /**
+     * Override compare method for number of servings sorting
+     */
+    public int compare(RecipeItem r1, RecipeItem r2) {
+        if (r1.getServings() > r2.getServings())
+            return 1;
+        else if (r1.getServings() < r2.getServings())
+            return -1;
+        else
+            return 0;
+    }
+}
+
+/**
+ * Comparator class to sort ingredient item by description
+ */
+class SortRecipeByCategory implements Comparator<RecipeItem> {
+    @Override
+    /**
+     * Override compare method for category sorting
+     */
+    public int compare(RecipeItem r1, RecipeItem r2) {
+        return r1.getCategory().compareTo(r2.getCategory());
     }
 }
