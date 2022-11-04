@@ -28,6 +28,8 @@ import com.google.firebase.firestore.QuerySnapshot;
 import org.checkerframework.checker.units.qual.A;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
@@ -69,21 +71,29 @@ public class IngredientDL extends FireBaseDL {
                 for(QueryDocumentSnapshot doc: queryDocumentSnapshots)
                 {
                     String hash = doc.getId();
-                    String name = (String) doc.getData().get("Name");
+                    String name = doc.getString("Name");
                     String description = (String) doc.getData().get("Description");
-                    String amount = (String) doc.getData().get("Amount");
+
                     String unit = (String) doc.getData().get("Unit");
                     String category = (String) doc.getData().get("Category");
                     String location = (String) doc.getData().get("Location");
+                    GregorianCalendar bestbefore = new GregorianCalendar();
+                    Double amount = 0.0;
+                    try {
+                        bestbefore.setTime(doc.getDate("Best Before"));
+                        amount = (Double) doc.getDouble("Amount");
+                    } catch (Exception e) {}
+
 
                     IngredientItem i = new IngredientItem();
                     i.setName(name);
                     i.setDescription(description);
-                    i.setAmount(Integer.parseInt(amount));
+                    i.setAmount(amount.intValue());
                     i.setUnit(unit);
                     i.setCategory(category);
                     i.setLocation(location);
                     i.setHashId(hash);
+                    i.setBbd(bestbefore);
                     ingredientStorage.add(i);
                 }
                 listener.onSuccess();
@@ -113,9 +123,9 @@ public class IngredientDL extends FireBaseDL {
         ingredientItems.put("Name", ing_name);
         ingredientItems.put("Description", ing_description);
         if (ing_bestBefore != null)
-            ingredientItems.put("Best Before", ing_bestBefore.toString());
+            ingredientItems.put("Best Before", ing_bestBefore.toZonedDateTime().toInstant()); // ing_bestBefore.get(Calendar.DATE));
         ingredientItems.put("Location", ing_location);
-        ingredientItems.put("Amount", ing_amount.toString());
+        ingredientItems.put("Amount", ing_amount);
         ingredientItems.put("Unit", ing_unit);
         ingredientItems.put("Category", ing_category);
         ingredientItems.put("Image", ing_image);
