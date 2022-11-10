@@ -12,6 +12,9 @@ import com.google.firebase.Timestamp;
 import java.util.Comparator;
 import java.util.GregorianCalendar;
 
+/** Public class representing a recipe - options for constructing, getting and setting
+ *
+ *  */
 public class RecipeItem implements Serializable {
 
     private String title;
