@@ -15,6 +15,7 @@ import androidx.navigation.ui.NavigationUI;
 import com.example.cmput301f22t13.R;
 import com.example.cmput301f22t13.databinding.ActivityRecipeStorageBinding;
 
+import com.example.cmput301f22t13.datalayer.RecipeDL;
 import com.example.cmput301f22t13.domainlayer.item.IngredientItem;
 import com.example.cmput301f22t13.domainlayer.item.RecipeItem;
 
@@ -57,6 +58,7 @@ public class RecipeStorageActivity extends AppCompatActivity implements AddEditV
     public static final String RECIPE = "recipe";
 
     private RecipeItem recipeSelected;
+    private RecipeDL recipeDL = RecipeDL.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,7 +89,7 @@ public class RecipeStorageActivity extends AppCompatActivity implements AddEditV
         setSupportActionBar(binding.toolbar);
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_recipe_storage);
         Bundle bundle = new Bundle();
-        bundle.putSerializable("init_recipes", recipeDataList);
+        bundle.putSerializable("init_recipes", recipeDL.getRecipes());
         navController.setGraph(R.navigation.nav_recipestorage_to_viewrecipe, bundle);
 
         appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
@@ -113,7 +115,7 @@ public class RecipeStorageActivity extends AppCompatActivity implements AddEditV
      */
     @Override
     public void onAddDonePressed(RecipeItem recipe) {
-        recipeDataList.add(recipe);
+        recipeDL.recipeFirebaseAddEdit(recipe);
     }
 
     /**
@@ -124,7 +126,7 @@ public class RecipeStorageActivity extends AppCompatActivity implements AddEditV
      */
     @Override
     public void changeRecipe(RecipeItem oldRecipe, RecipeItem newRecipe) {
-        recipeDataList.set(recipeDataList.indexOf(oldRecipe), newRecipe);
+        recipeDL.getRecipes().set(recipeDL.getRecipes().indexOf(oldRecipe), newRecipe);
     }
 
     /**
@@ -134,7 +136,7 @@ public class RecipeStorageActivity extends AppCompatActivity implements AddEditV
      */
     @Override
     public void onDeletePressed(RecipeItem recipe) {
-        recipeDataList.remove(recipe);
+        recipeDL.recipeFirebaseDelete(recipe);
 
     }
 
