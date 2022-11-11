@@ -39,4 +39,4 @@
         app:itemIconSize="@dimen/bottom_navigation_icon_size"
         app:menu="@menu/bottom_nav_menu" />
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>out.widget.CoordinatorLayout>
