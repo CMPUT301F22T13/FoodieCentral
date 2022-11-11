@@ -12,12 +12,13 @@ import androidx.fragment.app.Fragment;
 import com.example.cmput301f22t13.databinding.FragmentShoppingListMainBinding;
 import com.example.cmput301f22t13.domainlayer.item.CountedIngredient;
 import com.example.cmput301f22t13.domainlayer.item.IngredientItem;
-
 import java.util.ArrayList;
 
 public class ShoppingListMainFragment extends Fragment {
     private FragmentShoppingListMainBinding binding;
     private ArrayAdapter<CountedIngredient> countedIngredientListAdapter;
+    public static final String ARG_COUNTED_INGREDIENT_LIST = "ARG_COUNTED_INGREDIENT_LIST";
+
 
     @Override
     public View onCreateView(

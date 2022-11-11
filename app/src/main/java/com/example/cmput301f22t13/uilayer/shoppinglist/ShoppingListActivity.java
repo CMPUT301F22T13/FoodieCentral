@@ -9,10 +9,6 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.example.cmput301f22t13.R;
 import com.example.cmput301f22t13.databinding.ActivityShoppingListBinding;
-import com.example.cmput301f22t13.domainlayer.item.CountedIngredient;
-import com.example.cmput301f22t13.domainlayer.item.IngredientItem;
-import com.example.cmput301f22t13.uilayer.ingredientstorage.IngredientStorageMainFragment;
-
 
 public class ShoppingListActivity extends AppCompatActivity {
     private AppBarConfiguration appBarConfiguration;
