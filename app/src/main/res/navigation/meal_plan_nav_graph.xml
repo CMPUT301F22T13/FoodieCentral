@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/meal_plan_nav_graph"
+    app:startDestination="@id/MealPlanMainFragment">
+
+    <fragment
+        android:id="@+id/MealPlanMainFragment"
+        android:name="com.example.cmput301f22t13.uilayer.mealplanstorage.MealPlanMainFragment"
+        android:label="Meal Plan"
+        tools:layout="@layout/fragment_meal_plan_main" >
+        <action
+            android:id="@+id/action_MealPlanMainFragment_to_mealPlanViewFragment"
+            app:destination="@id/mealPlanViewFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/mealPlanViewFragment"
+        android:name="com.example.cmput301f22t13.uilayer.mealplanstorage.MealPlanViewFragment"
+        android:label="MealPlanViewFragment" >
+        <action
+            android:id="@+id/action_mealPlanViewFragment_to_mealPlanAddEditViewDateFragment"
+            app:destination="@id/mealPlanAddEditViewDateFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/mealPlanAddEditViewDateFragment"
+        android:name="com.example.cmput301f22t13.uilayer.mealplanstorage.MealPlanAddEditViewDateFragment"
+        android:label="fragment_meal_plan_add_edit_view_date"
+        tools:layout="@layout/fragment_meal_plan_add_edit_view_date" />
+</navigation>

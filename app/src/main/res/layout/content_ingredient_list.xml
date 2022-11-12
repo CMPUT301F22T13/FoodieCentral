@@ -6,7 +6,7 @@
     android:orientation="horizontal">
 
     <ImageView
-        android:id="@+id/ingredient_picture_imageview"
+        android:id="@+id/picture_item_list_imageview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
