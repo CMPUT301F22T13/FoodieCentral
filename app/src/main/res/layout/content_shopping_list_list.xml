@@ -17,11 +17,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="name"
-            android:textColor="@color/white"/>
+            android:textColor="@color/black"
+            android:textSize="24sp" />
+
         <TextView
             android:id="@+id/ingredient_count"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="description"/>
+            android:text="description"
+            android:textColor="@color/black"
+            android:textSize="20sp" />
     </LinearLayout>
 </LinearLayout>
