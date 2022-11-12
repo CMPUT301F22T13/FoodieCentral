@@ -15,7 +15,7 @@ import java.util.GregorianCalendar;
 /** Public class representing a recipe - options for constructing, getting and setting
  *
  *  */
-public class RecipeItem implements Serializable {
+public class RecipeItem extends Item implements Serializable {
 
     private String title;
     private int prepTime;

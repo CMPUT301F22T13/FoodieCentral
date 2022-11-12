@@ -18,29 +18,26 @@ import java.util.Comparator;
 *
 *  */
 
-public class IngredientItem implements Serializable {
-    private String name;
+public class IngredientItem extends Item implements Serializable {
+
     private String description;
     private Integer amount;
     private String unit;
     private String category;
     private GregorianCalendar bbd;
     private String location;
-    private String photo;
     private String hashId;
 
     /**
      * Constructor that initializes all ingredient fields to default values
      */
     public IngredientItem () {
-        this.name = "";
         this.description = "";
         this.amount = 0;
         this.unit = "";
         this.category = "";
         this.bbd = new GregorianCalendar();
         this.location = "";
-        this.photo = "";
         this.hashId = Utils.getUniqueHash();
     }
 
@@ -57,13 +54,12 @@ public class IngredientItem implements Serializable {
      * @param location the location of the ingredient stored
      */
     public IngredientItem (String name, String description, Integer amount, String unit, String category, GregorianCalendar bbd, String photo, String location) {
-        this.name = name;
+        super(name, photo);
         this.description = description;
         this.amount = amount;
         this.unit = unit;
         this.category = category;
         this.bbd = bbd;
-        this.photo = photo;
         this.location = location;
 
         int timestamp = new Timestamp(new Date()).getNanoseconds();
@@ -78,22 +74,6 @@ public class IngredientItem implements Serializable {
                 timeStampString.getBytes(StandardCharsets.UTF_8));
 
         this.hashId = Utils.bytesToHex(encodedhash);
-    }
-
-    /**
-     * Gets the name of the ingredient
-     * @return name of ingredient
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * Set the name of the ingredient
-     * @param name new name
-     */
-    public void setName(String name) {
-        this.name = name;
     }
 
     /**
@@ -186,20 +166,6 @@ public class IngredientItem implements Serializable {
      */
     public void setLocation(String location) {
         this.location = location;
-    }
-    /**
-     * Gets the uri image string of the ingredient it belongs to
-     * @return photo
-     */
-    public String getPhoto() {
-        return photo;
-    }
-    /**
-     * Sets the uri string for the image of the ingredient it belongs to
-     * @param photo new photo
-     */
-    public void setPhoto(String photo) {
-        this.photo = photo;
     }
     /**
      * Gets the hash ID of this ingredient it belongs to
