@@ -40,7 +40,7 @@ public class ShoppingListAdapter extends ArrayAdapter<CountedIngredient> {
         TextView ingredientDescription = view.findViewById(R.id.ingredient_count);
 
         ingredientName.setText(item.getIngredient().getName());
-        ingredientDescription.setText(item.getCount());
+        ingredientDescription.setText(Integer.toString(item.getCount()));
 
         return view;
     }
