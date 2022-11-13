@@ -4,10 +4,8 @@ import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.List;
+import java.util.TreeMap;
 
 /**
  * This class will store information relevant to a meal plan. It contains a start and end date, and
@@ -19,18 +17,18 @@ public class MealPlan implements Serializable {
      * Each day from startDate to endDate will have its own list of ingredients/recipes with the
      * key as the date and the value equal to the list of ingredients/recipes
      */
-    private HashMap<GregorianCalendar, ArrayList<Item>> mealPlanItems;
+    private TreeMap<GregorianCalendar, ArrayList<Item>> mealPlanItems;
     private GregorianCalendar startDate;
     private GregorianCalendar endDate;
 
     public MealPlan() {
-        this.mealPlanItems = new HashMap<GregorianCalendar, ArrayList<Item>>();
+        this.mealPlanItems = new TreeMap<GregorianCalendar, ArrayList<Item>>();
         this.startDate = new GregorianCalendar();
         this.endDate = new GregorianCalendar();
     }
 
     public MealPlan(GregorianCalendar startDate, GregorianCalendar endDate) {
-        this.mealPlanItems = new HashMap<GregorianCalendar, ArrayList<Item>>();
+        this.mealPlanItems = new TreeMap<GregorianCalendar, ArrayList<Item>>();
         this.startDate = startDate;
         this.endDate = endDate;
 
@@ -45,17 +43,17 @@ public class MealPlan implements Serializable {
         }
     }
 
-    public MealPlan(GregorianCalendar startDate, GregorianCalendar endDate, HashMap<GregorianCalendar, ArrayList<Item>> items) {
+    public MealPlan(GregorianCalendar startDate, GregorianCalendar endDate, TreeMap<GregorianCalendar, ArrayList<Item>> items) {
         this.mealPlanItems = items;
         this.startDate = startDate;
         this.endDate = endDate;
     }
 
-    public HashMap<GregorianCalendar, ArrayList<Item>> getMealPlanItems() {
+    public TreeMap<GregorianCalendar, ArrayList<Item>> getMealPlanItems() {
         return mealPlanItems;
     }
 
-    public void setMealPlanItems(HashMap<GregorianCalendar, ArrayList<Item>> mealPlanItems) {
+    public void setMealPlanItems(TreeMap<GregorianCalendar, ArrayList<Item>> mealPlanItems) {
         this.mealPlanItems = mealPlanItems;
     }
 
@@ -77,10 +75,10 @@ public class MealPlan implements Serializable {
 
     public ArrayList<Item> getItemsForDay(GregorianCalendar date) {
         // check that date is within specified range
-        if (date.before(startDate) || date.after(endDate)) {
+        if (!isDateValid(date)) {
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
             throw new IllegalArgumentException("Date must be between " + formatter.format(startDate.getTime()) +
-                    " and " + formatter.format(endDate.getTime()));
+                    " and " + formatter.format(endDate.getTime()) + ". " + formatter.format(date.getTime()) + " is not");
         }
 
         if (mealPlanItems.containsKey(date)) {
@@ -93,10 +91,10 @@ public class MealPlan implements Serializable {
 
     public void setItemsForDay(GregorianCalendar date, ArrayList<Item> items) {
         // check that date is within specified range
-        if (date.before(startDate) || date.after(endDate)) {
+        if (!isDateValid(date)) {
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
             throw new IllegalArgumentException("Date must be between " + formatter.format(startDate.getTime()) +
-                    " and " + formatter.format(endDate.getTime()));
+                    " and " + formatter.format(endDate.getTime()) + ". " + formatter.format(date.getTime()) + " is not");
         }
 
         if (mealPlanItems.containsKey(date)) {
@@ -107,10 +105,10 @@ public class MealPlan implements Serializable {
 
     public void addItemForDay(GregorianCalendar date, Item item) {
         // check that date is within specified range
-        if (date.before(startDate) || date.after(endDate)) {
+        if (!isDateValid(date)) {
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
             throw new IllegalArgumentException("Date must be between " + formatter.format(startDate.getTime()) +
-                    " and " + formatter.format(endDate.getTime()));
+                    " and " + formatter.format(endDate.getTime())+ ". " + formatter.format(date.getTime()) + " is not");
         }
 
         if (mealPlanItems.containsKey(date)) {
@@ -123,10 +121,10 @@ public class MealPlan implements Serializable {
 
     public void removeItemForDay(GregorianCalendar date, Item item) {
         // check that date is within specified range
-        if (date.before(startDate) || date.after(endDate)) {
+        if (!isDateValid(date)) {
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
             throw new IllegalArgumentException("Date must be between " + formatter.format(startDate.getTime()) +
-                    " and " + formatter.format(endDate.getTime()));
+                    " and " + formatter.format(endDate.getTime()) + ". " + formatter.format(date.getTime()) + " is not");
         }
 
         if (mealPlanItems.containsKey(date)) {
@@ -135,5 +133,9 @@ public class MealPlan implements Serializable {
             mealPlanItems.remove(date);
             mealPlanItems.put(date, items);
         }
+    }
+
+    private boolean isDateValid(GregorianCalendar date) {
+        return (date.get(Calendar.DATE) >= startDate.get(Calendar.DATE)) && (date.get(Calendar.DATE) <= endDate.get(Calendar.DATE));
     }
 }
