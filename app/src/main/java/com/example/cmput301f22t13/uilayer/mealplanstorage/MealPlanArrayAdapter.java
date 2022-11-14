@@ -40,7 +40,7 @@ public class MealPlanArrayAdapter extends ArrayAdapter<MealPlan> {
         TextView start = view.findViewById(R.id.meal_plan_list_item_start_date);
         TextView end = view.findViewById(R.id.meal_plan_list_item_end_date);
 
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd");
+        SimpleDateFormat formatter = new SimpleDateFormat("EEE, MMM d");
         start.setText(formatter.format(item.getStartDate().getTime()));
         end.setText(formatter.format(item.getEndDate().getTime()));
 

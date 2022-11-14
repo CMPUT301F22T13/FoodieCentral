@@ -1,6 +1,7 @@
 package com.example.cmput301f22t13.uilayer.mealplanstorage;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,11 +15,14 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.cmput301f22t13.R;
 import com.example.cmput301f22t13.databinding.FragmentMealPlanMainBinding;
+import com.example.cmput301f22t13.domainlayer.item.IngredientItem;
+import com.example.cmput301f22t13.domainlayer.item.Item;
 import com.example.cmput301f22t13.domainlayer.item.MealPlan;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 public class MealPlanMainFragment extends Fragment {
@@ -78,10 +82,15 @@ public class MealPlanMainFragment extends Fragment {
             @Override
             public void onPositiveButtonClick(Object selection) {
                 Pair<Long, Long> dates = (Pair<Long, Long>) materialDatePicker.getSelection();
+
                 GregorianCalendar start = new GregorianCalendar();
                 start.setTimeInMillis(dates.first);
+                start.add(Calendar.DATE, 1); // for some reason the date always comes offset by 1
+
                 GregorianCalendar end = new GregorianCalendar();
                 end.setTimeInMillis(dates.second);
+                end.add(Calendar.DATE, 1); // for some reason the date always comes offset by 1
+
                 mealPlans.add(new MealPlan(start, end));
                 mealPlanAdapter.notifyDataSetChanged();
             }

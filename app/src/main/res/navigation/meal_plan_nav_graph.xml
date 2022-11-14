@@ -17,14 +17,22 @@
     <fragment
         android:id="@+id/mealPlanViewFragment"
         android:name="com.example.cmput301f22t13.uilayer.mealplanstorage.MealPlanViewFragment"
-        android:label="MealPlanViewFragment" >
+        android:label="Meal Plan">
         <action
-            android:id="@+id/action_mealPlanViewFragment_to_mealPlanAddEditViewDateFragment"
-            app:destination="@id/mealPlanAddEditViewDateFragment" />
+            android:id="@+id/action_mealPlanViewFragment_to_mealPlanAddIngredientFragment"
+            app:destination="@id/mealPlanAddIngredientFragment" />
+        <action
+            android:id="@+id/action_mealPlanViewFragment_to_mealPlanAddRecipeFragment"
+            app:destination="@id/mealPlanAddRecipeFragment" />
     </fragment>
     <fragment
-        android:id="@+id/mealPlanAddEditViewDateFragment"
-        android:name="com.example.cmput301f22t13.uilayer.mealplanstorage.MealPlanAddEditViewDateFragment"
-        android:label="fragment_meal_plan_add_edit_view_date"
-        tools:layout="@layout/fragment_meal_plan_add_edit_view_date" />
+        android:id="@+id/mealPlanAddIngredientFragment"
+        android:name="com.example.cmput301f22t13.uilayer.mealplanstorage.MealPlanAddIngredientFragment"
+        android:label="Add Ingredient"
+        tools:layout="@layout/fragment_meal_plan_add_ingredient" />
+    <fragment
+        android:id="@+id/mealPlanAddRecipeFragment"
+        android:name="com.example.cmput301f22t13.uilayer.mealplanstorage.MealPlanAddRecipeFragment"
+        android:label="fragment_meal_plan_add_recipe"
+        tools:layout="@layout/fragment_meal_plan_add_recipe" />
 </navigation>

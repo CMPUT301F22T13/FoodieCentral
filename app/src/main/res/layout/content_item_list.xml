@@ -17,16 +17,36 @@
         android:id="@+id/name_item_list_textview"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:layout_marginLeft="10dp"
         android:layout_weight="1"
+        android:gravity="center_vertical"
         android:text="name"
         android:textSize="20sp" />
 
-    <TextView
-        android:id="@+id/amount_item_list_textview"
+    <EditText
+        android:id="@+id/amount_item_list_edittext"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:text="amount"
+        android:layout_gravity="center"
+        android:layout_marginLeft="10dp"
+        android:layout_weight="0.5"
+        android:ems="4"
+        android:focusable="auto"
+        android:gravity="center_vertical"
+        android:inputType="number"
+        android:text="0"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/unit_item_list_textview"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:layout_marginLeft="10dp"
+        android:layout_weight="0.5"
+        android:gravity="center_vertical"
+        android:text="unit"
         android:textSize="20sp" />
 
 </LinearLayout>

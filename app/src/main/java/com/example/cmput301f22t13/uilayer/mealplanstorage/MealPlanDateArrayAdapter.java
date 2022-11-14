@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Filter;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -39,9 +40,48 @@ public class MealPlanDateArrayAdapter extends ArrayAdapter<GregorianCalendar> {
         GregorianCalendar date = dates.get(position);
         TextView start = view.findViewById(R.id.meal_plan_date_list_item_textview);
 
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd");
+        SimpleDateFormat formatter = new SimpleDateFormat("EEE, MMM d");
         start.setText(formatter.format(date.getTime()));
 
         return view;
+    }
+
+    @NonNull
+    @Override
+    public View getDropDownView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+        View view = convertView;
+
+        if (view == null) {
+            view = LayoutInflater.from(context).inflate(R.layout.content_meal_plan_date_list, parent, false);
+        }
+
+        GregorianCalendar date = dates.get(position);
+        TextView start = view.findViewById(R.id.meal_plan_date_list_item_textview);
+
+        SimpleDateFormat formatter = new SimpleDateFormat("EEE, MMM d");
+        start.setText(formatter.format(date.getTime()));
+
+        return view;
+    }
+
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            public String convertResultToString(Object resultValue) {
+                SimpleDateFormat formatter = new SimpleDateFormat("EEE, MMM d");
+                return formatter.format(((GregorianCalendar) resultValue).getTime());
+            }
+
+            @Override
+            protected FilterResults performFiltering(CharSequence charSequence) {
+                return null;
+            }
+
+            @Override
+            protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+
+            }
+        };
     }
 }
