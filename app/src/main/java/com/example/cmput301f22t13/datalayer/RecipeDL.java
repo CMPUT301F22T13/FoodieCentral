@@ -89,6 +89,11 @@ public class RecipeDL {
      * @Input: IngredientItem item - item to add or edit
      * */
     public void recipeFirebaseAddEdit(RecipeItem item) {
+//        IngredientItem test = new IngredientItem();
+//
+//        test.setName("test");
+//        item.addIngredient(test);
+
         //Initializing and storing data value from passed in Recipe item
         String recipe_title = item.getTitle();
         Integer recipe_prepTime = item.getPrepTime();
@@ -96,7 +101,7 @@ public class RecipeDL {
         String recipe_category = item.getCategory();
         String recipe_comments = item.getComments();
         String recipe_photo = item.getPhoto();
-        ArrayList<IngredientItem> ingredientItems = item.getIngredients();
+
 
         //Storing data collected from object in a HashMap
         Map<String, Object> recipe = new HashMap<>();
@@ -113,6 +118,35 @@ public class RecipeDL {
                 .document(fb.auth.getCurrentUser().getUid())
                 .collection("Recipe Storage")
                 .document(item.getHashId());
+
+
+        for (IngredientItem i: item.getIngredients()) {
+            Map<String, Object> ingredient = new HashMap<>();
+            ingredient.put("Name", i.getName());
+            ingredient.put("Description", i.getDescription());
+            ingredient.put("Amount",i.getAmount());
+            ingredient.put("Unit", i.getUnit());
+            ingredient.put("Category", i.getCategory());
+
+            DocumentReference ingredientStorage = fb.fstore.collection("Users")
+                    .document(fb.auth.getCurrentUser().getUid())
+                    .collection("Recipe Storage")
+                    .document(item.getHashId())
+                    .collection("Ingredients")
+                    .document(i.getHashId());
+
+            ingredientStorage.set(ingredient).addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void unused) {
+                    Log.d("TAG", "firebaseAdd works as wanted");
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.d("TAG", "firebaseAdd does not work");
+                }
+            });
+        }
 
         recipeStorage.set(recipe).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
