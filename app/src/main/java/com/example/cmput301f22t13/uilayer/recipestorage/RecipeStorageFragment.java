@@ -24,6 +24,8 @@ import com.example.cmput301f22t13.R;
 import com.example.cmput301f22t13.databinding.FragmentRecipeStorageBinding;
 import com.example.cmput301f22t13.datalayer.RecipeDL;
 import com.example.cmput301f22t13.domainlayer.item.RecipeItem;
+import com.google.android.material.bottomnavigation.BottomNavigationItemView;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.example.cmput301f22t13.uilayer.userlogin.ResultListener;
 
 import org.w3c.dom.Text;
@@ -34,6 +36,8 @@ import java.util.Comparator;
 /**
  * This is the fragment class for Recipe Storage. It is a subclass of {@link Fragment}
  * It is responsible for the initializing the list adapter and setting OnClickListener for the Add Recipe button.
+ *
+ * @author Shiv Chopra
  * @version 1.0
  */
 public class RecipeStorageFragment extends Fragment {
@@ -94,7 +98,10 @@ public class RecipeStorageFragment extends Fragment {
     }
 
     /**
-     * This function is called after onCreateView
+     * This function is called after onCreateView.
+     * Sets up recipeAdapter
+     * Sets onClickListeners for add and sort button.
+     * Handles sorting of recipes.
      * @param view Of type {@link View}
      * @param savedInstanceState Of type {@link Bundle}
      */
@@ -109,7 +116,6 @@ public class RecipeStorageFragment extends Fragment {
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                     RecipeItem recipe = (RecipeItem) adapterView.getItemAtPosition(i);
                     ((RecipeStorageActivity) getActivity()).recipeSelected(recipe);
-
                     Bundle bundle = new Bundle();
                     bundle.putSerializable(AddEditViewRecipeFragment.RECIPE_PASSED, recipe);
                     NavHostFragment.findNavController(RecipeStorageFragment.this)
@@ -117,16 +123,18 @@ public class RecipeStorageFragment extends Fragment {
                 }
             });
 
+            // Sets onClickListener for add button.
             binding.addButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable(AddEditViewRecipeFragment.RECIPE_PASSED, new RecipeItem());
+                   Bundle bundle = new Bundle();
+                   bundle.putSerializable(AddEditViewRecipeFragment.RECIPE_PASSED, new RecipeItem());
                     NavHostFragment.findNavController(RecipeStorageFragment.this)
-                            .navigate(R.id.recipe_action_storage_to_view);
+                            .navigate(R.id.recipe_action_storage_to_view, bundle);
 
                 }
             });
+
             recipeAdapter.notifyDataSetChanged();
 
             Context context = getContext();
@@ -135,6 +143,7 @@ public class RecipeStorageFragment extends Fragment {
             View popupView = inflater.inflate(R.layout.content_recipe_sort_popup, null);
             PopupWindow popupWindow = new PopupWindow(popupView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
+            // Sets onClickListener for sort button.
             binding.sortButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
