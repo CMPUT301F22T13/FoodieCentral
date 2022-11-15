@@ -17,7 +17,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:text="Preparation Time"
+            android:text="Preparation Time\n       (in mins.)"
             android:textSize="16sp"
             app:layout_constraintBaseline_toBaselineOf="@+id/preparation_time_edit"
             app:layout_constraintStart_toStartOf="parent" />
