@@ -87,11 +87,7 @@ public class RecipeStorageFragment extends Fragment {
         binding = FragmentRecipeStorageBinding.inflate(inflater, container, false);
         Bundle bundle = getArguments();
 
-        if (bundle != null) {
-            recipeDataList = (ArrayList<RecipeItem>) bundle.getSerializable("init_recipes");
-        } else {
-            Log.d("RecipeStorageFragment", "Binding was null!");
-        }
+        recipeDataList = recipeDL.getRecipes();
 
         return binding.getRoot();
 

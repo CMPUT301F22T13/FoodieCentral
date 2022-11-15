@@ -45,11 +45,6 @@ public class RecipeStorageActivity extends AppCompatActivity implements AddEditV
     private ActivityRecipeStorageBinding binding;
 
     /**
-     * This variable holds an array list of {@link RecipeItem} objects.
-     */
-    private ArrayList<RecipeItem> recipeDataList;
-
-    /**
      * This method performs initialization of all fragments.
      * Also initializes the array list for {@link RecipeItem} objects.
      * @param savedInstanceState Of type {@link Bundle}
@@ -83,8 +78,6 @@ public class RecipeStorageActivity extends AppCompatActivity implements AddEditV
         sampleRecipe.addIngredient(item1);
         sampleRecipe.addIngredient(item2);
 
-        recipeDataList = new ArrayList<RecipeItem>();
-        recipeDataList.add(sampleRecipe);
 
         setSupportActionBar(binding.toolbar);
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_recipe_storage);
@@ -146,8 +139,12 @@ public class RecipeStorageActivity extends AppCompatActivity implements AddEditV
     @Override
     public void onDonePressed(IngredientItem ingredientItem) {
         if (recipeSelected != null) {
-            recipeSelected.addIngredient(ingredientItem);
+            ArrayList<RecipeItem> Recipes = recipeDL.getRecipes();
+        //    RecipeItem selected = recipeDL.getRecipes().get(recipeDL.getRecipes().indexOf(recipeSelected));
+            this.recipeSelected.addIngredient(ingredientItem);
         }
+        // For now
+        recipeDL.recipeFirebaseAddEdit(this.recipeSelected);
 
         Log.d("RecipeActivity", "OnDonePressed");
     }

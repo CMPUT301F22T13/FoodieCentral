@@ -249,7 +249,7 @@ public class AddEditViewRecipeFragment extends Fragment {
                 @Override
                 public void onClick(View view) {
                     RecipeItem newRecipe = createNewRecipe();
-                    listener.changeRecipe(recipe, newRecipe);
+                    listener.onAddDonePressed(newRecipe);
                 }
             });
         }
@@ -300,7 +300,11 @@ public class AddEditViewRecipeFragment extends Fragment {
      * @return Returns the newly created {@link RecipeItem}
      */
     public RecipeItem createNewRecipe() {
-        RecipeItem newRecipe = new RecipeItem();
+        RecipeItem newRecipe;
+        if (recipe == null)
+             newRecipe = new RecipeItem();
+        else
+            newRecipe = recipe;
 
         // Set title typed in by user.
         newRecipe.setTitle(binding.recipeNameEdit.getText().toString());
@@ -332,7 +336,8 @@ public class AddEditViewRecipeFragment extends Fragment {
             newRecipe.setPrepTime(0);
         }
 
-        newRecipe.setIngredients(recipe.getIngredients());
+        if (recipe != null)
+            newRecipe.setIngredients(recipe.getIngredients());
 
         binding.saveButton.setVisibility(View.GONE);
         binding.editButton.setVisibility(View.VISIBLE);

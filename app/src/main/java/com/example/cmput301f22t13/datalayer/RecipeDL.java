@@ -58,11 +58,11 @@ public class RecipeDL {
      * listens for db changes and updates the ingredient storage accordingly
      * */
     private static void populateRecipesOnStartup() {
-        CollectionReference getIngredients = fb.fstore.collection("Users")
+        CollectionReference getRecipes = fb.fstore.collection("Users")
                 .document(fb.auth.getCurrentUser().getUid())
                 .collection("Recipe Storage");
 
-        getIngredients.addSnapshotListener(new EventListener<QuerySnapshot>() {
+        getRecipes.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable
                     FirebaseFirestoreException error) {
@@ -72,11 +72,27 @@ public class RecipeDL {
                     // TODO set all recipe dataums
                     String hash = doc.getId();
                     String title = doc.getString("Title");
+                    int prep = doc.getDouble("Prep Time").intValue();
+                    int servings = doc.getDouble("Servings").intValue();
+                    String category = doc.getString("Category");
+                    String comments = doc.getString("Comments");
 
                     RecipeItem r = new RecipeItem();
 
                     r.setTitle(title);
                     r.setHashId(hash);
+                    r.setPrepTime(prep);
+                    r.setServings(servings);
+                    r.setCategory(category);
+                    r.setComments(comments);
+
+
+                    CollectionReference getIngredients = fb.fstore.collection("Users")
+                            .document(fb.auth.getCurrentUser().getUid())
+                            .collection("Recipe Storage").document(r.getHashId())
+                            .collection("Ingredients");
+
+
                     recipeStorage.add(r);
                 }
                 listener.onSuccess();
@@ -96,8 +112,8 @@ public class RecipeDL {
 
         //Initializing and storing data value from passed in Recipe item
         String recipe_title = item.getTitle();
-        Integer recipe_prepTime = item.getPrepTime();
-        Integer recipe_servings = item.getServings();
+        int recipe_prepTime = item.getPrepTime();
+        int recipe_servings = item.getServings();
         String recipe_category = item.getCategory();
         String recipe_comments = item.getComments();
         String recipe_photo = item.getPhoto();
