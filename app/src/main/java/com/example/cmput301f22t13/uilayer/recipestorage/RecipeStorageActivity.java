@@ -105,10 +105,10 @@ public class RecipeStorageActivity extends AppCompatActivity implements AddEditV
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.recipes:
-                        return false;
+                        return true;
                     case R.id.ingredientStorage:
-                        Intent intent = new Intent(RecipeStorageActivity.this, IngredientStorageActivity.class);
-                        startActivity(intent);
+                        Intent intentIngr = new Intent(RecipeStorageActivity.this, IngredientStorageActivity.class);
+                        startActivity(intentIngr);
                         return true;
                 }
                 return false;
