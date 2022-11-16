@@ -87,6 +87,7 @@ public class IngredientDL extends FireBaseDL {
                     String category = (String) doc.getData().get("Category");
                     String location = (String) doc.getData().get("Location");
                     GregorianCalendar bestbefore = new GregorianCalendar();
+                    String image = (String) doc.getData().get("Image");
                     Double amount = 0.0;
                     try {
                         bestbefore.setTime(doc.getDate("Best Before"));
@@ -103,6 +104,7 @@ public class IngredientDL extends FireBaseDL {
                     i.setLocation(location);
                     i.setHashId(hash);
                     i.setBbd(bestbefore);
+                    i.setPhoto(image);
                     ingredientStorage.add(i);
                 }
                 listener.onSuccess();
@@ -114,6 +116,7 @@ public class IngredientDL extends FireBaseDL {
     /** Add/Edit item recieved from Domain Layer into FireStore Ingredient storage collection
      * @Input: IngredientItem item - item to add or edit
      * */
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public void ingredientFirebaseAddEdit(IngredientItem item) {
         //Initializing data value from item object
         String ing_name = item.getName();
