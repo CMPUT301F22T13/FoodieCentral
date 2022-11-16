@@ -25,6 +25,10 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
+/**
+ * {@link Fragment} for listing all of the meal plans. User can add and delete a meal plan as well
+ * as click on one to view more information about it
+ */
 public class MealPlanMainFragment extends Fragment {
 
     private FragmentMealPlanMainBinding binding;
@@ -66,7 +70,13 @@ public class MealPlanMainFragment extends Fragment {
             }
         });
 
-        // https://www.geeksforgeeks.org/material-design-date-picker-in-android/
+        /**
+         * Idea and implementation for the material date picker was adapted from a web reference
+         * Name: Material Design Date Picker in Android
+         * Publisher: https://auth.geeksforgeeks.org/user/adityamshidlyali/articles
+         * URL: https://www.geeksforgeeks.org/material-design-date-picker-in-android/
+         * License: https://www.geeksforgeeks.org/copyright-information/
+         */
         MaterialDatePicker.Builder<Pair<Long, Long>> materialDateBuilder = MaterialDatePicker.Builder.dateRangePicker();
         materialDateBuilder.setTitleText("SELECT A DATE");
         final MaterialDatePicker materialDatePicker = materialDateBuilder.build();

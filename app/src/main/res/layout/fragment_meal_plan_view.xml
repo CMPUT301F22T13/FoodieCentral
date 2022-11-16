@@ -99,7 +99,11 @@
         app:layout_constraintEnd_toStartOf="@+id/add_ingredient_meal_plan_item_button"
         app:layout_constraintTop_toTopOf="@+id/add_ingredient_meal_plan_item_button" />
 
-    <!-- Idea came from https://www.youtube.com/watch?v=Bdm-pR3Nqkw -->
+    <!--
+    Idea for this type of dropdown came from a web resource
+    Date Accessed: 2022/11/14
+    Web Resource URL: https://www.youtube.com/watch?v=Bdm-pR3Nqkw
+    -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/select_date_meal_plan_spinner"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"

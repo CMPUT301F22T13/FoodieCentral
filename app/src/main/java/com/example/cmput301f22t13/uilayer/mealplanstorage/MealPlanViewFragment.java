@@ -23,18 +23,37 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * {@link Fragment} that allows the user to view details of a meal plan. User can also add ingredients
+ * & recipes to a certain day in the meal plan. Recipes and Ingredients can also be removed from
+ * each day.
+ */
 public class MealPlanViewFragment extends Fragment {
 
+    // argument key for the meal plan item passed through the bundle
     public static final String ARG_MEAL_PLAN_ITEM = "ARG_MEAL_PLAN_ITEM";
 
     private FragmentMealPlanViewBinding binding;
 
+    // meal plan item that is passed in through the bundle
     private MealPlan mealPlanItem;
+
+    // array adapter for the drop down list of dates to select
     private ArrayAdapter<GregorianCalendar> mealPlanDateAdapter;
+
+    // all dates of the meal plan passed into the fragment
     private ArrayList<GregorianCalendar> dates;
 
+    /**
+     * We need an array adapter for every day of the meal plan. Key of the map will be the day of
+     * the meal plan and the value is the array adapter for that day
+     */
     private Map<GregorianCalendar, ArrayAdapter<Item>> itemsArrayAdapters;
+
+    // item selected from the list of ingredients and recipes
     private Item selectedItem;
+
+    // date selected from the dropdown
     private GregorianCalendar selectedDate;
 
     @Override
@@ -46,11 +65,6 @@ public class MealPlanViewFragment extends Fragment {
         binding = FragmentMealPlanViewBinding.inflate(inflater, container, false);
         mealPlanItem = (MealPlan) getArguments().getSerializable(ARG_MEAL_PLAN_ITEM);
         dates = new ArrayList<>(mealPlanItem.getMealPlanItems().keySet());
-
-        // choose the first date by default if none selected
-        if (selectedDate == null) {
-            selectedDate = dates.get(0);
-        }
 
         itemsArrayAdapters = new HashMap<>();
 
@@ -79,10 +93,20 @@ public class MealPlanViewFragment extends Fragment {
                 selectedDate = (GregorianCalendar) adapterView.getItemAtPosition(i);
                 binding.mealPlanViewDateListview.setAdapter(itemsArrayAdapters.get(selectedDate));
                 itemsArrayAdapters.get(selectedDate).notifyDataSetChanged();
+                binding.addRecipeIngredientMealPlanButton.show();
             }
         });
 
-        binding.mealPlanViewDateListview.setAdapter(itemsArrayAdapters.get(selectedDate));
+        // don't set these if there is no date selected from the dropdown menu
+        if (selectedDate != null) {
+            binding.mealPlanViewDateListview.setAdapter(itemsArrayAdapters.get(selectedDate));
+            itemsArrayAdapters.get(selectedDate).notifyDataSetChanged();
+        }
+        else {
+            // don't show add button if there is no date selected
+            binding.addRecipeIngredientMealPlanButton.setVisibility(View.GONE);
+        }
+
         binding.mealPlanViewDateListview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -91,8 +115,7 @@ public class MealPlanViewFragment extends Fragment {
             }
         });
 
-        itemsArrayAdapters.get(selectedDate).notifyDataSetChanged();
-
+        // only show delete button if an item is selected
         binding.deleteItemButton.setVisibility(View.GONE);
         binding.deleteItemButton.setOnClickListener(new View.OnClickListener() {
             @Override

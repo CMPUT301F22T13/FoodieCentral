@@ -53,9 +53,14 @@ public class MealPlanTest extends TestCase {
         GregorianCalendar end = new GregorianCalendar(2022, 11, 25);
         MealPlan mp = new MealPlan(start, end);
 
-        GregorianCalendar newStart = new GregorianCalendar(2022, 11, 21);
+        GregorianCalendar newStart = new GregorianCalendar(2022, 11, 23);
         mp.setStartDate(newStart);
         assertEquals(newStart, mp.getStartDate());
+
+        assertEquals(3, mp.getMealPlanItems().keySet().size());
+        assertTrue(mp.getMealPlanItems().containsKey(newStart));
+        assertTrue(mp.getMealPlanItems().containsKey(new GregorianCalendar(2022, 11, 24)));
+        assertTrue(mp.getMealPlanItems().containsKey(end));
     }
 
     @Test
@@ -64,9 +69,48 @@ public class MealPlanTest extends TestCase {
         GregorianCalendar end = new GregorianCalendar(2022, 11, 25);
         MealPlan mp = new MealPlan(start, end);
 
-        GregorianCalendar newEnd = new GregorianCalendar(2022, 11, 23);
+        GregorianCalendar newEnd = new GregorianCalendar(2022, 11, 22);
         mp.setEndDate(newEnd);
         assertEquals(newEnd, mp.getEndDate());
+
+        assertEquals(3, mp.getMealPlanItems().keySet().size());
+        assertTrue(mp.getMealPlanItems().containsKey(newEnd));
+        assertTrue(mp.getMealPlanItems().containsKey(new GregorianCalendar(2022, 11, 21)));
+        assertTrue(mp.getMealPlanItems().containsKey(start));
+    }
+
+    @Test
+    public void testSetStartDateAfterEndDate() {
+        GregorianCalendar start = new GregorianCalendar(2022, 11, 20);
+        GregorianCalendar end = new GregorianCalendar(2022, 11, 25);
+        MealPlan mp = new MealPlan(start, end);
+
+        GregorianCalendar newStart = new GregorianCalendar(2022, 11, 26);
+        GregorianCalendar newEnd = new GregorianCalendar(2022, 11, 27);
+        mp.setStartDate(newStart);
+        assertEquals(newStart, mp.getStartDate());
+        assertEquals(newEnd, mp.getEndDate());
+
+        assertEquals(2, mp.getMealPlanItems().keySet().size());
+        assertTrue(mp.getMealPlanItems().containsKey(newStart));
+        assertTrue(mp.getMealPlanItems().containsKey(newEnd));
+    }
+
+    @Test
+    public void testSetEndDateBeforeStartDate() {
+        GregorianCalendar start = new GregorianCalendar(2022, 11, 20);
+        GregorianCalendar end = new GregorianCalendar(2022, 11, 25);
+        MealPlan mp = new MealPlan(start, end);
+
+        GregorianCalendar newStart = new GregorianCalendar(2022, 11, 18);
+        GregorianCalendar newEnd = new GregorianCalendar(2022, 11, 19);
+        mp.setEndDate(newEnd);
+        assertEquals(newEnd, mp.getEndDate());
+        assertEquals(newStart, mp.getStartDate());
+
+        assertEquals(2, mp.getMealPlanItems().keySet().size());
+        assertTrue(mp.getMealPlanItems().containsKey(newStart));
+        assertTrue(mp.getMealPlanItems().containsKey(newEnd));
     }
 
     @Test

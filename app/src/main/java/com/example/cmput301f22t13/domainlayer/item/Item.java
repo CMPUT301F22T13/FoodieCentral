@@ -1,5 +1,7 @@
 package com.example.cmput301f22t13.domainlayer.item;
 
+import com.example.cmput301f22t13.domainlayer.utils.Utils;
+
 /**
  * Base class for items that stores a name and a photo
  */
@@ -11,12 +13,16 @@ public class Item {
     // photo that is stored as a String representation of the Uri
     private String photo;
 
+    // unique hash id for the object
+    private String hashId;
+
     /**
      * Creates an item with no name or photo
      */
     public Item() {
         this.name = "";
         this.photo = "";
+        this.hashId = Utils.getUniqueHash();
     }
 
     /**
@@ -28,6 +34,7 @@ public class Item {
     public Item(String name, String photo) {
         this.name = name;
         this.photo = photo;
+        this.hashId = Utils.getUniqueHash();
     }
 
     /**
@@ -56,5 +63,20 @@ public class Item {
      */
     public void setPhoto(String photo) {
         this.photo = photo;
+    }
+
+    /**
+     * Gets the hash ID of this ingredient it belongs to
+     * @return hashId
+     */
+    public String getHashId() {
+        return hashId;
+    }
+    /**
+     * Sets the hashId of the ingredient it belongs to
+     * @param hashId new hashId
+     */
+    public void setHashId(String hashId) {
+        this.hashId = hashId;
     }
 }

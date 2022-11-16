@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
+import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -80,10 +81,18 @@ public class MealPlanAddIngredientFragment extends Fragment {
         SparseBooleanArray checkedItems = binding.addIngredientMealPlanListview.getCheckedItemPositions();
         for (int i = 0; i < binding.addIngredientMealPlanListview.getCount(); i++) {
             if (checkedItems.get(i, false)) {
-                if (!items.contains(binding.addIngredientMealPlanListview.getItemAtPosition(i))) {
+                boolean contains = false;
+                for (Item item : items) {
+                    if (item.getHashId().equals(((Item) binding.addIngredientMealPlanListview.getItemAtPosition(i)).getHashId())) {
+                        contains = true;
+                    }
+                }
+                if (!contains) {
                     // create deep copy so that changes to the ingredient in meal plan do not affect
                     // the ingredients in the IngredientDL and Ingredient Storage
-                    items.add(new IngredientItem((IngredientItem) binding.addIngredientMealPlanListview.getItemAtPosition(i)));
+                    IngredientItem item = new IngredientItem((IngredientItem) binding.addIngredientMealPlanListview.getItemAtPosition(i));
+                    item.setHashId(((IngredientItem) binding.addIngredientMealPlanListview.getItemAtPosition(i)).getHashId());
+                    items.add(item);
                 }
             }
         }
