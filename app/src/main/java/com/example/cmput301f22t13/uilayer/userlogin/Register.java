@@ -1,22 +1,36 @@
 package com.example.cmput301f22t13.uilayer.userlogin;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.example.cmput301f22t13.R;
 import com.example.cmput301f22t13.datalayer.FireBaseDL;
 import com.example.cmput301f22t13.uilayer.ingredientstorage.IngredientStorageActivity;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /** UI layer for user Register it contains the following:
  * - EditTexts for getting users full name, email and password
@@ -31,7 +45,12 @@ public class Register extends AppCompatActivity {
     private TextView loginBtn;
     private ProgressBar progressBar;
     private FireBaseDL fb = FireBaseDL.getFirebaseDL();
-
+    GoogleSignInOptions gso;
+    GoogleSignInClient gsc;
+    private ImageView googleSignUp;
+    private Button googleSignOut;
+    private FirebaseAuth auth;
+    private FirebaseFirestore fstore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,8 +63,49 @@ public class Register extends AppCompatActivity {
         userPassword = findViewById(R.id.userPassword);
         registerBtn = findViewById(R.id.registerBtn);
         loginBtn= findViewById(R.id.loginClick);
+        googleSignUp = findViewById(R.id.googleSignUp);
+        googleSignOut = findViewById(R.id.googleLogout);
+        auth = FirebaseAuth.getInstance();
+        progressBar = findViewById(R.id.registerProgressBar);
+        fstore = FirebaseFirestore.getInstance();
 
-        progressBar = findViewById(R.id.progressBar);
+        //Google GSO & GSC setup
+        gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
+        gsc = GoogleSignIn.getClient(this, gso);
+
+
+        //User clicks the google sign up button
+        googleSignUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("TAG", "Login button is clicked");
+                googleSignIn();
+            }
+        });
+
+
+
+
+        //google user signout
+        googleSignOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                gsc.signOut().addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        finish();
+
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(Register.this, "cant sign out of google", Toast.LENGTH_SHORT).show();
+                        Log.d("TAG", "cant sign out of google");
+                    }
+                });
+            }
+        });
+
 
 
         // Checks if user opening the app is a returning user - based on method in FireBaseDL
@@ -112,5 +172,31 @@ public class Register extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void googleSignIn() {
+        Log.d("TAG", "In google sign in activity");
+        Intent signInIntent = gsc.getSignInIntent();
+        startActivityForResult(signInIntent,1000);
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        Log.d("TAG", "In Activity result activity");
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1000) {
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            try {
+                task.getResult(ApiException.class);
+                //gotoIngredient storage if success
+                Log.d("TAG", "Google authentication successful");
+
+                startActivity(new Intent(getApplicationContext(), IngredientStorageActivity.class));
+            } catch (ApiException e) {
+                Toast.makeText(this, "Google sign in unsuccessful", Toast.LENGTH_SHORT).show();
+            }
+
+        }
     }
 }

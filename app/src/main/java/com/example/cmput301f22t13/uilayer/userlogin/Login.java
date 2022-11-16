@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,7 +19,13 @@ import android.widget.Toast;
 import com.example.cmput301f22t13.R;
 import com.example.cmput301f22t13.datalayer.FireBaseDL;
 import com.example.cmput301f22t13.uilayer.ingredientstorage.IngredientStorageActivity;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.firebase.auth.FirebaseAuth;
+
+
 
 /** UI layer for user Login it contains the following:
  * - EditTexts for getting user email and password
@@ -34,6 +41,10 @@ public class Login extends AppCompatActivity {
     private Button loginBtn;
     private TextView createBtn, forgotPasswordBtn;
     private ProgressBar loginProgressBar;
+    private FirebaseAuth auth;
+    private ImageView googleLogIn;
+    GoogleSignInOptions gso;
+    GoogleSignInClient gsc;
     private FireBaseDL fb = FireBaseDL.getFirebaseDL();
 
     @Override
@@ -48,6 +59,27 @@ public class Login extends AppCompatActivity {
         createBtn = findViewById(R.id.createClick);
         forgotPasswordBtn = findViewById(R.id.forgetPasswordBtn);
         loginProgressBar = findViewById(R.id.loginProgressBar);
+        googleLogIn = findViewById(R.id.googleSignIn);
+        auth = FirebaseAuth.getInstance();
+
+        //Google firebase authentication
+        gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
+        gsc = GoogleSignIn.getClient(this,gso);
+
+        //Checking if google  user actually exists on Firebase
+        googleLogIn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(getApplicationContext());
+                if(acct!=null){
+
+                    startActivity(new Intent(getApplicationContext(), IngredientStorageActivity.class));
+                }
+                else{
+                    Toast.makeText(Login.this, "Please go to registration page and set up google authentication", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
 
        //User clicks the login button
