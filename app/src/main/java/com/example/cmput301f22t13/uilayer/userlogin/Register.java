@@ -27,7 +27,12 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -70,7 +75,10 @@ public class Register extends AppCompatActivity {
         fstore = FirebaseFirestore.getInstance();
 
         //Google GSO & GSC setup
-        gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
+        gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
         gsc = GoogleSignIn.getClient(this, gso);
 
 
@@ -187,16 +195,34 @@ public class Register extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1000) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-            try {
-                task.getResult(ApiException.class);
-                //gotoIngredient storage if success
-                Log.d("TAG", "Google authentication successful");
 
-                startActivity(new Intent(getApplicationContext(), IngredientStorageActivity.class));
+            try {
+                GoogleSignInAccount account = task.getResult(ApiException.class);
+                authenticateWithGoogle(account);
+               // startActivity(new Intent(getApplicationContext(), IngredientStorageActivity.class));
             } catch (ApiException e) {
                 Toast.makeText(this, "Google sign in unsuccessful", Toast.LENGTH_SHORT).show();
             }
 
         }
+    }
+
+    private void authenticateWithGoogle(GoogleSignInAccount account) {
+        AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(),null);
+
+        auth.signInWithCredential(credential).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@androidx.annotation.NonNull Task<AuthResult> task) {
+                if(task.isSuccessful()){
+                    FirebaseUser user = auth.getCurrentUser();
+                    Intent intent = new Intent(getApplicationContext(), IngredientStorageActivity.class);
+                    startActivity(intent);
+                }
+                else{
+                    Toast.makeText(Register.this, "Authentication with google failed", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+        });
     }
 }

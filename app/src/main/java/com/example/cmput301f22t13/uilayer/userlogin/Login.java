@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -24,7 +25,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.firebase.auth.FirebaseAuth;
-
+import com.google.firebase.auth.FirebaseUser;
 
 
 /** UI layer for user Login it contains the following:
@@ -47,6 +48,17 @@ public class Login extends AppCompatActivity {
     GoogleSignInClient gsc;
     private FireBaseDL fb = FireBaseDL.getFirebaseDL();
 
+////    @Override
+////    protected void onStart() {
+////        super.onStart();
+////
+////        FirebaseUser user = auth.getCurrentUser();
+////        if(user !=null){
+////            Intent intent = new Intent(getApplicationContext(), IngredientStorageActivity.class);
+////            startActivity(intent);
+////        }
+//    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,20 +78,7 @@ public class Login extends AppCompatActivity {
         gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
         gsc = GoogleSignIn.getClient(this,gso);
 
-        //Checking if google  user actually exists on Firebase
-        googleLogIn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(getApplicationContext());
-                if(acct!=null){
 
-                    startActivity(new Intent(getApplicationContext(), IngredientStorageActivity.class));
-                }
-                else{
-                    Toast.makeText(Login.this, "Please go to registration page and set up google authentication", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
 
 
        //User clicks the login button
