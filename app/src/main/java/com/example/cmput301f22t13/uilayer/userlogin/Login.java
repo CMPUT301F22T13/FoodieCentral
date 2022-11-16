@@ -117,7 +117,7 @@ public class Login extends AppCompatActivity {
                     public void onSuccess() {
                         loginProgressBar.setVisibility(View.INVISIBLE);
                         Toast.makeText(Login.this, "Welcome back!", Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(getApplicationContext(), IngredientStorageActivity.class));
+                        startActivity(new Intent(getApplicationContext(), ShoppingListActivity.class));
                     }
                     @Override
                     public void onFailure(Exception e) {

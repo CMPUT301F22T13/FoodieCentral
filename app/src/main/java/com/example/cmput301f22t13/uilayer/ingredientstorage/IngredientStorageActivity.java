@@ -73,9 +73,7 @@ public class IngredientStorageActivity extends AppCompatActivity implements AddE
         bottomNavigationView.setSelectedItemId(R.id.ingredientStorage);
 
         setSupportActionBar(binding.toolbar);
-
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_ingredient_storage);
-
         Bundle bundle = new Bundle();
         bundle.putSerializable(IngredientStorageMainFragment.ARG_INGREDIENT_LIST, ingredientDL.ingredientStorage);
         navController.setGraph(R.navigation.ingredient_storage_nav_graph, bundle);
