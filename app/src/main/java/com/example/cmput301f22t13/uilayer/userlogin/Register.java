@@ -68,8 +68,8 @@ public class Register extends AppCompatActivity {
         userPassword = findViewById(R.id.userPassword);
         registerBtn = findViewById(R.id.registerBtn);
         loginBtn= findViewById(R.id.loginClick);
-        googleSignUp = findViewById(R.id.googleSignUp);
-        googleSignOut = findViewById(R.id.googleLogout);
+       // googleSignUp = findViewById(R.id.googleSignUp);
+        //googleSignOut = findViewById(R.id.googleLogout);
         auth = FirebaseAuth.getInstance();
         progressBar = findViewById(R.id.registerProgressBar);
         fstore = FirebaseFirestore.getInstance();

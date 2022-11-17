@@ -71,7 +71,7 @@ public class Login extends AppCompatActivity {
         createBtn = findViewById(R.id.createClick);
         forgotPasswordBtn = findViewById(R.id.forgetPasswordBtn);
         loginProgressBar = findViewById(R.id.loginProgressBar);
-        googleLogIn = findViewById(R.id.googleSignIn);
+       // googleLogIn = findViewById(R.id.googleSignIn);
         auth = FirebaseAuth.getInstance();
 
         //Google firebase authentication
