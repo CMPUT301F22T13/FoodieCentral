@@ -157,7 +157,9 @@ public class AddEditViewRecipeFragment extends Fragment {
             @Override
             public void onActivityResult(ActivityResult result) {
                 if (result.getResultCode() == Activity.RESULT_OK) {
-                    setRecipeImage(result.getData().getData());
+                    Uri image = result.getData().getData();
+                    getActivity().getContentResolver().takePersistableUriPermission(image, Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    setRecipeImage(image);
                 }
                 else {
                     Log.d("AddEditViewRecipe", String.valueOf(result.getResultCode()));

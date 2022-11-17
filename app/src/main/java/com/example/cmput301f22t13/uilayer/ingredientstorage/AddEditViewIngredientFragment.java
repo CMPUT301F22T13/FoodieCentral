@@ -238,7 +238,9 @@ public class AddEditViewIngredientFragment extends Fragment {
             @Override
             public void onActivityResult(ActivityResult result) {
                 if (result.getResultCode() == Activity.RESULT_OK) {
-                    setIngredientImage(result.getData().getData());
+                    Uri image = result.getData().getData();
+                    getActivity().getContentResolver().takePersistableUriPermission(image, Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    setIngredientImage(image);
                 }
                 else {
                     Log.d("AddEditViewIngred", String.valueOf(result.getResultCode()));
@@ -274,7 +276,7 @@ public class AddEditViewIngredientFragment extends Fragment {
         // https://stackoverflow.com/questions/38352148/get-image-from-the-gallery-and-show-in-imageview
         try {
             selectedImageUri = imageUri;
-            getActivity().getContentResolver().takePersistableUriPermission(selectedImageUri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
             final InputStream imageStream;
             imageStream = getActivity().getApplicationContext().getContentResolver().openInputStream(selectedImageUri);
             final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
