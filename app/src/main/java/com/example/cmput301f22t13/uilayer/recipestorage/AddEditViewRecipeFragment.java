@@ -170,7 +170,7 @@ public class AddEditViewRecipeFragment extends Fragment {
                 if (binding.saveButton.getVisibility() == View.VISIBLE) {
                     Intent intent = new Intent();
                     intent.setType("image/*");
-                    intent.setAction(Intent.ACTION_GET_CONTENT);
+                    intent.setAction(Intent.ACTION_OPEN_DOCUMENT);
                     selectImageLauncher.launch(Intent.createChooser(intent, "Select Image"));
                 }
             }
@@ -380,6 +380,7 @@ public class AddEditViewRecipeFragment extends Fragment {
         // https://stackoverflow.com/questions/38352148/get-image-from-the-gallery-and-show-in-imageview
         try {
             selectedImageUri = imageUri;
+            getActivity().getContentResolver().takePersistableUriPermission(selectedImageUri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
             final InputStream imageStream;
             imageStream = getActivity().getApplicationContext().getContentResolver().openInputStream(selectedImageUri);
             final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);

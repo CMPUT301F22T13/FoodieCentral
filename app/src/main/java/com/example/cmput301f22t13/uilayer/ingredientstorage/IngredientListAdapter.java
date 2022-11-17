@@ -53,7 +53,8 @@ public class IngredientListAdapter extends ArrayAdapter<IngredientItem> {
 
         try {
             image.setImageURI(Uri.parse(item.getPhoto()));
-        } catch (Exception e) { }
+        } catch (Exception e) {
+        }
         return view;
     }
 }

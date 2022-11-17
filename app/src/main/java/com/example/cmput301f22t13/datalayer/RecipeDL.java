@@ -76,6 +76,7 @@ public class RecipeDL {
                     int servings = doc.getDouble("Servings").intValue();
                     String category = doc.getString("Category");
                     String comments = doc.getString("Comments");
+                    String photo = doc.getString("Photo");
 
                     RecipeItem r = new RecipeItem();
 
@@ -85,13 +86,40 @@ public class RecipeDL {
                     r.setServings(servings);
                     r.setCategory(category);
                     r.setComments(comments);
+                    r.setPhoto(photo);
 
 
-                    CollectionReference getIngredients = fb.fstore.collection("Users")
+                    Task<QuerySnapshot> getIngredients = fb.fstore.collection("Users")
                             .document(fb.auth.getCurrentUser().getUid())
                             .collection("Recipe Storage").document(r.getHashId())
-                            .collection("Ingredients");
+                            .collection("Ingredients").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                @Override
+                                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                    for (QueryDocumentSnapshot doc: queryDocumentSnapshots) {
+                                        String hash = doc.getId();
+                                        String name = doc.getString("Name");
+                                        String description = (String) doc.getData().get("Description");
+                                        String unit = (String) doc.getData().get("Unit");
+                                        String category = (String) doc.getData().get("Category");
+                                        String photo = doc.getString("Photo");
+                                        Double amount = 0.0;
+                                        try {
+                                            amount = (Double) doc.getDouble("Amount");
+                                        } catch (Exception e) {}
 
+
+                                        IngredientItem i = new IngredientItem();
+                                        i.setName(name);
+                                        i.setDescription(description);
+                                        i.setAmount(amount.intValue());
+                                        i.setUnit(unit);
+                                        i.setCategory(category);
+                                        i.setHashId(hash);
+                                        i.setPhoto(photo);
+                                        r.addIngredient(i);
+                                    }
+                                }
+                            });
 
                     recipeStorage.add(r);
                 }
@@ -105,11 +133,6 @@ public class RecipeDL {
      * @Input: IngredientItem item - item to add or edit
      * */
     public void recipeFirebaseAddEdit(RecipeItem item) {
-//        IngredientItem test = new IngredientItem();
-//
-//        test.setName("test");
-//        item.addIngredient(test);
-
         //Initializing and storing data value from passed in Recipe item
         String recipe_title = item.getTitle();
         int recipe_prepTime = item.getPrepTime();

@@ -91,6 +91,9 @@ public class IngredientDL extends FireBaseDL {
                     Double amount = 0.0;
                     try {
                         bestbefore.setTimeInMillis(doc.getDouble("Best Before").longValue());
+
+                    } catch (Exception e) {}
+                    try {
                         amount = (Double) doc.getDouble("Amount");
                     } catch (Exception e) {}
 
