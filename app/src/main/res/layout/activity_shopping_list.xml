@@ -30,4 +30,13 @@
         android:clickable="true"
         app:srcCompat="@android:drawable/btn_star" />
 
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigationView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:minHeight="75dp"
+        app:itemIconSize="@dimen/bottom_navigation_icon_size"
+        app:menu="@menu/bottom_nav_menu" />
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

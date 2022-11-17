@@ -2,8 +2,10 @@ package com.example.cmput301f22t13.uilayer.shoppinglist;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -17,12 +19,15 @@ import com.example.cmput301f22t13.domainlayer.item.IngredientItem;
 import com.example.cmput301f22t13.uilayer.ingredientstorage.IngredientStorageActivity;
 import com.example.cmput301f22t13.uilayer.ingredientstorage.IngredientStorageMainFragment;
 import com.example.cmput301f22t13.uilayer.recipestorage.RecipeStorageActivity;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
 
 import java.util.ArrayList;
 
 public class ShoppingListActivity extends AppCompatActivity {
     private AppBarConfiguration appBarConfiguration;
     private ActivityShoppingListBinding binding;
+    private BottomNavigationView bottomNavigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +35,32 @@ public class ShoppingListActivity extends AppCompatActivity {
 
         binding = ActivityShoppingListBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        // https://www.geeksforgeeks.org/bottom-navigation-bar-in-android/
+        bottomNavigationView = findViewById(R.id.bottomNavigationView);
+        bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.shoppingList:
+                        return true;
+                    case R.id.ingredientStorage:
+                        Intent ingredientsIntent = new Intent(ShoppingListActivity.this, IngredientStorageActivity.class);
+                        startActivity(ingredientsIntent);
+                        return true;
+                    case R.id.recipes:
+                        Intent recipeIntent = new Intent(ShoppingListActivity.this, RecipeStorageActivity.class);
+                        startActivity(recipeIntent);
+                        return true;
+                    case R.id.mealPlanning:
+//                        Intent mealPlanningIntent = new Intent(ShoppingListActivity.this, MealPlanningActivity.class);
+//                        startActivity(mealPlanningIntent);
+                        return true;
+                }
+                return false;
+            }
+        });
+//        bottomNavigationView.setSelectedItemId(R.id.shoppingList);
 
         setSupportActionBar(binding.toolbar);
 
