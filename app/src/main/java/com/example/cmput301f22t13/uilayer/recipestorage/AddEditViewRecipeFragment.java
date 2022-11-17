@@ -4,7 +4,10 @@ import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
@@ -30,17 +33,22 @@ import com.example.cmput301f22t13.domainlayer.item.RecipeItem;
 import com.example.cmput301f22t13.uilayer.ingredientstorage.AddEditViewIngredientFragment;
 import com.example.cmput301f22t13.uilayer.ingredientstorage.IngredientStorageActivity;
 import com.example.cmput301f22t13.uilayer.ingredientstorage.IngredientStorageMainFragment;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 /**
  * This is the class for the Add, Edit, and View Recipe Fragment. It is a subclass of the {@link Fragment} class.
  * Class is responsible for deciding what will be displayed on the fragment and calling methods responsible for Recipe changes.
- * @version 1.0
- * Ongoing issue: Adding ingredient to existing recipe WORKS. Adding ingredient to new recipe does not work. Will be fixed in the final project.
+ *
+ * @author Shiv Chopra
+ * @version 2.0
  */
 
 public class AddEditViewRecipeFragment extends Fragment {
+
 
     /**
      * This variable is responsible for data binding.
@@ -60,15 +68,15 @@ public class AddEditViewRecipeFragment extends Fragment {
     private RecipeItem recipe;
 
     /**
-     * This variable holds the view.
-     */
-    private View view;
-
-    /**
      * Variable is ingredients of the recipe in string form.
      */
     ArrayList<String> ingredientsOfRecipeList;
 
+
+    /**
+     * Variable is the Uri of the recipe image
+     */
+    private Uri selectedImageUri;
 
     /**
      * Variable is the adapter for ingredients list of recipe.
@@ -80,7 +88,11 @@ public class AddEditViewRecipeFragment extends Fragment {
      */
     ArrayList<IngredientItem> ingredients;
 
+    BottomNavigationView navigationView;
+
+
     public static final String RECIPE_PASSED = "recipe_passed";
+
 
     /**
      * Called when when the fragment is first attached to its context.
@@ -97,7 +109,7 @@ public class AddEditViewRecipeFragment extends Fragment {
     }
 
     /**
-     * Called to have the fragment instantiate its UI view.
+     * Called to have the fragment instantiate its UI view. Also sets the recipe passed.
      * @param inflater Of type {@link LayoutInflater}
      * @param container Of type {@link ViewGroup}
      * @param savedInstanceState Of type {@link Bundle}
@@ -108,13 +120,9 @@ public class AddEditViewRecipeFragment extends Fragment {
             LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState
     ) {
-
         binding = FragmentAddEditViewRecipeBinding.inflate(inflater, container, false);
-        try {
-            recipe = (RecipeItem) getArguments().getSerializable(RECIPE_PASSED);
-        } catch (NullPointerException n) {
-            recipe = null;
-        }
+
+        recipe = (RecipeItem) getArguments().getSerializable(RECIPE_PASSED);
 
         return binding.getRoot();
 
@@ -131,21 +139,45 @@ public class AddEditViewRecipeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        //setTitle("My new title");
-        // Set visibility of buttons for View Recipe page.
+        // Initializing ingredients adapter.
         ingredientsAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1);;
         ingredientsOfRecipeList = new ArrayList<String>();
         ingredients = new ArrayList<IngredientItem>();
         binding.listOfIngredients.setAdapter(ingredientsAdapter);
+        ingredients = recipe.getIngredients();
 
-        binding.editButton.setVisibility(View.VISIBLE);
-        binding.deleteButton.setVisibility(View.VISIBLE);
-        binding.saveButton.setVisibility(View.GONE);
-        binding.addIngredientToRecipe.setVisibility(View.GONE);
-        binding.deleteIngredientFromRecipe.setVisibility(View.GONE);
+        ingredientsAdapter.clear();
+        // Set ingredients of recipe.
+        for (int i = 0; i < recipe.getIngredients().size(); i++) {
+            ingredientsAdapter.add(ingredients.get(i).getName());
+            ingredientsAdapter.notifyDataSetChanged();
+        }
+
+        ActivityResultLauncher<Intent> selectImageLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+            @Override
+            public void onActivityResult(ActivityResult result) {
+                if (result.getResultCode() == Activity.RESULT_OK) {
+                    setRecipeImage(result.getData().getData());
+                }
+                else {
+                    Log.d("AddEditViewRecipe", String.valueOf(result.getResultCode()));
+                }
+            }
+        });
+        binding.recipeImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (binding.saveButton.getVisibility() == View.VISIBLE) {
+                    Intent intent = new Intent();
+                    intent.setType("image/*");
+                    intent.setAction(Intent.ACTION_OPEN_DOCUMENT);
+                    selectImageLauncher.launch(Intent.createChooser(intent, "Select Image"));
+                }
+            }
+        });
 
         // This code should run when an existing recipe has been passed to the fragment.
-        if (recipe != null) {
+        if (!recipe.getTitle().equals("")) {
             listener.recipeSelected(recipe);
             // Set EditText text to current values of recipe attributes.
             binding.recipeNameEdit.setText(recipe.getTitle());
@@ -153,14 +185,13 @@ public class AddEditViewRecipeFragment extends Fragment {
             binding.preparationTimeEdit.setText(String.valueOf(recipe.getPrepTime()));
             binding.categoryEdit.setText(recipe.getCategory());
             binding.commentsEdit.setText(recipe.getComments());
+            setRecipeImage(Uri.parse(recipe.getPhoto()));
 
-            // Set ingredients of recipe.
-            ArrayList<IngredientItem> ingredients = recipe.getIngredients();
-            for (int i = 0; i < recipe.getIngredients().size(); i++) {
-                ingredientsOfRecipeList.add(ingredients.get(i).getName());
-                ingredientsAdapter.add(ingredients.get(i).getName());
-                ingredientsAdapter.notifyDataSetChanged();
-            }
+            binding.editButton.setVisibility(View.VISIBLE);
+            binding.deleteButton.setVisibility(View.VISIBLE);
+            binding.saveButton.setVisibility(View.GONE);
+            binding.addIngredientToRecipe.setVisibility(View.GONE);
+            binding.deleteIngredientFromRecipe.setVisibility(View.GONE);
 
             // As we are currently in View Recipe mode, all EditText should be disabled.
             binding.recipeNameEdit.setEnabled(false);
@@ -197,33 +228,13 @@ public class AddEditViewRecipeFragment extends Fragment {
                 }
             });
 
-            ActivityResultLauncher<Intent> selectImageLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
-                @Override
-                public void onActivityResult(ActivityResult result) {
-                    if (result.getResultCode() == Activity.RESULT_OK) {
-                        binding.recipeImageView.setImageURI(result.getData().getData());
-                    } else {
-                        Log.d("AddEditViewRecipe", String.valueOf(result.getResultCode()));
-                    }
-                }
-            });
-            binding.recipeImageView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent();
-                    intent.setType("image/*");
-                    intent.setAction(Intent.ACTION_GET_CONTENT);
-                    selectImageLauncher.launch(Intent.createChooser(intent, "Select Image"));
-                }
-            });
-
             // OnClickListener for adding ingredient to a recipe.
             binding.addIngredientToRecipe.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     NavHostFragment.findNavController(AddEditViewRecipeFragment.this)
                             .navigate(R.id.action_addEditViewRecipeFragment_to_ingredient_storage_nav_graph);
-                    ingredientsAdapter.notifyDataSetChanged();
+                    //TODO ingredientsAdapter.notifyDataSetChanged();
                     RecipeItem newRecipe = createNewRecipe();
                     listener.changeRecipe(recipe, newRecipe);
                 }
@@ -249,14 +260,15 @@ public class AddEditViewRecipeFragment extends Fragment {
                 @Override
                 public void onClick(View view) {
                     RecipeItem newRecipe = createNewRecipe();
-                    listener.changeRecipe(recipe, newRecipe);
+                    listener.onAddDonePressed(newRecipe);
+                    binding.addIngredientToRecipe.setVisibility(View.GONE);
+                    binding.deleteIngredientFromRecipe.setVisibility(View.GONE);
                 }
             });
         }
         else {
-            recipe = new RecipeItem();
-            listener.recipeSelected(recipe);
 
+            listener.recipeSelected(recipe);
             binding.recipeNameEdit.setEnabled(true);
             binding.servingsEdit.setEnabled(true);
             binding.preparationTimeEdit.setEnabled(true);
@@ -267,11 +279,14 @@ public class AddEditViewRecipeFragment extends Fragment {
             binding.saveButton.setVisibility(View.VISIBLE);
             binding.addIngredientToRecipe.setVisibility(View.VISIBLE);
             binding.deleteIngredientFromRecipe.setVisibility(View.GONE);
+
             binding.saveButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     RecipeItem newRecipe = createNewRecipe();
                     listener.onAddDonePressed(newRecipe);
+                    NavHostFragment.findNavController(AddEditViewRecipeFragment.this).navigateUp();
+
                 }
             });
 
@@ -280,7 +295,6 @@ public class AddEditViewRecipeFragment extends Fragment {
                 public void onClick(View view) {
                     NavHostFragment.findNavController(AddEditViewRecipeFragment.this)
                             .navigate(R.id.action_addEditViewRecipeFragment_to_ingredient_storage_nav_graph);
-                    ingredientsAdapter.notifyDataSetChanged();
                 }
             });
             }
@@ -300,7 +314,11 @@ public class AddEditViewRecipeFragment extends Fragment {
      * @return Returns the newly created {@link RecipeItem}
      */
     public RecipeItem createNewRecipe() {
-        RecipeItem newRecipe = new RecipeItem();
+        RecipeItem newRecipe;
+        if (recipe == null)
+             newRecipe = new RecipeItem();
+        else
+            newRecipe = recipe;
 
         // Set title typed in by user.
         newRecipe.setTitle(binding.recipeNameEdit.getText().toString());
@@ -332,7 +350,14 @@ public class AddEditViewRecipeFragment extends Fragment {
             newRecipe.setPrepTime(0);
         }
 
-        newRecipe.setIngredients(recipe.getIngredients());
+        if (recipe != null)
+            newRecipe.setIngredients(recipe.getIngredients());
+
+        // Set Image
+        if (selectedImageUri != null) {
+            newRecipe.setPhoto(selectedImageUri.toString());
+        }
+
 
         binding.saveButton.setVisibility(View.GONE);
         binding.editButton.setVisibility(View.VISIBLE);
@@ -345,6 +370,24 @@ public class AddEditViewRecipeFragment extends Fragment {
         binding.listOfIngredients.setEnabled(false);
 
         return newRecipe;
+    }
+
+    /**
+     * Sets the Recipe Image.
+     * @param imageUri Of type {@link Uri}
+     */
+    private void setRecipeImage(Uri imageUri) {
+        // https://stackoverflow.com/questions/38352148/get-image-from-the-gallery-and-show-in-imageview
+        try {
+            selectedImageUri = imageUri;
+            getActivity().getContentResolver().takePersistableUriPermission(selectedImageUri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            final InputStream imageStream;
+            imageStream = getActivity().getApplicationContext().getContentResolver().openInputStream(selectedImageUri);
+            final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+            binding.recipeImageView.setImageBitmap(selectedImage);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     /**

@@ -4,17 +4,30 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/recipe_image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_weight="1"
-        app:srcCompat="@android:drawable/picture_frame" />
+        android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/recipe_name_for_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:textSize="25dp" />
+        <ImageView
+            android:id="@+id/recipe_image"
+            android:layout_width="51dp"
+            android:layout_height="91dp"
+            android:layout_weight="1"
+            android:adjustViewBounds="false"
+            android:foregroundGravity="center"
+            android:scaleType="fitXY"
+            app:srcCompat="@android:drawable/picture_frame" />
+
+        <TextView
+            android:id="@+id/recipe_name_for_view"
+            android:layout_width="wrap_content"
+            android:layout_height="124dp"
+            android:layout_weight="1"
+            android:gravity="center|center_horizontal|center_vertical"
+            android:textAlignment="gravity"
+            android:textSize="25dp" />
+    </LinearLayout>
+
 </LinearLayout>
