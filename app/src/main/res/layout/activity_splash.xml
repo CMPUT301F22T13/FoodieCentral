@@ -8,12 +8,6 @@
     android:background="@drawable/app_background">
 
 
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#2fff"/>
-
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/blackRect"
         android:layout_width="420dp"
@@ -22,55 +16,54 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:src="@color/black"
-        app:shapeAppearanceOverlay="@style/roundimageview" />
+        app:shapeAppearanceOverlay="@style/roundimageview"/>
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#3FFF">
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
 
     <androidx.cardview.widget.CardView
         android:id="@+id/mealPlanCircle"
         android:layout_width="150dp"
         android:layout_height="150dp"
-        app:cardCornerRadius="150dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         android:layout_marginBottom="230dp"
-        android:background="@android:color/transparent"
-        app:cardPreventCornerOverlap="false" />
+        android:background= "@color/white"
+        app:cardCornerRadius="150dp"
 
-
-    <ImageView
-        android:id="@+id/shoppingCart"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:src="@drawable/shoppingcart"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginBottom="150dp" />
+        >
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#3fff">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Hello this is meal plan"
-        android:textColor="@color/black"
-        />
-
-
-
-
-
-
-
-
-
-
-
+            <ImageView
+                android:id="@+id/shoppingCart"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginBottom="50dp"
+                android:src="@drawable/shoppingcart"
+                />
 
 
 
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-
+    </androidx.cardview.widget.CardView>
 
 
 
