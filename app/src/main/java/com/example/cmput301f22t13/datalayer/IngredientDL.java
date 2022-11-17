@@ -86,10 +86,11 @@ public class IngredientDL extends FireBaseDL {
                     String unit = (String) doc.getData().get("Unit");
                     String category = (String) doc.getData().get("Category");
                     String location = (String) doc.getData().get("Location");
+                    String photo = doc.getString("Photo");
                     GregorianCalendar bestbefore = new GregorianCalendar();
                     Double amount = 0.0;
                     try {
-                        bestbefore.setTime(doc.getDate("Best Before"));
+                        bestbefore.setTimeInMillis(doc.getDouble("Best Before").longValue());
                         amount = (Double) doc.getDouble("Amount");
                     } catch (Exception e) {}
 
@@ -103,6 +104,7 @@ public class IngredientDL extends FireBaseDL {
                     i.setLocation(location);
                     i.setHashId(hash);
                     i.setBbd(bestbefore);
+                    i.setPhoto(photo);
                     ingredientStorage.add(i);
                 }
                 listener.onSuccess();
@@ -123,7 +125,7 @@ public class IngredientDL extends FireBaseDL {
         Integer ing_amount = item.getAmount();
         String ing_unit = item.getUnit();
         String ing_category = item.getCategory();
-        String ing_image = item.getPhoto();
+        String ing_photo = item.getPhoto();
 
 
         //Storing data collected from object in a HashMap
@@ -131,12 +133,12 @@ public class IngredientDL extends FireBaseDL {
         ingredientItem.put("Name", ing_name);
         ingredientItem.put("Description", ing_description);
         if (ing_bestBefore != null)
-            ingredientItem.put("Best Before", ing_bestBefore.toZonedDateTime().toInstant()); // ing_bestBefore.get(Calendar.DATE));
+            ingredientItem.put("Best Before", ing_bestBefore.getTimeInMillis()); // ing_bestBefore.get(Calendar.DATE));
         ingredientItem.put("Location", ing_location);
         ingredientItem.put("Amount", ing_amount);
         ingredientItem.put("Unit", ing_unit);
         ingredientItem.put("Category", ing_category);
-        ingredientItem.put("Image", ing_image);
+        ingredientItem.put("Photo", ing_photo);
 
         //Storing data in Hashmap to correct location in Firebase using uniqueKey as document reference
         DocumentReference ingredientStorage = fb.fstore.collection("Users")
