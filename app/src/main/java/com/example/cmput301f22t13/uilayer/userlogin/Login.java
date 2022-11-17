@@ -44,8 +44,8 @@ public class Login extends AppCompatActivity {
     private ProgressBar loginProgressBar;
     private FirebaseAuth auth;
     private ImageView googleLogIn;
-    GoogleSignInOptions gso;
-    GoogleSignInClient gsc;
+   // GoogleSignInOptions gso;
+    //GoogleSignInClient gsc;
     private FireBaseDL fb = FireBaseDL.getFirebaseDL();
 
 ////    @Override
@@ -64,6 +64,8 @@ public class Login extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        getSupportActionBar().hide();
+
         //Initializing objects used within the UI
         loginEmail = findViewById(R.id.loginEmail);
         loginPassword = findViewById(R.id.loginPassword);
@@ -75,8 +77,8 @@ public class Login extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
 
         //Google firebase authentication
-        gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
-        gsc = GoogleSignIn.getClient(this,gso);
+       // gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
+       // gsc = GoogleSignIn.getClient(this,gso);
 
 
 
