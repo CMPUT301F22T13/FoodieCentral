@@ -18,7 +18,6 @@ import com.example.cmput301f22t13.domainlayer.item.CountedIngredient;
 import java.util.ArrayList;
 
 public class ShoppingListAdapter extends ArrayAdapter<CountedIngredient> {
-    private ShoppingListDL ingredientDL = ShoppingListDL.getInstance();
     private ArrayList<CountedIngredient> countedIngredients;
     private Context context;
 
