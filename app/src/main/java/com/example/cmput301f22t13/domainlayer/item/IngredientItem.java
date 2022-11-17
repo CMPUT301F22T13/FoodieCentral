@@ -26,7 +26,6 @@ public class IngredientItem extends Item implements Serializable {
     private String category;
     private GregorianCalendar bbd;
     private String location;
-    private String hashId;
 
     /**
      * Constructor that initializes all ingredient fields to default values
@@ -38,7 +37,6 @@ public class IngredientItem extends Item implements Serializable {
         this.category = "";
         this.bbd = new GregorianCalendar();
         this.location = "";
-        this.hashId = Utils.getUniqueHash();
     }
 
 
@@ -73,7 +71,18 @@ public class IngredientItem extends Item implements Serializable {
         byte[] encodedhash = digest.digest(
                 timeStampString.getBytes(StandardCharsets.UTF_8));
 
-        this.hashId = Utils.bytesToHex(encodedhash);
+    }
+
+    /**
+     * Copy constructor for ingredient item. Creates a deep copy
+     * @param ingredientItem ingredient to create a deep copy of
+     */
+    public IngredientItem(IngredientItem ingredientItem) {
+        this(ingredientItem.getName(), ingredientItem.getDescription(), ingredientItem.getAmount(),
+                ingredientItem.getUnit(), ingredientItem.getCategory(), ingredientItem.getBbd(),
+                ingredientItem.getPhoto(), ingredientItem.getLocation());
+
+        setHashId(ingredientItem.getHashId());
     }
 
     /**
@@ -167,20 +176,7 @@ public class IngredientItem extends Item implements Serializable {
     public void setLocation(String location) {
         this.location = location;
     }
-    /**
-     * Gets the hash ID of this ingredient it belongs to
-     * @return hashId
-     */
-    public String getHashId() {
-        return hashId;
-    }
-    /**
-     * Sets the hashId of the ingredient it belongs to
-     * @param hashId new hashId
-     */
-    public void setHashId(String hashId) {
-        this.hashId = hashId;
-    }
+
 }
 
 
