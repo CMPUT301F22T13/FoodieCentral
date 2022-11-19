@@ -3,7 +3,7 @@ package com.example.cmput301f22t13.domainlayer.item;
 import com.example.cmput301f22t13.domainlayer.utils.Utils;
 
 /**
- * Base class for items that stores a name and a photo
+ * Base class for items that stores a hash id, name and a photo
  */
 public class Item {
 
@@ -38,28 +38,33 @@ public class Item {
     }
 
     /**
-     * @return
+     * Gets the name of the item
+     *
+     * @return name of item
      */
     public String getName() {
         return name;
     }
 
     /**
-     * @param name
+     * Sets the name of the item
+     * @param name name of item
      */
     public void setName(String name) {
         this.name = name;
     }
 
     /**
-     * @return
+     * Gets the Uri of the photo as a {@code String}
+     * @return Uri of photo
      */
     public String getPhoto() {
         return photo;
     }
 
     /**
-     * @param photo
+     * Sets the Uri of the photo as a {@code String}
+     * @param photo Uri of photo
      */
     public void setPhoto(String photo) {
         this.photo = photo;
