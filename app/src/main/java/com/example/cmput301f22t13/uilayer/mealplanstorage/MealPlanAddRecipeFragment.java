@@ -83,7 +83,7 @@ public class MealPlanAddRecipeFragment extends Fragment {
         SparseBooleanArray checkedItems = binding.addRecipeMealPlanListview.getCheckedItemPositions();
         for (int i = 0; i < binding.addRecipeMealPlanListview.getCount(); i++) {
             if (checkedItems.get(i, false)) {
-                if (!items.contains(binding.addRecipeMealPlanListview.getItemAtPosition(i))) {
+                if (!items.contains((RecipeItem) binding.addRecipeMealPlanListview.getItemAtPosition(i))) {
                     // create deep copy so that changes to the ingredient in meal plan do not affect
                     // the ingredients in the IngredientDL and Ingredient Storage
                     items.add(new RecipeItem((RecipeItem) binding.addRecipeMealPlanListview.getItemAtPosition(i)));

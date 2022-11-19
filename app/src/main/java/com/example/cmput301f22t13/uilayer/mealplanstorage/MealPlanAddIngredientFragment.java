@@ -81,18 +81,10 @@ public class MealPlanAddIngredientFragment extends Fragment {
         SparseBooleanArray checkedItems = binding.addIngredientMealPlanListview.getCheckedItemPositions();
         for (int i = 0; i < binding.addIngredientMealPlanListview.getCount(); i++) {
             if (checkedItems.get(i, false)) {
-                boolean contains = false;
-                for (Item item : items) {
-                    if (item.getHashId().equals(((Item) binding.addIngredientMealPlanListview.getItemAtPosition(i)).getHashId())) {
-                        contains = true;
-                    }
-                }
-                if (!contains) {
+                if (!items.contains((IngredientItem) binding.addIngredientMealPlanListview.getItemAtPosition(i))) {
                     // create deep copy so that changes to the ingredient in meal plan do not affect
                     // the ingredients in the IngredientDL and Ingredient Storage
-                    IngredientItem item = new IngredientItem((IngredientItem) binding.addIngredientMealPlanListview.getItemAtPosition(i));
-                    item.setHashId(((IngredientItem) binding.addIngredientMealPlanListview.getItemAtPosition(i)).getHashId());
-                    items.add(item);
+                    items.add(new IngredientItem((IngredientItem) binding.addIngredientMealPlanListview.getItemAtPosition(i)));
                 }
             }
         }
