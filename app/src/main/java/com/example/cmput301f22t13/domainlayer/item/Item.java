@@ -79,4 +79,14 @@ public class Item {
     public void setHashId(String hashId) {
         this.hashId = hashId;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof Item) {
+            return getHashId().equals(((Item) o).getHashId());
+        }
+
+        return super.equals(o);
+
+    }
 }
