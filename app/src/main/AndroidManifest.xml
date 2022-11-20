@@ -25,7 +25,9 @@
         <activity
             android:name=".uilayer.userlogin.Register"
             android:exported="false" />
-
+        <activity
+            android:name=".uilayer.shoppinglist.ShoppingListActivity"
+            android:exported="true" />
         <activity
             android:name=".uilayer.userlogin.Login"
             android:exported="false" />
