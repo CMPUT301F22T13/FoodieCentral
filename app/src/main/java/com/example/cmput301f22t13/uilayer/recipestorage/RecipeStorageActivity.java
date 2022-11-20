@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.example.cmput301f22t13.uilayer.ingredientstorage.IngredientStorageActivity;
+import com.example.cmput301f22t13.uilayer.shoppinglist.ShoppingListActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
@@ -109,6 +110,10 @@ public class RecipeStorageActivity extends AppCompatActivity implements AddEditV
                     case R.id.ingredientStorage:
                         Intent intentIngr = new Intent(RecipeStorageActivity.this, IngredientStorageActivity.class);
                         startActivity(intentIngr);
+                        return true;
+                    case R.id.shoppingList:
+                        Intent shoppingListIntent = new Intent(RecipeStorageActivity.this, ShoppingListActivity.class);
+                        startActivity(shoppingListIntent);
                         return true;
                 }
                 return false;

@@ -23,6 +23,7 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.cmput301f22t13.R;
+import com.example.cmput301f22t13.uilayer.shoppinglist.ShoppingListActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
@@ -61,10 +62,14 @@ public class IngredientStorageActivity extends AppCompatActivity implements AddE
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.ingredientStorage:
-                        return false;
+                        return true;
                     case R.id.recipes:
-                        Intent intent = new Intent(IngredientStorageActivity.this, RecipeStorageActivity.class);
-                        startActivity(intent);
+                        Intent recipesIntent = new Intent(IngredientStorageActivity.this, RecipeStorageActivity.class);
+                        startActivity(recipesIntent);
+                        return true;
+                    case R.id.shoppingList:
+                        Intent shoppingListIntent = new Intent(IngredientStorageActivity.this, ShoppingListActivity.class);
+                        startActivity(shoppingListIntent);
                         return true;
                 }
                 return false;

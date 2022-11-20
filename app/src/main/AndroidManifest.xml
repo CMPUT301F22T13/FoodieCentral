@@ -40,6 +40,11 @@
             android:label="@string/app_name"
             android:theme="@style/Theme.CMPUT301F22T13.NoActionBar" />
         <activity
+            android:name=".uilayer.shoppinglist.ShoppingListActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.CMPUT301F22T13.NoActionBar" />
+        <activity
             android:name=".uilayer.userlogin.Splash"
             android:exported="true">
             <intent-filter>
