@@ -72,12 +72,11 @@ public class RecipeItem extends Item implements Serializable {
         this.category = "";
         this.comments = "";
         this.ingredients = new ArrayList<IngredientItem>();
-        this.hashId = Utils.getUniqueHash();
     }
 
     public RecipeItem(RecipeItem recipeItem) {
         this(recipeItem.getName(), recipeItem.getPrepTime(), recipeItem.getServings(), recipeItem.getCategory(),
-                recipeItem.getComments(), recipeItem.getPhoto(), recipeItem.getIngredients());
+                recipeItem.getComments(), recipeItem.getPhoto(), recipeItem.getIngredients(), recipeItem.getHashId());
 
         setHashId(recipeItem.getHashId());
     }

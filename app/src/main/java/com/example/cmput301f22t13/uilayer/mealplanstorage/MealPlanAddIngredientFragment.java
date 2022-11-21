@@ -56,7 +56,7 @@ public class MealPlanAddIngredientFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        ingredients = IngredientDL.getInstance().getIngredients();
+        ingredients = IngredientDL.getInstance().getStorage();
         ingredientAdapter = new IngredientListAdapter(getActivity(), ingredients);
         binding.addIngredientMealPlanListview.setAdapter(ingredientAdapter);
         binding.addIngredientMealPlanListview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
