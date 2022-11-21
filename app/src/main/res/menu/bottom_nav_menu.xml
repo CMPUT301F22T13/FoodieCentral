@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/ingredientStorage"
+        android:icon="@mipmap/ingredient_icon_foreground"
+        android:title="Ingredient\nStorage" />
+    <item
+        android:id="@+id/recipes"
+        android:icon="@drawable/recipe_icon_foreground"
+        android:title="Recipes" />
+    <item
+        android:id="@+id/mealPlanning"
+        android:icon="@mipmap/heart_icon_foreground"
+        android:title="Meal Planning" />
+    <item
+        android:id="@+id/shoppingList"
+        android:icon="@drawable/shopping_list_icon_foreground"
+        android:title="Shopping List" />
+</menu>

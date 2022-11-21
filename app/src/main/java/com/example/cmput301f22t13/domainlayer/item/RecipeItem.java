@@ -15,16 +15,13 @@ import java.util.GregorianCalendar;
 /** Public class representing a recipe - options for constructing, getting and setting
  *
  *  */
-public class RecipeItem implements Serializable {
+public class RecipeItem extends Item implements Serializable {
 
-    private String title;
     private int prepTime;
     private int servings;
     private String category;
     private String comments;
-    private String photo;
     private ArrayList<IngredientItem> ingredients;
-    private String hashId;
 
     /**
      * Constructor to create a recipe
@@ -46,12 +43,11 @@ public class RecipeItem implements Serializable {
             String photo,
             ArrayList<IngredientItem> ingredients
     ) {
-        this.title = title;
+        super(title, photo);
         this.prepTime = prepTime;
         this.servings = servings;
         this.category = category;
         this.comments = comments;
-        this.photo = photo;
         this.ingredients = ingredients;
 
         int timestamp = new Timestamp(new Date()).getNanoseconds();
@@ -64,46 +60,32 @@ public class RecipeItem implements Serializable {
         }
         byte[] encodedhash = digest.digest(
                 timeStampString.getBytes(StandardCharsets.UTF_8));
-
-        this.hashId = Utils.bytesToHex(encodedhash);
     }
 
     /**
      * Default constructor to create a recipe
      */
     public RecipeItem() {
-        this.title = "";
         this.prepTime = -1;
         this.servings = -1;
         this.category = "";
         this.comments = "";
-        this.photo = "";
         this.ingredients = new ArrayList<IngredientItem>();
     }
 
-    /**
-     * Id for hashing the recipe item
-     * @return Hashed Id
-     */
-    public String getHashId() {
-        return hashId;
-    }
+    public RecipeItem(RecipeItem recipeItem) {
+        this(recipeItem.getName(), recipeItem.getPrepTime(), recipeItem.getServings(), recipeItem.getCategory(),
+                recipeItem.getComments(), recipeItem.getPhoto(), recipeItem.getIngredients());
 
-    /**
-     * Setting the hashed Id
-     * @param hashId
-     */
-    public void setHashId(String hashId) {
-        this.hashId = hashId;
+        setHashId(recipeItem.getHashId());
     }
-
 
     /**
      * Get title of recipe
      * @return Title of recipe
      */
     public String getTitle() {
-        return title;
+        return getName();
     }
 
     /**
@@ -111,7 +93,7 @@ public class RecipeItem implements Serializable {
      * @param title Title of recipe
      */
     public void setTitle(String title) {
-        this.title = title;
+        setName(title);
     }
 
     /**
@@ -176,22 +158,6 @@ public class RecipeItem implements Serializable {
      */
     public void setComments(String comments) {
         this.comments = comments;
-    }
-
-    /**
-     * Gets the link to the recipe photo for FireStorage
-     * @return Link to the recipe photo for FireStorage
-     */
-    public String getPhoto() {
-        return photo;
-    }
-
-    /**
-     * Sets the link for the recipe photo to FireStorage
-     * @param photo Link to photo
-     */
-    public void setPhoto(String photo) {
-        this.photo = photo;
     }
 
     /**
