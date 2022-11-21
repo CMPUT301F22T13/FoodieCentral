@@ -4,7 +4,6 @@ import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,11 +23,7 @@ import com.example.cmput301f22t13.R;
 import com.example.cmput301f22t13.databinding.FragmentRecipeStorageBinding;
 import com.example.cmput301f22t13.datalayer.RecipeDL;
 import com.example.cmput301f22t13.domainlayer.item.RecipeItem;
-import com.google.android.material.bottomnavigation.BottomNavigationItemView;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.example.cmput301f22t13.uilayer.userlogin.ResultListener;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -117,9 +112,9 @@ public class RecipeStorageFragment extends Fragment {
                     RecipeItem recipe = (RecipeItem) adapterView.getItemAtPosition(i);
                     ((RecipeStorageActivity) getActivity()).recipeSelected(recipe);
                     Bundle bundle = new Bundle();
-                    bundle.putSerializable(AddEditViewRecipeFragment.RECIPE_PASSED, recipe);
+                    bundle.putSerializable(ViewRecipeFragment.RECIPE_PASSED, recipe);
                     NavHostFragment.findNavController(RecipeStorageFragment.this)
-                            .navigate(R.id.recipe_action_storage_to_view, bundle);
+                            .navigate(R.id.view_recipe_action, bundle);
                 }
             });
 

@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".uilayer.recipestorage.ViewRecipeFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/viewfrag_recipe_image"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:scaleType="fitXY"
+            android:src="@android:drawable/ic_menu_report_image"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/viewfrag_recipe_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="20dp"
+            android:text="Recipe Name"
+            android:textColor="@color/storagebackground"
+            android:textSize="28sp"
+            app:layout_constraintBottom_toTopOf="@+id/viewfrag_preptime"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/viewfrag_recipe_image"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <TextView
+            android:id="@+id/viewfrag_preptime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:text="Preparation Time:"
+            style="@style/RecipeInfoStyle"
+            app:layout_constraintBaseline_toBaselineOf="@+id/viewfrag_preptime_amount"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/viewfrag_preptime_amount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="76dp"
+            android:hint="Prep Time"
+            style="@style/RecipeInfoStyle"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/viewfrag_preptime"
+            app:layout_constraintTop_toBottomOf="@+id/viewfrag_recipe_image" />
+
+        <TextView
+            android:id="@+id/viewfrag_servings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:text="Servings:"
+            style="@style/RecipeInfoStyle"
+            app:layout_constraintBaseline_toBaselineOf="@+id/viewfrag_servings_amount"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/viewfrag_servings_amount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Serving Amount"
+            style="@style/RecipeInfoStyle"
+            app:layout_constraintStart_toStartOf="@+id/viewfrag_preptime_amount"
+            app:layout_constraintTop_toBottomOf="@+id/viewfrag_preptime_amount" />
+
+        <TextView
+            android:id="@+id/viewfrag_category_amount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Category Amount"
+            style="@style/RecipeInfoStyle"
+            app:layout_constraintStart_toStartOf="@+id/viewfrag_servings_amount"
+            app:layout_constraintTop_toBottomOf="@+id/viewfrag_servings_amount" />
+
+        <TextView
+            android:id="@+id/viewfrag_comments_amount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Comments Amount"
+            style="@style/RecipeInfoStyle"
+            app:layout_constraintStart_toStartOf="@+id/viewfrag_category_amount"
+            app:layout_constraintTop_toBottomOf="@+id/viewfrag_category_amount" />
+
+        <TextView
+            android:id="@+id/viewfrag_category"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:text="Category:"
+            style="@style/RecipeInfoStyle"
+            app:layout_constraintBaseline_toBaselineOf="@+id/viewfrag_category_amount"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/viewfrag_comments"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:text="Comments:"
+            style="@style/RecipeInfoStyle"
+            app:layout_constraintBaseline_toBaselineOf="@+id/viewfrag_comments_amount"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/viewfrag_ingredients"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:text="Ingredients:"
+            style="@style/RecipeInfoStyle"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/viewfrag_ingredients_of_recipe" />
+
+        <ListView
+            android:id="@+id/viewfrag_ingredients_of_recipe"
+            android:layout_width="139dp"
+            android:layout_height="100dp"
+            android:layout_marginTop="20dp"
+            app:layout_constraintStart_toStartOf="@+id/viewfrag_comments_amount"
+            app:layout_constraintTop_toBottomOf="@+id/viewfrag_comments_amount" >
+
+        </ListView>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/viewfrag_edit_button"
+            style="@style/RecipeButtons"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="30dp"
+            android:clickable="true"
+            android:src="@android:drawable/ic_menu_edit"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.278"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/viewfrag_delete_button"
+            style="@style/RecipeButtons"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="80dp"
+            android:layout_marginBottom="30dp"
+            android:clickable="true"
+            android:src="@android:drawable/ic_menu_delete"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/viewfrag_edit_button"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/viewfrag_ingredients"
+            app:layout_constraintVertical_bias="0.0" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

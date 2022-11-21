@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/recipe_storage_to_view_frag"
+    app:startDestination="@id/recipeStorageFragment">
+    <fragment
+        android:id="@+id/recipeStorageFragment"
+        android:name="com.example.cmput301f22t13.uilayer.recipestorage.RecipeStorageFragment"
+        android:label="Recipes"
+        tools:layout="@layout/fragment_recipe_storage">
+        <action
+            android:id="@+id/view_recipe_action"
+            app:destination="@id/viewRecipeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/viewRecipeFragment"
+        android:name="com.example.cmput301f22t13.uilayer.recipestorage.ViewRecipeFragment"
+        android:label="View Recipe"
+        tools:layout="@layout/fragment_view_recipe" />
+</navigation>
