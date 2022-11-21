@@ -14,8 +14,23 @@
         <item name="cornerSizeTopLeft">20dp</item>
         <item name="color">@color/black</item>
 
-
-
     </style>
 
+    <style name="RecipeStorageListView" parent="android:style/Widget.ListView">
+        <item name="android:divider">@android:color/darker_gray</item>
+        <item name="android:dividerHeight">1dp</item>
+    </style>
+
+    <style name="RecipeStorageListItem" parent="TextAppearance.AppCompat">
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
+    <style name="RecipeButtons" parent="Widget.MaterialComponents.FloatingActionButton">
+        <item name="android:backgroundTint">@color/storagebackground</item>
+        <item name="tint">@color/white</item>
+    </style>
+
+    <style name="RecipeInfoStyle" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">17dp</item>
+    </style>
 </resources>
