@@ -21,7 +21,7 @@ public class Splash extends AppCompatActivity {
 
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_splash);
+        setContentView(R.layout.activity_loading_screen);
 
         getSupportActionBar().hide();
 
