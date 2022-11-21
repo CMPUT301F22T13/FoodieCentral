@@ -152,7 +152,6 @@ public class ViewRecipeFragment extends Fragment {
             ingredientsAdapter.add(ingredients.get(i).getName());
             ingredientsAdapter.notifyDataSetChanged();
         }
-
         ActivityResultLauncher<Intent> selectImageLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
             @Override
             public void onActivityResult(ActivityResult result) {
@@ -164,6 +163,17 @@ public class ViewRecipeFragment extends Fragment {
                 else {
                     Log.d("AddEditViewRecipe", String.valueOf(result.getResultCode()));
                 }
+            }
+        });
+
+
+        binding.viewfragEditButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Bundle bundle = new Bundle();
+                bundle.putSerializable(AddEditViewRecipeFragment.RECIPE_PASSED, recipe);
+                NavHostFragment.findNavController(ViewRecipeFragment.this)
+                        .navigate(R.id.view_frag_to_edit_frag, bundle);
             }
         });
         /*binding.viewfragRecipeImage.setOnClickListener(new View.OnClickListener() {
@@ -211,10 +221,10 @@ public class ViewRecipeFragment extends Fragment {
         });
 
         // Sets up OnClickListener for Edit button.
-        binding.viewfragEditButton.setOnClickListener(new View.OnClickListener() {
+       /* binding.viewfragEditButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                /*binding.addIngredientToRecipe.setVisibility(View.VISIBLE);
+                *//*binding.addIngredientToRecipe.setVisibility(View.VISIBLE);
                 binding.deleteIngredientFromRecipe.setVisibility(View.VISIBLE);
                 binding.recipeNameEdit.setEnabled(true);
                 binding.servingsEdit.setEnabled(true);
@@ -223,9 +233,9 @@ public class ViewRecipeFragment extends Fragment {
                 binding.commentsEdit.setEnabled(true);
                 binding.editButton.setVisibility(View.GONE);
                 binding.deleteButton.setVisibility(View.GONE);
-                binding.saveButton.setVisibility(View.VISIBLE);*/
+                binding.saveButton.setVisibility(View.VISIBLE);*//*
             }
-        });
+        });*/
 
         // OnClickListener for adding ingredient to a recipe.
         /*binding.addIngredientToRecipe.setOnClickListener(new View.OnClickListener() {

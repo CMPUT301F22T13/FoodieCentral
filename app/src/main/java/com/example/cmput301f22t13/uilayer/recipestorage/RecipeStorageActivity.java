@@ -43,7 +43,7 @@ import java.util.GregorianCalendar;
  * @author Shiv Chopra
  * @version 1.0
  */
-public class RecipeStorageActivity extends AppCompatActivity implements ViewRecipeFragment.OnRecipeItemChangedListener, AddEditViewIngredientFragment.OnIngredientItemChangeListener {
+public class RecipeStorageActivity extends AppCompatActivity implements ViewRecipeFragment.OnRecipeItemChangedListener, AddEditViewRecipeFragment.OnRecipeItemChangedListener, AddEditViewIngredientFragment.OnIngredientItemChangeListener {
 
     /**
      * This variable is for configuration of the app bar.

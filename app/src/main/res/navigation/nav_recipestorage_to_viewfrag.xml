@@ -12,10 +12,28 @@
         <action
             android:id="@+id/view_recipe_action"
             app:destination="@id/viewRecipeFragment" />
+        <action
+            android:id="@+id/recipe_action_storage_to_addedit"
+            app:destination="@id/addEditViewRecipeFragment" />
     </fragment>
     <fragment
         android:id="@+id/viewRecipeFragment"
         android:name="com.example.cmput301f22t13.uilayer.recipestorage.ViewRecipeFragment"
         android:label="View Recipe"
-        tools:layout="@layout/fragment_view_recipe" />
+        tools:layout="@layout/fragment_view_recipe" >
+        <action
+            android:id="@+id/view_frag_to_edit_frag"
+            app:destination="@id/addEditViewRecipeFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/addEditViewRecipeFragment"
+        android:name="com.example.cmput301f22t13.uilayer.recipestorage.AddEditViewRecipeFragment"
+        android:label="View/Edit/Add Recipe"
+        tools:layout="@layout/fragment_add_edit_view_recipe">
+        <action
+            android:id="@+id/action_addEditViewRecipeFragment_to_ingredient_storage_nav_graph"
+            app:destination="@id/ingredient_storage_nav_graph" />
+    </fragment>
+    <include app:graph="@navigation/ingredient_storage_nav_graph" />
 </navigation>

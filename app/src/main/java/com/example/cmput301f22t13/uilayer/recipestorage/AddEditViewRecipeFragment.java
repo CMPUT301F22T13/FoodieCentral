@@ -35,6 +35,7 @@ import com.example.cmput301f22t13.uilayer.ingredientstorage.IngredientStorageAct
 import com.example.cmput301f22t13.uilayer.ingredientstorage.IngredientStorageMainFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -70,7 +71,7 @@ public class AddEditViewRecipeFragment extends Fragment {
     /**
      * Variable is ingredients of the recipe in string form.
      */
-    ArrayList<String> ingredientsOfRecipeList;
+    private ArrayList<String> ingredientsOfRecipeList;
 
 
     /**
@@ -81,14 +82,12 @@ public class AddEditViewRecipeFragment extends Fragment {
     /**
      * Variable is the adapter for ingredients list of recipe.
      */
-    ArrayAdapter<String> ingredientsAdapter;
+    private ArrayAdapter<String> ingredientsAdapter;
 
     /**
      * Variable is a list of ingredients.
      */
-    ArrayList<IngredientItem> ingredients;
-
-    BottomNavigationView navigationView;
+    private ArrayList<IngredientItem> ingredients;
 
 
     public static final String RECIPE_PASSED = "recipe_passed";
@@ -147,6 +146,7 @@ public class AddEditViewRecipeFragment extends Fragment {
         ingredients = recipe.getIngredients();
 
         ingredientsAdapter.clear();
+
         // Set ingredients of recipe.
         for (int i = 0; i < recipe.getIngredients().size(); i++) {
             ingredientsAdapter.add(ingredients.get(i).getName());
@@ -189,54 +189,13 @@ public class AddEditViewRecipeFragment extends Fragment {
             binding.commentsEdit.setText(recipe.getComments());
             setRecipeImage(Uri.parse(recipe.getPhoto()));
 
-            binding.editButton.setVisibility(View.VISIBLE);
-            binding.deleteButton.setVisibility(View.VISIBLE);
-            binding.saveButton.setVisibility(View.GONE);
-            binding.addIngredientToRecipe.setVisibility(View.GONE);
-            binding.deleteIngredientFromRecipe.setVisibility(View.GONE);
-
-            // As we are currently in View Recipe mode, all EditText should be disabled.
-            binding.recipeNameEdit.setEnabled(false);
-            binding.servingsEdit.setEnabled(false);
-            binding.preparationTimeEdit.setEnabled(false);
-            binding.categoryEdit.setEnabled(false);
-            binding.commentsEdit.setEnabled(false);
-
-            // Sets up OnClickListener for the Delete Button.
-            binding.deleteButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    // Calls onDeletePressed to delete the recipe.
-                    listener.onDeletePressed(recipe);
-                    // Navigates back to Recipes page after deletion.
-                    NavHostFragment.findNavController(AddEditViewRecipeFragment.this).navigateUp();
-                }
-            });
-
-            // Sets up OnClickListener for Edit button.
-            binding.editButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    binding.addIngredientToRecipe.setVisibility(View.VISIBLE);
-                    binding.deleteIngredientFromRecipe.setVisibility(View.VISIBLE);
-                    binding.recipeNameEdit.setEnabled(true);
-                    binding.servingsEdit.setEnabled(true);
-                    binding.preparationTimeEdit.setEnabled(true);
-                    binding.categoryEdit.setEnabled(true);
-                    binding.commentsEdit.setEnabled(true);
-                    binding.editButton.setVisibility(View.GONE);
-                    binding.deleteButton.setVisibility(View.GONE);
-                    binding.saveButton.setVisibility(View.VISIBLE);
-                }
-            });
-
             // OnClickListener for adding ingredient to a recipe.
             binding.addIngredientToRecipe.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     NavHostFragment.findNavController(AddEditViewRecipeFragment.this)
                             .navigate(R.id.action_addEditViewRecipeFragment_to_ingredient_storage_nav_graph);
-                    //TODO ingredientsAdapter.notifyDataSetChanged();
+
                     RecipeItem newRecipe = createNewRecipe();
                     listener.changeRecipe(recipe, newRecipe);
                 }
@@ -263,21 +222,13 @@ public class AddEditViewRecipeFragment extends Fragment {
                 public void onClick(View view) {
                     RecipeItem newRecipe = createNewRecipe();
                     listener.onAddDonePressed(newRecipe);
-                    binding.addIngredientToRecipe.setVisibility(View.GONE);
-                    binding.deleteIngredientFromRecipe.setVisibility(View.GONE);
+                    NavHostFragment.findNavController(AddEditViewRecipeFragment.this).navigateUp();
+
                 }
             });
         }
         else {
-
             listener.recipeSelected(recipe);
-            binding.recipeNameEdit.setEnabled(true);
-            binding.servingsEdit.setEnabled(true);
-            binding.preparationTimeEdit.setEnabled(true);
-            binding.categoryEdit.setEnabled(true);
-            binding.commentsEdit.setEnabled(true);
-            binding.editButton.setVisibility(View.GONE);
-            binding.deleteButton.setVisibility(View.GONE);
             binding.saveButton.setVisibility(View.VISIBLE);
             binding.addIngredientToRecipe.setVisibility(View.VISIBLE);
             binding.deleteIngredientFromRecipe.setVisibility(View.GONE);
@@ -361,15 +312,15 @@ public class AddEditViewRecipeFragment extends Fragment {
         }
 
 
-        binding.saveButton.setVisibility(View.GONE);
-        binding.editButton.setVisibility(View.VISIBLE);
-        binding.deleteButton.setVisibility(View.VISIBLE);
-        binding.recipeNameEdit.setEnabled(false);
+       /* binding.saveButton.setVisibility(View.GONE);*/
+       /* binding.editButton.setVisibility(View.VISIBLE);
+        binding.deleteButton.setVisibility(View.VISIBLE);*/
+/*        binding.recipeNameEdit.setEnabled(false);
         binding.preparationTimeEdit.setEnabled(false);
         binding.servingsEdit.setEnabled(false);
         binding.categoryEdit.setEnabled(false);
         binding.commentsEdit.setEnabled(false);
-        binding.listOfIngredients.setEnabled(false);
+        binding.listOfIngredients.setEnabled(false);*/
 
         return newRecipe;
     }

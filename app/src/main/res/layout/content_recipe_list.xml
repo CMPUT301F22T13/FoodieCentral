@@ -29,8 +29,8 @@
             android:layout_weight="1"
             android:adjustViewBounds="false"
             android:foregroundGravity="center"
-            android:scaleType="fitXY"
-            app:srcCompat="@android:drawable/picture_frame" />
+            android:src="@drawable/noimage"
+            android:scaleType="fitXY" />
     </LinearLayout>
 
 </LinearLayout>

@@ -10,7 +10,7 @@
         android:label="Recipes"
         tools:layout="@layout/fragment_recipe_storage">
         <action
-            android:id="@+id/recipe_action_storage_to_view"
+            android:id="@+id/recipe_action_storage_to_addedit"
             app:destination="@id/addEditViewRecipeFragment" />
     </fragment>
     <fragment
