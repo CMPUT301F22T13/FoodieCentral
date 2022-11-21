@@ -1,14 +1,11 @@
 package com.example.cmput301f22t13.uilayer.recipestorage;
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.example.cmput301f22t13.uilayer.ingredientstorage.IngredientStorageActivity;
 import com.example.cmput301f22t13.uilayer.shoppinglist.ShoppingListActivity;
@@ -29,12 +26,9 @@ import com.example.cmput301f22t13.domainlayer.item.IngredientItem;
 import com.example.cmput301f22t13.domainlayer.item.RecipeItem;
 
 
-import com.example.cmput301f22t13.domainlayer.storage.RecipeStorage;
 import com.example.cmput301f22t13.uilayer.ingredientstorage.AddEditViewIngredientFragment;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
-import java.util.GregorianCalendar;
 
 /**
  * This is the Activity class for the Recipe Storage. The class is a subclass of {@link AppCompatActivity} and implements {@link AddEditViewRecipeFragment.OnRecipeItemChangedListener} and {@link AddEditViewIngredientFragment.OnIngredientItemChangeListener}
@@ -124,7 +118,7 @@ public class RecipeStorageActivity extends AppCompatActivity implements AddEditV
         setSupportActionBar(binding.toolbar);
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_recipe_storage);
         Bundle bundle = new Bundle();
-        bundle.putSerializable("init_recipes", recipeDL.getRecipes());
+        bundle.putSerializable("init_recipes", recipeDL.getStorage());
         navController.setGraph(R.navigation.nav_recipestorage_to_viewrecipe, bundle);
 
         appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
@@ -150,7 +144,7 @@ public class RecipeStorageActivity extends AppCompatActivity implements AddEditV
      */
     @Override
     public void onAddDonePressed(RecipeItem recipe) {
-        recipeDL.recipeFirebaseAddEdit(recipe);
+        recipeDL.firebaseAddEdit(recipe);
     }
 
     /**
@@ -161,7 +155,7 @@ public class RecipeStorageActivity extends AppCompatActivity implements AddEditV
      */
     @Override
     public void changeRecipe(RecipeItem oldRecipe, RecipeItem newRecipe) {
-        recipeDL.getRecipes().set(recipeDL.getRecipes().indexOf(oldRecipe), newRecipe);
+        recipeDL.getStorage().set(recipeDL.getStorage().indexOf(oldRecipe), newRecipe);
     }
 
     /**
@@ -171,7 +165,7 @@ public class RecipeStorageActivity extends AppCompatActivity implements AddEditV
      */
     @Override
     public void onDeletePressed(RecipeItem recipe) {
-        recipeDL.recipeFirebaseDelete(recipe);
+        recipeDL.firebaseDelete(recipe);
 
     }
 
@@ -193,7 +187,7 @@ public class RecipeStorageActivity extends AppCompatActivity implements AddEditV
             recipeSelected.addIngredient(ingredientItem);
         }
         // For now
-        recipeDL.recipeFirebaseAddEdit(this.recipeSelected);
+        recipeDL.firebaseAddEdit(this.recipeSelected);
 
         Log.d("RecipeActivity", "OnDonePressed");
     }

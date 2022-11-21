@@ -56,7 +56,7 @@ public class ShoppingListMainFragment extends Fragment {
                 CountedIngredient countedIngredient = (CountedIngredient) adapterView.getItemAtPosition(i);
 
                 IngredientItem ingredientItem = new IngredientItem();
-                ingredientItem.setName(countedIngredient.getIngredient().getName());
+                ingredientItem.setName(countedIngredient.getName());
                 ingredientItem.setAmount(countedIngredient.getCount());
 
                 binding.purchasedIngredientButton.setText(Integer.toString(i));
@@ -72,7 +72,7 @@ public class ShoppingListMainFragment extends Fragment {
                 binding.purchasedIngredientButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        IngredientDL.getInstance().ingredientFirebaseAddEdit(ingredientItem);
+                        IngredientDL.getInstance().firebaseAddEdit(ingredientItem);
                         binding.purchasedIngredientButton.setVisibility(View.GONE);
                     }
                 });
