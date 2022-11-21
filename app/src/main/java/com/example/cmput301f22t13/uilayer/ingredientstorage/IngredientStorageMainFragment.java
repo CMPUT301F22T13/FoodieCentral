@@ -4,14 +4,12 @@ import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
@@ -43,7 +41,7 @@ public class IngredientStorageMainFragment extends Fragment {
     public static final String ARG_INGREDIENT_LIST = "ARG_INGREDIENT_LIST";
 
     private ArrayAdapter<IngredientItem> ingredientListAdapter;
-    private ArrayList<IngredientItem> ingredients = ingredientDL.getIngredients();
+    private ArrayList<IngredientItem> ingredients = ingredientDL.getStorage();
 
     @Override
     public View onCreateView(

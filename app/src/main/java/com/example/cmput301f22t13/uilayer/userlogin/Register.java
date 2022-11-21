@@ -14,9 +14,10 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+//import com.google.android.gms.auth.api.signin.GoogleSignIn;
+//import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+//import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.example.cmput301f22t13.datalayer.LoginDL;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.example.cmput301f22t13.R;
 import com.example.cmput301f22t13.datalayer.FireBaseDL;
@@ -49,7 +50,7 @@ public class Register extends AppCompatActivity {
     private Button registerBtn;
     private TextView loginBtn;
     private ProgressBar progressBar;
-    private FireBaseDL fb = FireBaseDL.getFirebaseDL();
+    private LoginDL loginDL = LoginDL.getInstance();
    // GoogleSignInOptions gso;
    // GoogleSignInClient gsc;
    // private ImageView googleSignUp;
@@ -119,7 +120,7 @@ public class Register extends AppCompatActivity {
 
 
         // Checks if user opening the app is a returning user - based on method in FireBaseDL
-        fb.userReturning(new ResultListener() {
+        loginDL.userReturning(new ResultListener() {
             @Override
             public void onSuccess() {
                 Toast.makeText(Register.this, "Congrats you have logged in again", Toast.LENGTH_SHORT).show();
@@ -160,7 +161,7 @@ public class Register extends AppCompatActivity {
                 progressBar.setVisibility(View.VISIBLE);
 
                 // Registers user based on method in FireBaseDL
-                fb.userRegister(email, password, "", new ResultListener() {
+                loginDL.userRegister(email, password, "", new ResultListener() {
                     @Override
                     public void onSuccess() {
                         progressBar.setVisibility(View.INVISIBLE);

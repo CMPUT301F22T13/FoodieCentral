@@ -29,9 +29,8 @@ import java.util.Map;
 /** Will become Singleton class in the future - is responsible for tasks related to adding,deleting,getting and updating Ingredient items
  * */
 
-public class RecipeDL {
+public class RecipeDL extends FireBaseDL {
     static private RecipeDL recipeDL;
-    private static FireBaseDL fb;
 
     /** Listens for changes to the arraylist
      * */
@@ -46,20 +45,20 @@ public class RecipeDL {
     public static RecipeDL getInstance(){
         if(recipeDL==null){
             recipeDL = new RecipeDL();
-            fb = FireBaseDL.getFirebaseDL();
-            // Populate ingredients here
-            populateRecipesOnStartup();
-
         }
         return recipeDL;
+    }
+
+    public RecipeDL() {
+        populateStorageOnStartup();
     }
 
     /** populateRecipesOnStartup - called when first instance of IngredientDL is made
      * listens for db changes and updates the ingredient storage accordingly
      * */
-    private static void populateRecipesOnStartup() {
-        CollectionReference getRecipes = fb.fstore.collection("Users")
-                .document(fb.auth.getCurrentUser().getUid())
+    private void populateStorageOnStartup() {
+        CollectionReference getRecipes = fstore.collection("Users")
+                .document(auth.getCurrentUser().getUid())
                 .collection("Recipe Storage");
 
         getRecipes.addSnapshotListener(new EventListener<QuerySnapshot>() {
@@ -89,8 +88,8 @@ public class RecipeDL {
                     r.setPhoto(photo);
 
 
-                    Task<QuerySnapshot> getIngredients = fb.fstore.collection("Users")
-                            .document(fb.auth.getCurrentUser().getUid())
+                    Task<QuerySnapshot> getIngredients = fstore.collection("Users")
+                            .document(auth.getCurrentUser().getUid())
                             .collection("Recipe Storage").document(r.getHashId())
                             .collection("Ingredients").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                                 @Override
@@ -132,7 +131,7 @@ public class RecipeDL {
     /** Add/Edit item recieved from Domain Layer into FireStore Ingredient storage collection
      * @Input: IngredientItem item - item to add or edit
      * */
-    public void recipeFirebaseAddEdit(RecipeItem item) {
+    public void firebaseAddEdit(RecipeItem item) {
         //Initializing and storing data value from passed in Recipe item
         String recipe_title = item.getTitle();
         int recipe_prepTime = item.getPrepTime();
@@ -153,8 +152,8 @@ public class RecipeDL {
 
 
         //Storing data in Hashmap to correct location in Firebase using uniqueKey as document reference
-        DocumentReference recipeStorage = fb.fstore.collection("Users")
-                .document(fb.auth.getCurrentUser().getUid())
+        DocumentReference recipeStorage = fstore.collection("Users")
+                .document(auth.getCurrentUser().getUid())
                 .collection("Recipe Storage")
                 .document(item.getHashId());
 
@@ -167,8 +166,8 @@ public class RecipeDL {
             ingredient.put("Unit", i.getUnit());
             ingredient.put("Category", i.getCategory());
 
-            DocumentReference ingredientStorage = fb.fstore.collection("Users")
-                    .document(fb.auth.getCurrentUser().getUid())
+            DocumentReference ingredientStorage = fstore.collection("Users")
+                    .document(auth.getCurrentUser().getUid())
                     .collection("Recipe Storage")
                     .document(item.getHashId())
                     .collection("Ingredients")
@@ -204,10 +203,10 @@ public class RecipeDL {
     /** Deletes data from Firestore for a particular passed in Recipe item - by doing so the recipe document is deleted from Firestore
      *  @param item - Recipe item to be deleted from Firestore
      * */
-    public void recipeFirebaseDelete(RecipeItem item){
+    public void firebaseDelete(RecipeItem item){
         //Referencing wanted document from correct location in Firestore database
-        DocumentReference deleteIngredient = fb.fstore.collection("Users")
-                .document(fb.auth.getCurrentUser().getUid())
+        DocumentReference deleteIngredient = fstore.collection("Users")
+                .document(auth.getCurrentUser().getUid())
                 .collection("Recipe Storage")
                 .document(item.getHashId());
 
@@ -227,7 +226,7 @@ public class RecipeDL {
     /** Getter for ingredient storage
      * @Returns: ArrayList<IngredientItem> representing ingredients in storage
      * */
-    public ArrayList<RecipeItem> getRecipes() {
+    public ArrayList<RecipeItem> getStorage() {
         return recipeStorage;
     }
 

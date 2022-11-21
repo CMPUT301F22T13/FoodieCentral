@@ -13,9 +13,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -26,8 +23,6 @@ import com.example.cmput301f22t13.R;
 import com.example.cmput301f22t13.uilayer.shoppinglist.ShoppingListActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
-
-import java.util.ArrayList;
 
 /** Activity to handle ingredient storage,
  * utilizes 2 fragments for displaying ingredients and adding and editing ingredients
@@ -107,13 +102,13 @@ public class IngredientStorageActivity extends AppCompatActivity implements AddE
     @Override
     public void onDonePressed(IngredientItem ingredientItem) {
         Log.d("IngredientStorage", "onDonePressed");
-        ingredientDL.ingredientFirebaseAddEdit(ingredientItem);
+        ingredientDL.firebaseAddEdit(ingredientItem);
     }
 
     @Override
     public void onDeletePressed(IngredientItem ingredientItem) {
         Log.d("IngredientStorage", "onDeletePressed");
-        ingredientDL.ingredientFirebaseDelete(ingredientItem);
+        ingredientDL.firebaseDelete(ingredientItem);
     }
 
 }
