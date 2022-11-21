@@ -22,9 +22,11 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.cmput301f22t13.R;
 import com.example.cmput301f22t13.databinding.FragmentRecipeStorageBinding;
+import com.example.cmput301f22t13.datalayer.RecipeDL;
 import com.example.cmput301f22t13.domainlayer.item.RecipeItem;
 import com.google.android.material.bottomnavigation.BottomNavigationItemView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.example.cmput301f22t13.uilayer.userlogin.ResultListener;
 
 import org.w3c.dom.Text;
 
@@ -60,6 +62,8 @@ public class RecipeStorageFragment extends Fragment {
      */
     private ArrayList<RecipeItem> recipeDataList;
 
+    private RecipeDL recipeDL = RecipeDL.getInstance();
+
     /**
      * This function is called to have the fragment instantiate its UI view.
      * @param inflater Of type {@link LayoutInflater}
@@ -72,14 +76,22 @@ public class RecipeStorageFragment extends Fragment {
             LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState
     ) {
+        recipeDL.listener = new ResultListener() {
+            @Override
+            public void onSuccess() {
+                recipeAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+
+            }
+        };
+
         binding = FragmentRecipeStorageBinding.inflate(inflater, container, false);
         Bundle bundle = getArguments();
 
-        if (bundle != null) {
-            recipeDataList = (ArrayList<RecipeItem>) bundle.getSerializable("init_recipes");
-        } else {
-            Log.d("RecipeStorageFragment", "Binding was null!");
-        }
+        recipeDataList = recipeDL.getRecipes();
 
         return binding.getRoot();
 

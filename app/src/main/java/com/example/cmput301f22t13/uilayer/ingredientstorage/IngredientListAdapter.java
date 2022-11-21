@@ -51,8 +51,10 @@ public class IngredientListAdapter extends ArrayAdapter<IngredientItem> {
         ingredientName.setText(item.getName());
         ingredientDescription.setText(item.getDescription());
 
-        image.setImageURI(Uri.parse(item.getPhoto()));
-
+        try {
+            image.setImageURI(Uri.parse(item.getPhoto()));
+        } catch (Exception e) {
+        }
         return view;
     }
 }

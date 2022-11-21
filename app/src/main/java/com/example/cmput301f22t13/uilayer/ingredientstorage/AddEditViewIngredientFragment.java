@@ -36,8 +36,6 @@ import com.example.cmput301f22t13.uilayer.recipestorage.RecipeStorageActivity;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
@@ -240,7 +238,9 @@ public class AddEditViewIngredientFragment extends Fragment {
             @Override
             public void onActivityResult(ActivityResult result) {
                 if (result.getResultCode() == Activity.RESULT_OK) {
-                    setIngredientImage(result.getData().getData());
+                    Uri image = result.getData().getData();
+                    getActivity().getContentResolver().takePersistableUriPermission(image, Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    setIngredientImage(image);
                 }
                 else {
                     Log.d("AddEditViewIngred", String.valueOf(result.getResultCode()));
@@ -256,7 +256,7 @@ public class AddEditViewIngredientFragment extends Fragment {
                 if (binding.doneIngredientButton.getVisibility() == View.VISIBLE) {
                     Intent intent = new Intent();
                     intent.setType("image/*");
-                    intent.setAction(Intent.ACTION_GET_CONTENT);
+                    intent.setAction(Intent.ACTION_OPEN_DOCUMENT);
                     selectImageLauncher.launch(Intent.createChooser(intent, "Select Image"));
                 }
             }
@@ -276,6 +276,7 @@ public class AddEditViewIngredientFragment extends Fragment {
         // https://stackoverflow.com/questions/38352148/get-image-from-the-gallery-and-show-in-imageview
         try {
             selectedImageUri = imageUri;
+
             final InputStream imageStream;
             imageStream = getActivity().getApplicationContext().getContentResolver().openInputStream(selectedImageUri);
             final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);

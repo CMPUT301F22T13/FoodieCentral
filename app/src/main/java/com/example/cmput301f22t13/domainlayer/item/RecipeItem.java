@@ -44,7 +44,8 @@ public class RecipeItem implements Serializable {
             String category,
             String comments,
             String photo,
-            ArrayList<IngredientItem> ingredients
+            ArrayList<IngredientItem> ingredients,
+            String hashId
     ) {
         this.title = title;
         this.prepTime = prepTime;
@@ -53,19 +54,7 @@ public class RecipeItem implements Serializable {
         this.comments = comments;
         this.photo = photo;
         this.ingredients = ingredients;
-
-        int timestamp = new Timestamp(new Date()).getNanoseconds();
-        String timeStampString = Integer.toString(timestamp);
-        MessageDigest digest = null;
-        try {
-            digest = MessageDigest.getInstance("SHA-256");
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-        byte[] encodedhash = digest.digest(
-                timeStampString.getBytes(StandardCharsets.UTF_8));
-
-        this.hashId = Utils.bytesToHex(encodedhash);
+        this.hashId = hashId;
     }
 
     /**
@@ -79,6 +68,7 @@ public class RecipeItem implements Serializable {
         this.comments = "";
         this.photo = "";
         this.ingredients = new ArrayList<IngredientItem>();
+        this.hashId = Utils.getUniqueHash();
     }
 
     /**

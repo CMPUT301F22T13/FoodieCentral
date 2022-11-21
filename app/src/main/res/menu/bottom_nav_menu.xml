@@ -3,7 +3,7 @@
     <item
         android:id="@+id/ingredientStorage"
         android:icon="@mipmap/ingredient_icon_foreground"
-        android:title="Ingredient Storage" />
+        android:title="Ingredient\nStorage" />
     <item
         android:id="@+id/recipes"
         android:icon="@drawable/recipe_icon_foreground"

@@ -157,7 +157,9 @@ public class AddEditViewRecipeFragment extends Fragment {
             @Override
             public void onActivityResult(ActivityResult result) {
                 if (result.getResultCode() == Activity.RESULT_OK) {
-                    setRecipeImage(result.getData().getData());
+                    Uri image = result.getData().getData();
+                    getActivity().getContentResolver().takePersistableUriPermission(image, Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    setRecipeImage(image);
                 }
                 else {
                     Log.d("AddEditViewRecipe", String.valueOf(result.getResultCode()));
@@ -170,7 +172,7 @@ public class AddEditViewRecipeFragment extends Fragment {
                 if (binding.saveButton.getVisibility() == View.VISIBLE) {
                     Intent intent = new Intent();
                     intent.setType("image/*");
-                    intent.setAction(Intent.ACTION_GET_CONTENT);
+                    intent.setAction(Intent.ACTION_OPEN_DOCUMENT);
                     selectImageLauncher.launch(Intent.createChooser(intent, "Select Image"));
                 }
             }
@@ -260,7 +262,7 @@ public class AddEditViewRecipeFragment extends Fragment {
                 @Override
                 public void onClick(View view) {
                     RecipeItem newRecipe = createNewRecipe();
-                    listener.changeRecipe(recipe, newRecipe);
+                    listener.onAddDonePressed(newRecipe);
                     binding.addIngredientToRecipe.setVisibility(View.GONE);
                     binding.deleteIngredientFromRecipe.setVisibility(View.GONE);
                 }
@@ -314,7 +316,11 @@ public class AddEditViewRecipeFragment extends Fragment {
      * @return Returns the newly created {@link RecipeItem}
      */
     public RecipeItem createNewRecipe() {
-        RecipeItem newRecipe = new RecipeItem();
+        RecipeItem newRecipe;
+        if (recipe == null)
+             newRecipe = new RecipeItem();
+        else
+            newRecipe = recipe;
 
         // Set title typed in by user.
         newRecipe.setTitle(binding.recipeNameEdit.getText().toString());
@@ -346,8 +352,8 @@ public class AddEditViewRecipeFragment extends Fragment {
             newRecipe.setPrepTime(0);
         }
 
-        // Set Ingredients
-        newRecipe.setIngredients(recipe.getIngredients());
+        if (recipe != null)
+            newRecipe.setIngredients(recipe.getIngredients());
 
         // Set Image
         if (selectedImageUri != null) {

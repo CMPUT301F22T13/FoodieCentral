@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.example.cmput301f22t13.uilayer.ingredientstorage.IngredientStorageActivity;
+import com.example.cmput301f22t13.uilayer.shoppinglist.ShoppingListActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
@@ -23,6 +24,7 @@ import androidx.navigation.ui.NavigationUI;
 import com.example.cmput301f22t13.R;
 import com.example.cmput301f22t13.databinding.ActivityRecipeStorageBinding;
 
+import com.example.cmput301f22t13.datalayer.RecipeDL;
 import com.example.cmput301f22t13.domainlayer.item.IngredientItem;
 import com.example.cmput301f22t13.domainlayer.item.RecipeItem;
 
@@ -67,11 +69,14 @@ public class RecipeStorageActivity extends AppCompatActivity implements AddEditV
 
     private BottomNavigationView bottomNavigationView;
 
+    private RecipeDL recipeDL = RecipeDL.getInstance();
+
     /**
      * This method performs initialization of all fragments.
      * Also initializes the array list for {@link RecipeItem} objects.
      * @param savedInstanceState Of type {@link Bundle}
      */
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,25 +99,6 @@ public class RecipeStorageActivity extends AppCompatActivity implements AddEditV
         sampleRecipe.addIngredient(item1);
         sampleRecipe.addIngredient(item2);
 
-        RecipeItem pasta = new RecipeItem();
-        pasta.setTitle("Alfredo Pasta");
-        pasta.setPrepTime(200);
-        pasta.setServings(9);
-        pasta.setComments("This is a recipe for alfredo pasta");
-        pasta.setCategory("Lunch");
-
-        item1 = new IngredientItem();
-        item1.setName("Pasta");
-
-        item2 = new IngredientItem();
-        item2.setName("Alfredo sauce");
-
-        pasta.addIngredient(item1);
-        pasta.addIngredient(item2);
-
-        recipeDataList = new ArrayList<RecipeItem>();
-        recipeDataList.add(sampleRecipe);
-        recipeDataList.add(pasta);
 
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
@@ -120,10 +106,14 @@ public class RecipeStorageActivity extends AppCompatActivity implements AddEditV
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.recipes:
-                        return false;
+                        return true;
                     case R.id.ingredientStorage:
-                        Intent intent = new Intent(RecipeStorageActivity.this, IngredientStorageActivity.class);
-                        startActivity(intent);
+                        Intent intentIngr = new Intent(RecipeStorageActivity.this, IngredientStorageActivity.class);
+                        startActivity(intentIngr);
+                        return true;
+                    case R.id.shoppingList:
+                        Intent shoppingListIntent = new Intent(RecipeStorageActivity.this, ShoppingListActivity.class);
+                        startActivity(shoppingListIntent);
                         return true;
                 }
                 return false;
@@ -134,7 +124,7 @@ public class RecipeStorageActivity extends AppCompatActivity implements AddEditV
         setSupportActionBar(binding.toolbar);
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_recipe_storage);
         Bundle bundle = new Bundle();
-        bundle.putSerializable("init_recipes", recipeDataList);
+        bundle.putSerializable("init_recipes", recipeDL.getRecipes());
         navController.setGraph(R.navigation.nav_recipestorage_to_viewrecipe, bundle);
 
         appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
@@ -160,7 +150,7 @@ public class RecipeStorageActivity extends AppCompatActivity implements AddEditV
      */
     @Override
     public void onAddDonePressed(RecipeItem recipe) {
-        recipeDataList.add(recipe);
+        recipeDL.recipeFirebaseAddEdit(recipe);
     }
 
     /**
@@ -171,7 +161,7 @@ public class RecipeStorageActivity extends AppCompatActivity implements AddEditV
      */
     @Override
     public void changeRecipe(RecipeItem oldRecipe, RecipeItem newRecipe) {
-        recipeDataList.set(recipeDataList.indexOf(oldRecipe), newRecipe);
+        recipeDL.getRecipes().set(recipeDL.getRecipes().indexOf(oldRecipe), newRecipe);
     }
 
     /**
@@ -181,7 +171,7 @@ public class RecipeStorageActivity extends AppCompatActivity implements AddEditV
      */
     @Override
     public void onDeletePressed(RecipeItem recipe) {
-        recipeDataList.remove(recipe);
+        recipeDL.recipeFirebaseDelete(recipe);
 
     }
 
@@ -202,6 +192,8 @@ public class RecipeStorageActivity extends AppCompatActivity implements AddEditV
         if (recipeSelected != null && !recipeSelected.getIngredients().contains(ingredientItem)) {
             recipeSelected.addIngredient(ingredientItem);
         }
+        // For now
+        recipeDL.recipeFirebaseAddEdit(this.recipeSelected);
 
         Log.d("RecipeActivity", "OnDonePressed");
     }

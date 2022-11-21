@@ -8,9 +8,11 @@ import com.example.cmput301f22t13.datalayer.IngredientDL;
 import com.example.cmput301f22t13.domainlayer.item.IngredientItem;
 import com.example.cmput301f22t13.uilayer.recipestorage.RecipeStorageActivity;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -21,6 +23,9 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.cmput301f22t13.R;
+import com.example.cmput301f22t13.uilayer.shoppinglist.ShoppingListActivity;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
 
 import java.util.ArrayList;
 
@@ -33,10 +38,7 @@ public class IngredientStorageActivity extends AppCompatActivity implements AddE
     private AppBarConfiguration appBarConfiguration;
     private ActivityIngredientStorageBinding binding;
 
-    private ArrayList<IngredientItem> testList;
-
-    private ArrayAdapter<IngredientItem> ingredientListAdapter;
-    private ListView ingredientListView;
+    private BottomNavigationView bottomNavigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,14 +47,35 @@ public class IngredientStorageActivity extends AppCompatActivity implements AddE
         binding = ActivityIngredientStorageBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        IngredientItem item1 = new IngredientItem();
-        item1.setName("Apple");
-        item1.setDescription("This is an apple");
-        ingredientDL.ingredientStorage.add(item1);
-        IngredientItem item2 = new IngredientItem();
-        item2.setName("Pear");
-        item2.setDescription("This is a pear");
-        ingredientDL.ingredientStorage.add(item1);
+//        IngredientItem item1 = new IngredientItem();
+//        item1.setName("Apple");
+//        item1.setDescription("This is an apple");
+//        ingredientDL.ingredientStorage.add(item1);
+//        IngredientItem item2 = new IngredientItem();
+//        item2.setName("Pear");
+//        item2.setDescription("This is a pear");
+//        ingredientDL.ingredientStorage.add(item1);
+        // https://www.geeksforgeeks.org/bottom-navigation-bar-in-android/
+        bottomNavigationView = findViewById(R.id.bottomNavigationView);
+        bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.ingredientStorage:
+                        return true;
+                    case R.id.recipes:
+                        Intent recipesIntent = new Intent(IngredientStorageActivity.this, RecipeStorageActivity.class);
+                        startActivity(recipesIntent);
+                        return true;
+                    case R.id.shoppingList:
+                        Intent shoppingListIntent = new Intent(IngredientStorageActivity.this, ShoppingListActivity.class);
+                        startActivity(shoppingListIntent);
+                        return true;
+                }
+                return false;
+            }
+        });
+        bottomNavigationView.setSelectedItemId(R.id.ingredientStorage);
 
         setSupportActionBar(binding.toolbar);
 
@@ -71,14 +94,6 @@ public class IngredientStorageActivity extends AppCompatActivity implements AddE
                         .setAction("Action", null).show();
             }
         });*/
-
-        binding.floatingActionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(IngredientStorageActivity.this, RecipeStorageActivity.class);
-                startActivity(intent);
-            }
-        });
 
     }
 
