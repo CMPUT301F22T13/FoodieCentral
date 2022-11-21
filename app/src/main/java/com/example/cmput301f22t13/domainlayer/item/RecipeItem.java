@@ -41,7 +41,8 @@ public class RecipeItem extends Item implements Serializable {
             String category,
             String comments,
             String photo,
-            ArrayList<IngredientItem> ingredients
+            ArrayList<IngredientItem> ingredients,
+            String hashId
     ) {
         super(title, photo);
         this.prepTime = prepTime;
@@ -71,6 +72,7 @@ public class RecipeItem extends Item implements Serializable {
         this.category = "";
         this.comments = "";
         this.ingredients = new ArrayList<IngredientItem>();
+        this.hashId = Utils.getUniqueHash();
     }
 
     public RecipeItem(RecipeItem recipeItem) {

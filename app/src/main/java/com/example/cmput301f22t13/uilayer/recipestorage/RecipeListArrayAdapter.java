@@ -1,6 +1,7 @@
 package com.example.cmput301f22t13.uilayer.recipestorage;
 
 import android.content.Context;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,8 @@ import java.util.ArrayList;
 
 /**
  * This class creates an array adapter for the list of recipes which are of type {@link RecipeItem}.
+ *
+ * @author Shiv Chopra
  * @version 1.0
  */
 
@@ -66,6 +69,8 @@ public class RecipeListArrayAdapter extends ArrayAdapter<RecipeItem> {
         recipeName.setText(item.getTitle());
 
         ImageView recipeImage = view.findViewById(R.id.recipe_image);
+        
+        recipeImage.setImageURI(Uri.parse(item.getPhoto()));
         return view;
 
 

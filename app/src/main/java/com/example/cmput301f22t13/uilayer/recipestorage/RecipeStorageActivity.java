@@ -1,10 +1,16 @@
 package com.example.cmput301f22t13.uilayer.recipestorage;
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+
+import androidx.annotation.NonNull;
+import android.view.MenuItem;
+
+import com.example.cmput301f22t13.uilayer.ingredientstorage.IngredientStorageActivity;
+import com.example.cmput301f22t13.uilayer.shoppinglist.ShoppingListActivity;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
@@ -15,20 +21,20 @@ import androidx.navigation.ui.NavigationUI;
 import com.example.cmput301f22t13.R;
 import com.example.cmput301f22t13.databinding.ActivityRecipeStorageBinding;
 
+import com.example.cmput301f22t13.datalayer.RecipeDL;
 import com.example.cmput301f22t13.domainlayer.item.IngredientItem;
 import com.example.cmput301f22t13.domainlayer.item.RecipeItem;
 
 
-import com.example.cmput301f22t13.domainlayer.storage.RecipeStorage;
 import com.example.cmput301f22t13.uilayer.ingredientstorage.AddEditViewIngredientFragment;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
-import java.util.GregorianCalendar;
 
 /**
  * This is the Activity class for the Recipe Storage. The class is a subclass of {@link AppCompatActivity} and implements {@link AddEditViewRecipeFragment.OnRecipeItemChangedListener} and {@link AddEditViewIngredientFragment.OnIngredientItemChangeListener}
  * The class inflates the layout and initializes the recipes data.
+ *
+ * @author Shiv Chopra
  * @version 1.0
  */
 public class RecipeStorageActivity extends AppCompatActivity implements AddEditViewRecipeFragment.OnRecipeItemChangedListener, AddEditViewIngredientFragment.OnIngredientItemChangeListener {
@@ -48,20 +54,26 @@ public class RecipeStorageActivity extends AppCompatActivity implements AddEditV
      */
     private ArrayList<RecipeItem> recipeDataList;
 
+    public static final String RECIPE = "recipe";
+
+    /**
+     * Stores recipe selected.
+     */
+    private RecipeItem recipeSelected;
+
+    private BottomNavigationView bottomNavigationView;
+
+    private RecipeDL recipeDL = RecipeDL.getInstance();
+
     /**
      * This method performs initialization of all fragments.
      * Also initializes the array list for {@link RecipeItem} objects.
      * @param savedInstanceState Of type {@link Bundle}
      */
 
-    public static final String RECIPE = "recipe";
-
-    private RecipeItem recipeSelected;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         binding = ActivityRecipeStorageBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
@@ -81,13 +93,32 @@ public class RecipeStorageActivity extends AppCompatActivity implements AddEditV
         sampleRecipe.addIngredient(item1);
         sampleRecipe.addIngredient(item2);
 
-        recipeDataList = new ArrayList<RecipeItem>();
-        recipeDataList.add(sampleRecipe);
+
+        bottomNavigationView = findViewById(R.id.bottomNavigationView);
+        bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.recipes:
+                        return true;
+                    case R.id.ingredientStorage:
+                        Intent intentIngr = new Intent(RecipeStorageActivity.this, IngredientStorageActivity.class);
+                        startActivity(intentIngr);
+                        return true;
+                    case R.id.shoppingList:
+                        Intent shoppingListIntent = new Intent(RecipeStorageActivity.this, ShoppingListActivity.class);
+                        startActivity(shoppingListIntent);
+                        return true;
+                }
+                return false;
+            }
+        });
+        bottomNavigationView.setSelectedItemId(R.id.recipes);
 
         setSupportActionBar(binding.toolbar);
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_recipe_storage);
         Bundle bundle = new Bundle();
-        bundle.putSerializable("init_recipes", recipeDataList);
+        bundle.putSerializable("init_recipes", recipeDL.getStorage());
         navController.setGraph(R.navigation.nav_recipestorage_to_viewrecipe, bundle);
 
         appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
@@ -113,7 +144,7 @@ public class RecipeStorageActivity extends AppCompatActivity implements AddEditV
      */
     @Override
     public void onAddDonePressed(RecipeItem recipe) {
-        recipeDataList.add(recipe);
+        recipeDL.firebaseAddEdit(recipe);
     }
 
     /**
@@ -124,7 +155,7 @@ public class RecipeStorageActivity extends AppCompatActivity implements AddEditV
      */
     @Override
     public void changeRecipe(RecipeItem oldRecipe, RecipeItem newRecipe) {
-        recipeDataList.set(recipeDataList.indexOf(oldRecipe), newRecipe);
+        recipeDL.getStorage().set(recipeDL.getStorage().indexOf(oldRecipe), newRecipe);
     }
 
     /**
@@ -134,18 +165,29 @@ public class RecipeStorageActivity extends AppCompatActivity implements AddEditV
      */
     @Override
     public void onDeletePressed(RecipeItem recipe) {
-        recipeDataList.remove(recipe);
+        recipeDL.firebaseDelete(recipe);
 
     }
 
+    /**
+     * Method saves the recipe selected.
+     * @param recipe Of type {@link RecipeItem}
+     */
     public void recipeSelected(RecipeItem recipe) {
         this.recipeSelected = recipe;
     }
+
+    /**
+     * Method adds the ingredient provided to the recipe selected.
+     * @param ingredientItem Of type {@link IngredientItem}
+     */
     @Override
     public void onDonePressed(IngredientItem ingredientItem) {
-        if (recipeSelected != null) {
+        if (recipeSelected != null && !recipeSelected.getIngredients().contains(ingredientItem)) {
             recipeSelected.addIngredient(ingredientItem);
         }
+        // For now
+        recipeDL.firebaseAddEdit(this.recipeSelected);
 
         Log.d("RecipeActivity", "OnDonePressed");
     }

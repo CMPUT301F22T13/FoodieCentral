@@ -2,37 +2,25 @@ package com.example.cmput301f22t13.datalayer;
 
 import android.os.Build;
 import android.util.Log;
-import android.widget.ArrayAdapter;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
 import com.example.cmput301f22t13.domainlayer.item.IngredientItem;
-import com.example.cmput301f22t13.uilayer.ingredientstorage.IngredientListAdapter;
 import com.example.cmput301f22t13.uilayer.userlogin.ResultListener;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import org.checkerframework.checker.units.qual.A;
-
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 
@@ -40,7 +28,6 @@ import java.util.Map;
  * */
 public class IngredientDL extends FireBaseDL {
     static private IngredientDL ingredientDL;
-    private static FireBaseDL fb;
 
     /** Listens for changes to the arraylist
      * */
@@ -55,21 +42,22 @@ public class IngredientDL extends FireBaseDL {
     public static IngredientDL getInstance(){
         if(ingredientDL==null){
             ingredientDL = new IngredientDL();
-            fb = FireBaseDL.getFirebaseDL();
-            // Populate ingredients here
-            populateIngredientsOnStartup();
-
         }
         return ingredientDL;
+    }
+
+    public IngredientDL() {
+        // Populate ingredients here
+        populateOnStartup();
     }
 
 
     /** populateIngredientsOnStartup - called when first instance of IngredientDL is made
      * listens for db changes and updates the ingredient storage accordingly
      * */
-    private static void populateIngredientsOnStartup() {
-        CollectionReference getIngredients = fb.fstore.collection("Users")
-        .document(fb.auth.getCurrentUser().getUid())
+    private void populateOnStartup() {
+        CollectionReference getIngredients = fstore.collection("Users")
+        .document(auth.getCurrentUser().getUid())
         .collection("Ingredient Storage");
 
         getIngredients.addSnapshotListener(new EventListener<QuerySnapshot>() {
@@ -86,10 +74,15 @@ public class IngredientDL extends FireBaseDL {
                     String unit = (String) doc.getData().get("Unit");
                     String category = (String) doc.getData().get("Category");
                     String location = (String) doc.getData().get("Location");
+                    String photo = doc.getString("Photo");
                     GregorianCalendar bestbefore = new GregorianCalendar();
+                    String image = (String) doc.getData().get("Image");
                     Double amount = 0.0;
                     try {
-                        bestbefore.setTime(doc.getDate("Best Before"));
+                        bestbefore.setTimeInMillis(doc.getDouble("Best Before").longValue());
+
+                    } catch (Exception e) {}
+                    try {
                         amount = (Double) doc.getDouble("Amount");
                     } catch (Exception e) {}
 
@@ -103,6 +96,7 @@ public class IngredientDL extends FireBaseDL {
                     i.setLocation(location);
                     i.setHashId(hash);
                     i.setBbd(bestbefore);
+                    i.setPhoto(photo);
                     ingredientStorage.add(i);
                 }
                 listener.onSuccess();
@@ -114,7 +108,8 @@ public class IngredientDL extends FireBaseDL {
     /** Add/Edit item recieved from Domain Layer into FireStore Ingredient storage collection
      * @Input: IngredientItem item - item to add or edit
      * */
-    public void ingredientFirebaseAddEdit(IngredientItem item) {
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void firebaseAddEdit(IngredientItem item) {
         //Initializing data value from item object
         String ing_name = item.getName();
         String ing_description = item.getDescription();
@@ -123,28 +118,28 @@ public class IngredientDL extends FireBaseDL {
         Integer ing_amount = item.getAmount();
         String ing_unit = item.getUnit();
         String ing_category = item.getCategory();
-        String ing_image = item.getPhoto();
+        String ing_photo = item.getPhoto();
 
 
         //Storing data collected from object in a HashMap
-        Map<String, Object> ingredientItems = new HashMap<>();
-        ingredientItems.put("Name", ing_name);
-        ingredientItems.put("Description", ing_description);
+        Map<String, Object> ingredientItem = new HashMap<>();
+        ingredientItem.put("Name", ing_name);
+        ingredientItem.put("Description", ing_description);
         if (ing_bestBefore != null)
-            ingredientItems.put("Best Before", ing_bestBefore.toZonedDateTime().toInstant()); // ing_bestBefore.get(Calendar.DATE));
-        ingredientItems.put("Location", ing_location);
-        ingredientItems.put("Amount", ing_amount);
-        ingredientItems.put("Unit", ing_unit);
-        ingredientItems.put("Category", ing_category);
-        ingredientItems.put("Image", ing_image);
+            ingredientItem.put("Best Before", ing_bestBefore.getTimeInMillis()); // ing_bestBefore.get(Calendar.DATE));
+        ingredientItem.put("Location", ing_location);
+        ingredientItem.put("Amount", ing_amount);
+        ingredientItem.put("Unit", ing_unit);
+        ingredientItem.put("Category", ing_category);
+        ingredientItem.put("Photo", ing_photo);
 
         //Storing data in Hashmap to correct location in Firebase using uniqueKey as document reference
-        DocumentReference ingredientStorage = fb.fstore.collection("Users")
-                .document(fb.auth.getCurrentUser().getUid())
+        DocumentReference ingredientStorage = fstore.collection("Users")
+                .document(auth.getCurrentUser().getUid())
                 .collection("Ingredient Storage")
                 .document(item.getHashId());
 
-        ingredientStorage.set(ingredientItems).addOnSuccessListener(new OnSuccessListener<Void>() {
+        ingredientStorage.set(ingredientItem).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void unused) {
                 Log.d("TAG", "firebaseAdd works as wanted");
@@ -162,10 +157,10 @@ public class IngredientDL extends FireBaseDL {
     /** Deletes data from Firestore for a particular passed in ingredient item - by doing so the ingredient document is deleted from Firestore
      *  @param item - Ingredient item to be deleted from Firestore
      * */
-    public void ingredientFirebaseDelete(IngredientItem item){
+    public void firebaseDelete(IngredientItem item){
         //Referencing wanted document from correct location in Firestore database
-        DocumentReference deleteIngredient = fb.fstore.collection("Users")
-                .document(fb.auth.getCurrentUser().getUid())
+        DocumentReference deleteIngredient = fstore.collection("Users")
+                .document(auth.getCurrentUser().getUid())
                 .collection("Ingredient Storage")
                 .document(item.getHashId());
 
@@ -185,7 +180,7 @@ public class IngredientDL extends FireBaseDL {
     /** Getter for ingredient storage
      * @Returns: ArrayList<IngredientItem> representing ingredients in storage
      * */
-    public ArrayList<IngredientItem> getIngredients() {
+    public ArrayList<IngredientItem> getStorage() {
         return ingredientStorage;
     }
 

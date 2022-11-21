@@ -6,19 +6,30 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.cmput301f22t13.R;
 import com.example.cmput301f22t13.datalayer.FireBaseDL;
+import com.example.cmput301f22t13.datalayer.IngredientDL;
+import com.example.cmput301f22t13.datalayer.LoginDL;
 import com.example.cmput301f22t13.uilayer.ingredientstorage.IngredientStorageActivity;
+import com.example.cmput301f22t13.uilayer.shoppinglist.ShoppingListActivity;
+//import com.google.android.gms.auth.api.signin.GoogleSignIn;
+//import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+//import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 
 /** UI layer for user Login it contains the following:
  * - EditTexts for getting user email and password
@@ -34,12 +45,28 @@ public class Login extends AppCompatActivity {
     private Button loginBtn;
     private TextView createBtn, forgotPasswordBtn;
     private ProgressBar loginProgressBar;
-    private FireBaseDL fb = FireBaseDL.getFirebaseDL();
+    private ImageView googleLogIn;
+   // GoogleSignInOptions gso;
+    //GoogleSignInClient gsc;
+    private LoginDL loginDL = LoginDL.getInstance();
+
+////    @Override
+////    protected void onStart() {
+////        super.onStart();
+////
+////        FirebaseUser user = auth.getCurrentUser();
+////        if(user !=null){
+////            Intent intent = new Intent(getApplicationContext(), IngredientStorageActivity.class);
+////            startActivity(intent);
+////        }
+//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        getSupportActionBar().hide();
 
         //Initializing objects used within the UI
         loginEmail = findViewById(R.id.loginEmail);
@@ -48,6 +75,13 @@ public class Login extends AppCompatActivity {
         createBtn = findViewById(R.id.createClick);
         forgotPasswordBtn = findViewById(R.id.forgetPasswordBtn);
         loginProgressBar = findViewById(R.id.loginProgressBar);
+       // googleLogIn = findViewById(R.id.googleSignIn);
+
+        //Google firebase authentication
+       // gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
+       // gsc = GoogleSignIn.getClient(this,gso);
+
+
 
 
        //User clicks the login button
@@ -79,7 +113,7 @@ public class Login extends AppCompatActivity {
                 loginProgressBar.setVisibility(View.INVISIBLE);
 
                 //Authenticates user based on method in FireBaseDL
-                fb.getFirebaseDL().userSignIn(email,password, new ResultListener() {
+                loginDL.userSignIn(email,password, new ResultListener() {
                     @Override
                     public void onSuccess() {
                         loginProgressBar.setVisibility(View.INVISIBLE);
@@ -121,7 +155,7 @@ public class Login extends AppCompatActivity {
                         String email = resetEmail.getText().toString();
 
                         //Authenticates user based on method in FireBaseDL
-                        fb.userForgotPassword(email, new ResultListener() {
+                        loginDL.userForgotPassword(email, new ResultListener() {
                             @Override
                             public void onSuccess() {
                                 Log.d("TAG", "Email has been sent ");

@@ -3,18 +3,17 @@ package com.example.cmput301f22t13.domainlayer.item;
 import java.util.HashMap;
 import java.util.Map;
 
-public class CountedIngredient {
+public class CountedIngredient extends IngredientItem {
 
-    private IngredientItem ingredient;
     private int count;
 
     public CountedIngredient() {
-        this.ingredient = new IngredientItem();
+        super();
         this.count = 0;
     }
 
     public CountedIngredient(IngredientItem ingredient, int count) {
-        this.ingredient = ingredient;
+        super(ingredient.getName(), ingredient.getDescription(), ingredient.getAmount(), ingredient.getUnit(), ingredient.getCategory(), ingredient.getBbd(), ingredient.getPhoto(), ingredient.getLocation());
         this.count = count;
     }
 
@@ -33,14 +32,6 @@ public class CountedIngredient {
 
     public void decrementIngredient(int decrementer) {
         this.count -= decrementer;
-    }
-
-    public IngredientItem getIngredient() {
-        return ingredient;
-    }
-
-    public void setIngredient(IngredientItem ingredient) {
-        this.ingredient = ingredient;
     }
 
     public int getCount() {
