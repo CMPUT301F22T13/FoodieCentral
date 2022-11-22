@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/meal_plan_nav_graph"
+    app:startDestination="@id/MealPlanMainFragment">
+
+    <fragment
+        android:id="@+id/MealPlanMainFragment"
+        android:name="com.example.cmput301f22t13.uilayer.mealplanstorage.MealPlanMainFragment"
+        android:label="Meal Plan"
+        tools:layout="@layout/fragment_meal_plan_main" >
+        <action
+            android:id="@+id/action_MealPlanMainFragment_to_mealPlanViewFragment"
+            app:destination="@id/mealPlanViewFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/mealPlanViewFragment"
+        android:name="com.example.cmput301f22t13.uilayer.mealplanstorage.MealPlanViewFragment"
+        android:label="Meal Plan">
+        <action
+            android:id="@+id/action_mealPlanViewFragment_to_mealPlanAddIngredientFragment"
+            app:destination="@id/mealPlanAddIngredientFragment" />
+        <action
+            android:id="@+id/action_mealPlanViewFragment_to_mealPlanAddRecipeFragment"
+            app:destination="@id/mealPlanAddRecipeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/mealPlanAddIngredientFragment"
+        android:name="com.example.cmput301f22t13.uilayer.mealplanstorage.MealPlanAddIngredientFragment"
+        android:label="Add Ingredient"
+        tools:layout="@layout/fragment_meal_plan_add_ingredient" />
+    <fragment
+        android:id="@+id/mealPlanAddRecipeFragment"
+        android:name="com.example.cmput301f22t13.uilayer.mealplanstorage.MealPlanAddRecipeFragment"
+        android:label="fragment_meal_plan_add_recipe"
+        tools:layout="@layout/fragment_meal_plan_add_recipe" />
+</navigation>
