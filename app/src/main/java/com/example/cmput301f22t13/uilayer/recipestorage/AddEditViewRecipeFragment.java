@@ -41,11 +41,11 @@ import java.io.InputStream;
 import java.util.ArrayList;
 
 /**
- * This is the class for the Add, Edit, and View Recipe Fragment. It is a subclass of the {@link Fragment} class.
+ * This is the class for the Add and Edit Recipe Fragment. It is a subclass of the {@link Fragment} class.
  * Class is responsible for deciding what will be displayed on the fragment and calling methods responsible for Recipe changes.
  *
  * @author Shiv Chopra
- * @version 2.0
+ * @version 3.0
  */
 
 public class AddEditViewRecipeFragment extends Fragment {
@@ -153,6 +153,7 @@ public class AddEditViewRecipeFragment extends Fragment {
             ingredientsAdapter.notifyDataSetChanged();
         }
 
+        // Select image launcher
         ActivityResultLauncher<Intent> selectImageLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
             @Override
             public void onActivityResult(ActivityResult result) {
@@ -166,6 +167,7 @@ public class AddEditViewRecipeFragment extends Fragment {
                 }
             }
         });
+
         binding.recipeImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -193,11 +195,14 @@ public class AddEditViewRecipeFragment extends Fragment {
             binding.addIngredientToRecipe.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    //TODO UNCOMMENT THIS IF THINGS DON'T WORK
                     NavHostFragment.findNavController(AddEditViewRecipeFragment.this)
+                            .navigate(R.id.action_add_ingredient_to_recipe);
+                    /*NavHostFragment.findNavController(AddEditViewRecipeFragment.this)
                             .navigate(R.id.action_addEditViewRecipeFragment_to_ingredient_storage_nav_graph);
 
                     RecipeItem newRecipe = createNewRecipe();
-                    listener.changeRecipe(recipe, newRecipe);
+                    listener.changeRecipe(recipe, newRecipe);*/
                 }
             });
 
@@ -247,7 +252,7 @@ public class AddEditViewRecipeFragment extends Fragment {
                 @Override
                 public void onClick(View view) {
                     NavHostFragment.findNavController(AddEditViewRecipeFragment.this)
-                            .navigate(R.id.action_addEditViewRecipeFragment_to_ingredient_storage_nav_graph);
+                            .navigate(R.id.action_add_ingredient_to_recipe);
                 }
             });
             }
@@ -310,17 +315,6 @@ public class AddEditViewRecipeFragment extends Fragment {
         if (selectedImageUri != null) {
             newRecipe.setPhoto(selectedImageUri.toString());
         }
-
-
-       /* binding.saveButton.setVisibility(View.GONE);*/
-       /* binding.editButton.setVisibility(View.VISIBLE);
-        binding.deleteButton.setVisibility(View.VISIBLE);*/
-/*        binding.recipeNameEdit.setEnabled(false);
-        binding.preparationTimeEdit.setEnabled(false);
-        binding.servingsEdit.setEnabled(false);
-        binding.categoryEdit.setEnabled(false);
-        binding.commentsEdit.setEnabled(false);
-        binding.listOfIngredients.setEnabled(false);*/
 
         return newRecipe;
     }

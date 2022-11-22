@@ -16,7 +16,7 @@
     <fragment
         android:id="@+id/addEditViewRecipeFragment"
         android:name="com.example.cmput301f22t13.uilayer.recipestorage.AddEditViewRecipeFragment"
-        android:label="View/Edit/Add Recipe"
+        android:label="Add or Edit Recipe"
         tools:layout="@layout/fragment_add_edit_view_recipe">
         <action
             android:id="@+id/action_addEditViewRecipeFragment_to_ingredient_storage_nav_graph"

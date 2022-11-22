@@ -29,11 +29,24 @@
     <fragment
         android:id="@+id/addEditViewRecipeFragment"
         android:name="com.example.cmput301f22t13.uilayer.recipestorage.AddEditViewRecipeFragment"
-        android:label="View/Edit/Add Recipe"
+        android:label="Add or Edit Recipe"
         tools:layout="@layout/fragment_add_edit_view_recipe">
         <action
-            android:id="@+id/action_addEditViewRecipeFragment_to_ingredient_storage_nav_graph"
-            app:destination="@id/ingredient_storage_nav_graph" />
+            android:id="@+id/action_add_ingredient_to_recipe"
+            app:destination="@id/addIngredientToRecipeFragment" />
     </fragment>
-    <include app:graph="@navigation/ingredient_storage_nav_graph" />
+    <fragment
+        android:id="@+id/addIngredientToRecipeFragment"
+        android:name="com.example.cmput301f22t13.uilayer.recipestorage.AddIngredientToRecipeFragment"
+        android:label="Add Ingredient to Recipe"
+        tools:layout="@layout/fragment_add_ingredient_to_recipe">
+        <action
+            android:id="@+id/action_addingredienttorecipe_to_editingredientforrecipe"
+            app:destination="@id/addEditIngredientForRecipe" />
+    </fragment>
+    <fragment
+        android:id="@+id/addEditIngredientForRecipe"
+        android:name="com.example.cmput301f22t13.uilayer.recipestorage.AddEditIngredientForRecipe"
+        android:label="Create/Edit Ingredient for Recipe"
+        tools:layout="@layout/fragment_add_edit_ingredient_for_recipe" />
 </navigation>
