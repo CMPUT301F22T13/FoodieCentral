@@ -10,6 +10,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.InputType;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -71,12 +72,6 @@ public class ViewRecipeFragment extends Fragment {
      * Variable is ingredients of the recipe in string form.
      */
     private ArrayList<String> ingredientsOfRecipeList;
-
-
-    /**
-     * Variable is the Uri of the recipe image
-     */
-    private Uri selectedImageUri;
 
     /**
      * Variable is the adapter for ingredients list of recipe.
@@ -146,22 +141,9 @@ public class ViewRecipeFragment extends Fragment {
         ingredientsAdapter.clear();
         // Set ingredients of recipe.
         for (int i = 0; i < recipe.getIngredients().size(); i++) {
-            ingredientsAdapter.add(ingredients.get(i).getAmount() + ingredients.get(i).getUnit() + " " + ingredients.get(i).getName());
+            ingredientsAdapter.add(ingredients.get(i).getAmount() + ingredients.get(i).getUnit() + " " + ingredients.get(i).getName() + " " + ingredients.get(i).getDescription());
             ingredientsAdapter.notifyDataSetChanged();
         }
-        ActivityResultLauncher<Intent> selectImageLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
-            @Override
-            public void onActivityResult(ActivityResult result) {
-                if (result.getResultCode() == Activity.RESULT_OK) {
-                    Uri image = result.getData().getData();
-                    getActivity().getContentResolver().takePersistableUriPermission(image, Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                    setRecipeImage(image);
-                }
-                else {
-                    Log.d("AddEditViewRecipe", String.valueOf(result.getResultCode()));
-                }
-            }
-        });
 
         binding.viewfragEditButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -181,7 +163,19 @@ public class ViewRecipeFragment extends Fragment {
         binding.viewfragPreptimeAmount.setText(String.valueOf(recipe.getPrepTime()));
         binding.viewfragCategoryAmount.setText(recipe.getCategory());
         binding.viewfragCommentsAmount.setText(recipe.getComments());
-        setRecipeImage(Uri.parse(recipe.getPhoto()));
+        if (recipe.getPhoto() != null) {
+            // https://stackoverflow.com/questions/57476796/how-to-convert-bitmap-type-to-string-type
+            try {
+                byte[] encodeByte = Base64.decode(recipe.getPhoto(), Base64.DEFAULT);
+                Bitmap bmp = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
+                if (bmp != null) {
+                    binding.viewfragRecipeImage.setImageBitmap(bmp);
+                }
+            }
+            catch (IllegalArgumentException e) {
+
+            }
+        }
 
         // Sets up OnClickListener for the Delete Button.
         binding.viewfragDeleteButton.setOnClickListener(new View.OnClickListener() {
@@ -202,23 +196,6 @@ public class ViewRecipeFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
-    }
-
-    /**
-     * Sets the Recipe Image.
-     * @param imageUri Of type {@link Uri}
-     */
-    private void setRecipeImage(Uri imageUri) {
-        // https://stackoverflow.com/questions/38352148/get-image-from-the-gallery-and-show-in-imageview
-        try {
-            selectedImageUri = imageUri;
-            final InputStream imageStream;
-            imageStream = getActivity().getApplicationContext().getContentResolver().openInputStream(selectedImageUri);
-            final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
-            binding.viewfragRecipeImage.setImageBitmap(selectedImage);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
     }
 
     /**

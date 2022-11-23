@@ -1,7 +1,11 @@
 package com.example.cmput301f22t13.uilayer.recipestorage;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -69,8 +73,21 @@ public class RecipeListArrayAdapter extends ArrayAdapter<RecipeItem> {
         recipeName.setText(item.getTitle());
 
         ImageView recipeImage = view.findViewById(R.id.recipe_image);
-        
-        recipeImage.setImageURI(Uri.parse(item.getPhoto()));
+
+        try {
+            // https://stackoverflow.com/questions/57476796/how-to-convert-bitmap-type-to-string-type
+            byte[] encodeByte = Base64.decode(item.getPhoto(), Base64.DEFAULT);
+            Bitmap bmp = BitmapFactory.decodeByteArray(encodeByte, 0,encodeByte.length);
+            if (bmp != null) {
+                recipeImage.setImageBitmap(bmp);
+            }
+            else {
+                recipeImage.setVisibility(View.INVISIBLE);
+            }
+        } catch (Exception e) {
+            Log.d("IngredientListAdapter", "Could not set image bitmap: " + e.getMessage());
+        }
+
         return view;
 
 

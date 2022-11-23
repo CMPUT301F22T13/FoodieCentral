@@ -9,7 +9,9 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.text.InputType;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,6 +37,7 @@ import com.example.cmput301f22t13.uilayer.ingredientstorage.IngredientStorageAct
 import com.example.cmput301f22t13.uilayer.ingredientstorage.IngredientStorageMainFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -77,7 +80,9 @@ public class AddEditViewRecipeFragment extends Fragment {
     /**
      * Variable is the Uri of the recipe image
      */
-    private Uri selectedImageUri;
+    //private Uri selectedImageUri;
+
+    private Bitmap selectedImage;
 
     /**
      * Variable is the adapter for ingredients list of recipe.
@@ -155,27 +160,24 @@ public class AddEditViewRecipeFragment extends Fragment {
 
         // Select image launcher
         ActivityResultLauncher<Intent> selectImageLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+
             @Override
             public void onActivityResult(ActivityResult result) {
-                if (result.getResultCode() == Activity.RESULT_OK) {
-                    Uri image = result.getData().getData();
-                    getActivity().getContentResolver().takePersistableUriPermission(image, Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                    setRecipeImage(image);
-                }
-                else {
-                    Log.d("AddEditViewRecipe", String.valueOf(result.getResultCode()));
+                if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
+                    setRecipeImage((Bitmap) result.getData().getExtras().get("data"));
                 }
             }
         });
-
         binding.recipeImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // this means that the edit button has been pressed
+                // we only want to launch this intent if we have clicked the edit button prior to this
+                // when the edit button is clicked, the done visibility turns visible so we know if it has been pressed
                 if (binding.saveButton.getVisibility() == View.VISIBLE) {
                     Intent intent = new Intent();
-                    intent.setType("image/*");
-                    intent.setAction(Intent.ACTION_OPEN_DOCUMENT);
-                    selectImageLauncher.launch(Intent.createChooser(intent, "Select Image"));
+                    intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
+                    selectImageLauncher.launch(Intent.createChooser(intent, "Take photo"));
                 }
             }
         });
@@ -189,7 +191,22 @@ public class AddEditViewRecipeFragment extends Fragment {
             binding.preparationTimeEdit.setText(String.valueOf(recipe.getPrepTime()));
             binding.categoryEdit.setText(recipe.getCategory());
             binding.commentsEdit.setText(recipe.getComments());
-            setRecipeImage(Uri.parse(recipe.getPhoto()));
+            //setRecipeImage(Uri.parse(recipe.getPhoto()));
+
+            if (recipe.getPhoto() != null) {
+                // https://stackoverflow.com/questions/57476796/how-to-convert-bitmap-type-to-string-type
+                try {
+                    byte[] encodeByte = Base64.decode(recipe.getPhoto(), Base64.DEFAULT);
+                    Bitmap bmp = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
+                    if (bmp != null) {
+                        setRecipeImage(bmp);
+                    }
+                }
+                catch (IllegalArgumentException e) {
+
+                }
+            }
+
 
             // OnClickListener for adding ingredient to a recipe.
             binding.addIngredientToRecipe.setOnClickListener(new View.OnClickListener() {
@@ -312,8 +329,10 @@ public class AddEditViewRecipeFragment extends Fragment {
             newRecipe.setIngredients(recipe.getIngredients());
 
         // Set Image
-        if (selectedImageUri != null) {
-            newRecipe.setPhoto(selectedImageUri.toString());
+        if (selectedImage != null) {
+            ByteArrayOutputStream baos = new  ByteArrayOutputStream();
+            selectedImage.compress(Bitmap.CompressFormat.PNG,100, baos);
+            recipe.setPhoto(Base64.encodeToString(baos.toByteArray(), Base64.DEFAULT));
         }
 
         return newRecipe;
@@ -323,17 +342,9 @@ public class AddEditViewRecipeFragment extends Fragment {
      * Sets the Recipe Image.
      * @param imageUri Of type {@link Uri}
      */
-    private void setRecipeImage(Uri imageUri) {
-        // https://stackoverflow.com/questions/38352148/get-image-from-the-gallery-and-show-in-imageview
-        try {
-            selectedImageUri = imageUri;
-            final InputStream imageStream;
-            imageStream = getActivity().getApplicationContext().getContentResolver().openInputStream(selectedImageUri);
-            final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
-            binding.recipeImageView.setImageBitmap(selectedImage);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+    private void setRecipeImage(Bitmap image) {
+        selectedImage = image;
+        binding.recipeImageView.setImageBitmap(selectedImage);
     }
 
     /**
