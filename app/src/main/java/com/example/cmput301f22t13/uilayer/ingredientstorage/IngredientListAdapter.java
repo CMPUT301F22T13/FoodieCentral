@@ -57,7 +57,13 @@ public class IngredientListAdapter extends ArrayAdapter<IngredientItem> {
         try {
             // https://stackoverflow.com/questions/57476796/how-to-convert-bitmap-type-to-string-type
             byte[] encodeByte = Base64.decode(item.getPhoto(), Base64.DEFAULT);
-            image.setImageBitmap(BitmapFactory.decodeByteArray(encodeByte, 0,encodeByte.length));
+            Bitmap bmp = BitmapFactory.decodeByteArray(encodeByte, 0,encodeByte.length);
+            if (bmp != null) {
+                image.setImageBitmap(bmp);
+            }
+            else {
+                image.setVisibility(View.INVISIBLE);
+            }
         } catch (Exception e) {
             Log.d("IngredientListAdapter", "Could not set image bitmap: " + e.getMessage());
         }

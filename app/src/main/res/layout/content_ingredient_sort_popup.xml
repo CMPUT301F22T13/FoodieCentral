@@ -26,7 +26,19 @@
             android:textSize="20sp" />
 
         <TextView
-            android:id="@+id/recipe_sort_title"
+            android:id="@+id/ingredient_sort_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:gravity="center"
+            android:minHeight="48dp"
+            android:paddingLeft="15dp"
+            android:text="Name"
+            android:textAlignment="viewStart"
+            android:textSize="20sp"/>
+
+        <TextView
+            android:id="@+id/ingredient_sort_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clickable="true"
@@ -38,7 +50,7 @@
             android:textSize="20sp" />
 
         <TextView
-            android:id="@+id/recipe_sort_preparation_time"
+            android:id="@+id/ingredient_sort_bbd"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clickable="true"
@@ -50,7 +62,7 @@
             android:textSize="20sp" />
 
         <TextView
-            android:id="@+id/recipe_sort_servings"
+            android:id="@+id/ingredient_sort_location"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clickable="true"
@@ -62,7 +74,7 @@
             android:textSize="20sp" />
 
         <TextView
-            android:id="@+id/recipe_sort_category"
+            android:id="@+id/ingredient_sort_category"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clickable="true"

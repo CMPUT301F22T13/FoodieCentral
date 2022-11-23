@@ -43,6 +43,8 @@ public class IngredientStorageMainFragment extends Fragment {
     private ArrayAdapter<IngredientItem> ingredientListAdapter;
     private ArrayList<IngredientItem> ingredients = ingredientDL.getStorage();
 
+    private PopupWindow popupWindow;
+
     @Override
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container,
@@ -74,6 +76,7 @@ public class IngredientStorageMainFragment extends Fragment {
         binding.ingredientListview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                popupWindow.dismiss();
                 IngredientItem item = (IngredientItem) adapterView.getItemAtPosition(i);
                 if (getActivity() instanceof RecipeStorageActivity) {
                     ((RecipeStorageActivity)getActivity()).onDonePressed(item);
@@ -81,9 +84,9 @@ public class IngredientStorageMainFragment extends Fragment {
                 }
                 else if (getActivity() instanceof IngredientStorageActivity) {
                     Bundle bundle = new Bundle();
-                    bundle.putSerializable(AddEditViewIngredientFragment.ARG_INGREDIENT, item);
+                    bundle.putSerializable(IngredientViewFragment.ARG_INGREDIENT, item);
                     NavHostFragment.findNavController(IngredientStorageMainFragment.this)
-                            .navigate(R.id.action_MainIngredient_to_AddEditView, bundle);
+                            .navigate(R.id.action_IngredientStorageMainFragment_to_ingredientViewFragment, bundle);
 
                 }
             }
@@ -93,6 +96,7 @@ public class IngredientStorageMainFragment extends Fragment {
         binding.addIngredientButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                popupWindow.dismiss();
                 NavHostFragment.findNavController(IngredientStorageMainFragment.this)
                         .navigate(R.id.action_MainIngredient_to_AddEditView);
             }
@@ -101,12 +105,27 @@ public class IngredientStorageMainFragment extends Fragment {
         View fragView = view;
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
         View popupView = inflater.inflate(R.layout.content_ingredient_sort_popup, null);
-        PopupWindow popupWindow = new PopupWindow(popupView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        popupWindow = new PopupWindow(popupView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
         binding.sortIngredientButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                TextView description = popupView.findViewById(R.id.recipe_sort_title);
+                TextView name = popupView.findViewById(R.id.ingredient_sort_name);
+                name.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        ingredientListAdapter.sort(new Comparator<IngredientItem>() {
+                            @Override
+                            public int compare(IngredientItem t1, IngredientItem t2) {
+                                return t1.getName().compareTo(t2.getName());
+                            }
+                        });
+                        ingredientListAdapter.notifyDataSetChanged();
+                        popupWindow.dismiss();
+                    }
+                });
+
+                TextView description = popupView.findViewById(R.id.ingredient_sort_description);
                 description.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -121,7 +140,7 @@ public class IngredientStorageMainFragment extends Fragment {
                     }
                 });
 
-                TextView bestBeforeDate = popupView.findViewById(R.id.recipe_sort_preparation_time);
+                TextView bestBeforeDate = popupView.findViewById(R.id.ingredient_sort_bbd);
                 bestBeforeDate.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -145,7 +164,7 @@ public class IngredientStorageMainFragment extends Fragment {
                     }
                 });
 
-                TextView location = popupView.findViewById(R.id.recipe_sort_servings);
+                TextView location = popupView.findViewById(R.id.ingredient_sort_location);
                 location.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -160,7 +179,7 @@ public class IngredientStorageMainFragment extends Fragment {
                     }
                 });
 
-                TextView category = popupView.findViewById(R.id.recipe_sort_category);
+                TextView category = popupView.findViewById(R.id.ingredient_sort_category);
                 category.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {

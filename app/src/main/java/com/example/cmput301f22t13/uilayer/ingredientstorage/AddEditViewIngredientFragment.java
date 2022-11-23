@@ -99,7 +99,6 @@ public class AddEditViewIngredientFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         if (ingredient != null) {
-            binding.doneIngredientButton.setVisibility(View.INVISIBLE);
             if (ingredient.getName() != null) {
                 binding.ingredientNameEdittext.setText(ingredient.getName());
             }
@@ -145,18 +144,23 @@ public class AddEditViewIngredientFragment extends Fragment {
                                 ingredient.getBbd().get(Calendar.DAY_OF_MONTH));
             }
 
+            // don't want recipe storage to delete ingredient
+            if (getActivity() instanceof RecipeStorageActivity) {
+                binding.deleteIngredientButton.setVisibility(View.GONE);
+            }
+
             // we want the user to click the edit button first before being able to change the
             // ingredient attributes
+            /*
             binding.ingredientNameEdittext.setInputType(InputType.TYPE_NULL);
             binding.ingredientDescriptionEdittext.setInputType(InputType.TYPE_NULL);
             binding.ingredientAmountEdittext.setInputType(InputType.TYPE_NULL);
             binding.ingredientUnitEdittext.setInputType(InputType.TYPE_NULL);
             binding.ingredientCategoryEdittext.setInputType(InputType.TYPE_NULL);
-            binding.ingredientLocationEdittext.setInputType(InputType.TYPE_NULL);
+            binding.ingredientLocationEdittext.setInputType(InputType.TYPE_NULL);*/
         }
         else {
             ingredient = new IngredientItem();
-            binding.editIngredientButton.setVisibility(View.GONE);
             binding.deleteIngredientButton.setVisibility(View.GONE);
         }
 
@@ -192,7 +196,6 @@ public class AddEditViewIngredientFragment extends Fragment {
                 listener.onDonePressed(ingredient);
 
                 if (getActivity() instanceof RecipeStorageActivity) {
-                    ((RecipeStorageActivity)getActivity()).onDonePressed(ingredient);
                     NavHostFragment.findNavController(AddEditViewIngredientFragment.this).popBackStack(R.id.addEditViewRecipeFragment, false);
                 }
                 else if (getActivity() instanceof IngredientStorageActivity) {
@@ -206,10 +209,10 @@ public class AddEditViewIngredientFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 listener.onDeletePressed(ingredient);
-                NavHostFragment.findNavController(AddEditViewIngredientFragment.this).navigateUp();
+                NavHostFragment.findNavController(AddEditViewIngredientFragment.this).popBackStack(R.id.IngredientStorageMainFragment, false);
             }
         });
-
+        /*
         binding.editIngredientButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -223,7 +226,7 @@ public class AddEditViewIngredientFragment extends Fragment {
                 binding.deleteIngredientButton.setVisibility(View.GONE);
                 binding.editIngredientButton.setVisibility(View.GONE);
             }
-        });
+        });*/
 
         binding.ingredientBbdEdittext.setInputType(InputType.TYPE_NULL);
         binding.ingredientBbdEdittext.setOnClickListener(new View.OnClickListener() {

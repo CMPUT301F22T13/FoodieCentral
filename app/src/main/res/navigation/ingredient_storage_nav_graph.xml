@@ -14,6 +14,9 @@
         <action
             android:id="@+id/action_MainIngredient_to_AddEditView"
             app:destination="@id/AddEditViewIngredientFragment" />
+        <action
+            android:id="@+id/action_IngredientStorageMainFragment_to_ingredientViewFragment"
+            app:destination="@id/ingredientViewFragment" />
     </fragment>
     <fragment
         android:id="@+id/AddEditViewIngredientFragment"
@@ -25,5 +28,17 @@
             android:defaultValue="@null"
             app:argType="com.example.cmput301f22t13.domainlayer.item.IngredientItem"
             app:nullable="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/ingredientViewFragment"
+        android:name="com.example.cmput301f22t13.uilayer.ingredientstorage.IngredientViewFragment"
+        android:label="View Ingredient"
+        tools:layout="@layout/fragment_ingredient_view" >
+        <action
+            android:id="@+id/action_ingredientViewFragment_to_AddEditViewIngredientFragment"
+            app:destination="@id/AddEditViewIngredientFragment" />
+        <argument
+            android:name="Ingredient"
+            app:argType="com.example.cmput301f22t13.domainlayer.item.IngredientItem" />
     </fragment>
 </navigation>
