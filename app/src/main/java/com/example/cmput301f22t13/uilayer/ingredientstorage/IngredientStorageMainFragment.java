@@ -79,7 +79,8 @@ public class IngredientStorageMainFragment extends Fragment {
                 popupWindow.dismiss();
                 IngredientItem item = (IngredientItem) adapterView.getItemAtPosition(i);
                 if (getActivity() instanceof RecipeStorageActivity) {
-                    ((RecipeStorageActivity)getActivity()).onDonePressed(item);
+                    // deep copy so reference is not maintained
+                    ((RecipeStorageActivity)getActivity()).onDonePressed(new IngredientItem(item));
                     NavHostFragment.findNavController(IngredientStorageMainFragment.this).navigateUp();
                 }
                 else if (getActivity() instanceof IngredientStorageActivity) {
