@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import android.view.MenuItem;
 
 import com.example.cmput301f22t13.uilayer.ingredientstorage.IngredientStorageActivity;
+import com.example.cmput301f22t13.uilayer.mealplanstorage.MealPlanActivity;
 import com.example.cmput301f22t13.uilayer.shoppinglist.ShoppingListActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
@@ -108,6 +109,10 @@ public class RecipeStorageActivity extends AppCompatActivity implements AddEditV
                     case R.id.shoppingList:
                         Intent shoppingListIntent = new Intent(RecipeStorageActivity.this, ShoppingListActivity.class);
                         startActivity(shoppingListIntent);
+                        return true;
+                    case R.id.mealPlanning:
+                        Intent mealPlanningIntent = new Intent(RecipeStorageActivity.this, MealPlanActivity.class);
+                        startActivity(mealPlanningIntent);
                         return true;
                 }
                 return false;

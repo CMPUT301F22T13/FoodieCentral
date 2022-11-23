@@ -18,6 +18,7 @@ import com.example.cmput301f22t13.domainlayer.item.CountedIngredient;
 import com.example.cmput301f22t13.domainlayer.item.IngredientItem;
 import com.example.cmput301f22t13.uilayer.ingredientstorage.IngredientStorageActivity;
 import com.example.cmput301f22t13.uilayer.ingredientstorage.IngredientStorageMainFragment;
+import com.example.cmput301f22t13.uilayer.mealplanstorage.MealPlanActivity;
 import com.example.cmput301f22t13.uilayer.recipestorage.RecipeStorageActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
@@ -53,8 +54,8 @@ public class ShoppingListActivity extends AppCompatActivity {
                         startActivity(recipeIntent);
                         return true;
                     case R.id.mealPlanning:
-//                        Intent mealPlanningIntent = new Intent(ShoppingListActivity.this, MealPlanningActivity.class);
-//                        startActivity(mealPlanningIntent);
+                        Intent mealPlanningIntent = new Intent(ShoppingListActivity.this, MealPlanActivity.class);
+                        startActivity(mealPlanningIntent);
                         return true;
                 }
                 return false;
