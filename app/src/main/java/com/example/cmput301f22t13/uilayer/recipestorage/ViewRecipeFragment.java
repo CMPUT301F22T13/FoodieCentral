@@ -139,11 +139,24 @@ public class ViewRecipeFragment extends Fragment {
         ingredients = recipe.getIngredients();
 
         ingredientsAdapter.clear();
+
         // Set ingredients of recipe.
         for (int i = 0; i < recipe.getIngredients().size(); i++) {
             ingredientsAdapter.add(ingredients.get(i).getAmount() + ingredients.get(i).getUnit() + " " + ingredients.get(i).getName() + " " + ingredients.get(i).getDescription());
             ingredientsAdapter.notifyDataSetChanged();
         }
+
+        int totalHeight = 0;
+        for (int i = 0; i < ingredientsAdapter.getCount(); i++) {
+            View listItem = ingredientsAdapter.getView(i, null, binding.viewfragIngredientsOfRecipe);
+            listItem.measure(0, 0);
+            totalHeight += listItem.getMeasuredHeight();
+        }
+
+        ViewGroup.LayoutParams params = binding.viewfragIngredientsOfRecipe.getLayoutParams();
+        params.height = totalHeight + (binding.viewfragIngredientsOfRecipe.getDividerHeight() * (ingredientsAdapter.getCount() - 1));
+        binding.viewfragIngredientsOfRecipe.setLayoutParams(params);
+        binding.viewfragIngredientsOfRecipe.requestLayout();
 
         binding.viewfragEditButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -160,7 +173,7 @@ public class ViewRecipeFragment extends Fragment {
         // Set TextView text to current values of recipe attributes.
         binding.viewfragRecipeName.setText(recipe.getTitle());
         binding.viewfragServingsAmount.setText(String.valueOf(recipe.getServings()));
-        binding.viewfragPreptimeAmount.setText(String.valueOf(recipe.getPrepTime()));
+        binding.viewfragPreptimeAmount.setText(String.valueOf(recipe.getPrepTime()) + " mins.");
         binding.viewfragCategoryAmount.setText(recipe.getCategory());
         binding.viewfragCommentsAmount.setText(recipe.getComments());
         if (recipe.getPhoto() != null) {

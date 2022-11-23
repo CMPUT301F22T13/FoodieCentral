@@ -13,9 +13,14 @@
         <ImageView
             android:id="@+id/viewfrag_recipe_image"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="180dp"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="40dp"
             android:scaleType="fitXY"
             android:src="@drawable/noimage"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
@@ -163,18 +168,6 @@
             tools:layout_editor_absoluteX="10dp">
 
         </ListView>
-
-        <TextView
-            android:id="@+id/textView5"
-            style="@style/RecipeInfoStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="1dp"
-            android:layout_marginEnd="40dp"
-            android:text="mins"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/viewfrag_preptime_amount"
-            app:layout_constraintTop_toTopOf="@+id/viewfrag_preptime_amount" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

@@ -152,7 +152,7 @@
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:layout_marginStart="20dp"
-            android:layout_marginTop="70dp"
+            android:layout_marginTop="75dp"
             android:layout_marginEnd="20dp"
             android:scaleType="fitXY"
             android:src="@drawable/noimage"

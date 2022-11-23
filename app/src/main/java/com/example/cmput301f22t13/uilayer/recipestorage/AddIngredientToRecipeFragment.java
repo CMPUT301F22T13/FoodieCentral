@@ -33,8 +33,8 @@ import java.util.ArrayList;
 import java.util.Comparator;
 
 /**
- * This is the fragment class for Recipe Storage. It is a subclass of {@link Fragment}
- * It is responsible for the initializing the list adapter and setting OnClickListener for the Add Recipe button.
+ * This is the fragment class for add ingredient to a recipe. It is a subclass of {@link Fragment}
+ * It is responsible for the initializing the list adapter and setting OnClickListeners for the list of ingredients and add new button.
  *
  * @author Shiv Chopra
  * @version 1.0
@@ -89,7 +89,6 @@ public class AddIngredientToRecipeFragment extends Fragment {
         };
 
         binding = FragmentAddIngredientToRecipeBinding.inflate(inflater, container, false);
-        Bundle bundle = getArguments();
 
         ingredientDataList = ingredientDL.getIngredients();
 
@@ -99,9 +98,8 @@ public class AddIngredientToRecipeFragment extends Fragment {
 
     /**
      * This function is called after onCreateView.
-     * Sets up recipeAdapter
-     * Sets onClickListeners for add and sort button.
-     * Handles sorting of recipes.
+     * Sets up ingredientAdapter.
+     * Sets onClickListeners for the list of ingredients and make new ingredient button.
      * @param view Of type {@link View}
      * @param savedInstanceState Of type {@link Bundle}
      */
@@ -125,31 +123,13 @@ public class AddIngredientToRecipeFragment extends Fragment {
             binding.makeNewIngredientForRecipe.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                   // bundle.putSerializable(AddEditIngredientForRecipe.INGREDIENT_PASSED, ingredient);
                     NavHostFragment.findNavController(AddIngredientToRecipeFragment.this)
                             .navigate(R.id.action_addingredienttorecipe_to_editingredientforrecipe);
 
                 }
             });
-
-            // Sets onClickListener for add button.
-           /* binding.addButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable(AddEditViewRecipeFragment.RECIPE_PASSED, new RecipeItem());
-                    NavHostFragment.findNavController(RecipeStorageFragment.this)
-                            .navigate(R.id.recipe_action_storage_to_addedit, bundle);
-
-                }
-            });
-
-            recipeAdapter.notifyDataSetChanged();*/
-
         }
     }
-
-
 
     /**
      * This function is called when the view created has been detached from the fragment.

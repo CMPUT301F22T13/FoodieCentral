@@ -78,9 +78,8 @@ public class AddEditViewRecipeFragment extends Fragment {
 
 
     /**
-     * Variable is the Uri of the recipe image
+     * Variable is the Bitmap of the recipe image
      */
-    //private Uri selectedImageUri;
 
     private Bitmap selectedImage;
 
@@ -191,7 +190,6 @@ public class AddEditViewRecipeFragment extends Fragment {
             binding.preparationTimeEdit.setText(String.valueOf(recipe.getPrepTime()));
             binding.categoryEdit.setText(recipe.getCategory());
             binding.commentsEdit.setText(recipe.getComments());
-            //setRecipeImage(Uri.parse(recipe.getPhoto()));
 
             if (recipe.getPhoto() != null) {
                 // https://stackoverflow.com/questions/57476796/how-to-convert-bitmap-type-to-string-type
@@ -340,7 +338,7 @@ public class AddEditViewRecipeFragment extends Fragment {
 
     /**
      * Sets the Recipe Image.
-     * @param imageUri Of type {@link Uri}
+     * @param image Of type {@link Bitmap}
      */
     private void setRecipeImage(Bitmap image) {
         selectedImage = image;
