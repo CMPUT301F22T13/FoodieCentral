@@ -1,5 +1,6 @@
 package com.example.cmput301f22t13.domainlayer.utils;
 
+import com.example.cmput301f22t13.datalayer.IngredientDL;
 import com.example.cmput301f22t13.domainlayer.item.CountedIngredient;
 import com.example.cmput301f22t13.domainlayer.item.IngredientItem;
 import com.example.cmput301f22t13.domainlayer.item.Item;
@@ -83,6 +84,9 @@ public class Utils {
         datedRecipes.put(new GregorianCalendar(2022, 11, 18), recipes);
 
         MealPlan mealPlanItem = new MealPlan(startDate, endDate, datedRecipes);
+
+        IngredientDL ingredients = IngredientDL.getInstance();
+
 
         return countedIngredients;
     }
