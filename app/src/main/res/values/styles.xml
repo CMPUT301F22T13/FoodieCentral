@@ -22,7 +22,7 @@
     </style>
 
     <style name="RecipeStorageListItem" parent="TextAppearance.AppCompat">
-        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textColor">@color/black</item>
     </style>
 
     <style name="RecipeButtons" parent="Widget.MaterialComponents.FloatingActionButton">
