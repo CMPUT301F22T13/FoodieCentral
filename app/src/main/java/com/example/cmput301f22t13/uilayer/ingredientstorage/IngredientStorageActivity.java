@@ -1,14 +1,17 @@
 package com.example.cmput301f22t13.uilayer.ingredientstorage;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 
 import com.example.cmput301f22t13.databinding.ActivityIngredientStorageBinding;
 import com.example.cmput301f22t13.datalayer.IngredientDL;
 import com.example.cmput301f22t13.domainlayer.item.IngredientItem;
+import com.example.cmput301f22t13.uilayer.mealplanstorage.MealPlanActivity;
 import com.example.cmput301f22t13.uilayer.recipestorage.RecipeStorageActivity;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.util.Log;
@@ -66,6 +69,10 @@ public class IngredientStorageActivity extends AppCompatActivity implements AddE
                         Intent shoppingListIntent = new Intent(IngredientStorageActivity.this, ShoppingListActivity.class);
                         startActivity(shoppingListIntent);
                         return true;
+                    case R.id.mealPlanning:
+                        Intent mealplanIntent = new Intent(IngredientStorageActivity.this, MealPlanActivity.class);
+                        startActivity(mealplanIntent);
+                        return true;
                 }
                 return false;
             }
@@ -99,6 +106,7 @@ public class IngredientStorageActivity extends AppCompatActivity implements AddE
                 || super.onSupportNavigateUp();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onDonePressed(IngredientItem ingredientItem) {
         Log.d("IngredientStorage", "onDonePressed");
