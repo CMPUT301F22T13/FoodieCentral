@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="50dp"
+    android:background="@drawable/list_item_background"
     android:orientation="horizontal">
 
     <TextView
@@ -14,13 +15,4 @@
         android:textColor="@color/black"
         android:textSize="20sp" />
 
-    <TextView
-        android:id="@+id/meal_plan_list_item_end_date"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:gravity="center_vertical"
-        android:textAlignment="textStart"
-        android:textColor="@color/black"
-        android:textSize="20sp" />
 </LinearLayout>
