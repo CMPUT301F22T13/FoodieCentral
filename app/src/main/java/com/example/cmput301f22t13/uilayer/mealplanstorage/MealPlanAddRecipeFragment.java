@@ -59,7 +59,7 @@ public class MealPlanAddRecipeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         // TODO: Change once recipeDL is implemented
-        recipes = RecipeDL.getInstance().getStorage();
+        recipes = new ArrayList<>(); //RecipeDL.getInstance().getIngredients();
         recipeAdapter = new RecipeListArrayAdapter(getActivity(), recipes);
         binding.addRecipeMealPlanListview.setAdapter(recipeAdapter);
         binding.addRecipeMealPlanListview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
