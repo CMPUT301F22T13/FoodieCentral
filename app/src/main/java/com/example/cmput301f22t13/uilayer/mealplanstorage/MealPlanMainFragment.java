@@ -1,5 +1,6 @@
 package com.example.cmput301f22t13.uilayer.mealplanstorage;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,15 +10,18 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.core.util.Pair;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.cmput301f22t13.R;
 import com.example.cmput301f22t13.databinding.FragmentMealPlanMainBinding;
+import com.example.cmput301f22t13.datalayer.MealPlanDL;
 import com.example.cmput301f22t13.domainlayer.item.IngredientItem;
 import com.example.cmput301f22t13.domainlayer.item.Item;
 import com.example.cmput301f22t13.domainlayer.item.MealPlan;
+import com.example.cmput301f22t13.uilayer.userlogin.ResultListener;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 
@@ -35,11 +39,12 @@ public class MealPlanMainFragment extends Fragment {
 
     private ArrayAdapter<MealPlan> mealPlanAdapter;
     private ArrayList<MealPlan> mealPlans;
+    private MealPlanDL mealPlanDL = MealPlanDL.getInstance();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mealPlans = new ArrayList<>();
+        mealPlans = mealPlanDL.getStorage();
     }
 
     @Override
@@ -70,6 +75,18 @@ public class MealPlanMainFragment extends Fragment {
             }
         });
 
+        mealPlanDL.listener = new ResultListener() {
+            @Override
+            public void onSuccess() {
+                mealPlanAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+
+            }
+        };
+
         /**
          * Idea and implementation for the material date picker was adapted from a web reference
          * Name: Material Design Date Picker in Android
@@ -89,6 +106,7 @@ public class MealPlanMainFragment extends Fragment {
         });
 
         materialDatePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onPositiveButtonClick(Object selection) {
                 Pair<Long, Long> dates = (Pair<Long, Long>) materialDatePicker.getSelection();
@@ -101,7 +119,8 @@ public class MealPlanMainFragment extends Fragment {
                 end.setTimeInMillis(dates.second);
                 end.add(Calendar.DATE, 1); // for some reason the date always comes offset by 1
 
-                mealPlans.add(new MealPlan(start, end));
+//                mealPlans.add(new MealPlan(start, end));
+                mealPlanDL.firebaseAddEdit(new MealPlan(start, end));
                 mealPlanAdapter.notifyDataSetChanged();
             }
         });

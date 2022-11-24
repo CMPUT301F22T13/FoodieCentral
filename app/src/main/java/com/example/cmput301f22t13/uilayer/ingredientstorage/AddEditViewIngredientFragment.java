@@ -9,7 +9,9 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.text.InputType;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,6 +26,7 @@ import androidx.activity.result.contract.ActivityResultContract;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
@@ -34,7 +37,10 @@ import com.example.cmput301f22t13.domainlayer.item.IngredientItem;
 import com.example.cmput301f22t13.domainlayer.utils.Utils;
 import com.example.cmput301f22t13.uilayer.recipestorage.RecipeStorageActivity;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -60,7 +66,7 @@ public class AddEditViewIngredientFragment extends Fragment {
 
     private DatePickerDialog datePickerDialog; // used to select a date
     private GregorianCalendar selectedDate;
-    private Uri selectedImageUri;
+    private Bitmap selectedImage;
 
     @Override
     public void onAttach(Context context) {
@@ -93,7 +99,6 @@ public class AddEditViewIngredientFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         if (ingredient != null) {
-            binding.doneIngredientButton.setVisibility(View.INVISIBLE);
             if (ingredient.getName() != null) {
                 binding.ingredientNameEdittext.setText(ingredient.getName());
             }
@@ -115,7 +120,17 @@ public class AddEditViewIngredientFragment extends Fragment {
             }
 
             if (ingredient.getPhoto() != null) {
-                setIngredientImage(Uri.parse(ingredient.getPhoto()));
+                // https://stackoverflow.com/questions/57476796/how-to-convert-bitmap-type-to-string-type
+                try {
+                    byte[] encodeByte = Base64.decode(ingredient.getPhoto(), Base64.DEFAULT);
+                    Bitmap bmp = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
+                    if (bmp != null) {
+                        setIngredientImage(bmp);
+                    }
+                }
+                catch (IllegalArgumentException e) {
+
+                }
             }
 
             if (ingredient.getLocation() != null) {
@@ -129,18 +144,23 @@ public class AddEditViewIngredientFragment extends Fragment {
                                 ingredient.getBbd().get(Calendar.DAY_OF_MONTH));
             }
 
+            // don't want recipe storage to delete ingredient
+            if (getActivity() instanceof RecipeStorageActivity) {
+                binding.deleteIngredientButton.setVisibility(View.GONE);
+            }
+
             // we want the user to click the edit button first before being able to change the
             // ingredient attributes
+            /*
             binding.ingredientNameEdittext.setInputType(InputType.TYPE_NULL);
             binding.ingredientDescriptionEdittext.setInputType(InputType.TYPE_NULL);
             binding.ingredientAmountEdittext.setInputType(InputType.TYPE_NULL);
             binding.ingredientUnitEdittext.setInputType(InputType.TYPE_NULL);
             binding.ingredientCategoryEdittext.setInputType(InputType.TYPE_NULL);
-            binding.ingredientLocationEdittext.setInputType(InputType.TYPE_NULL);
+            binding.ingredientLocationEdittext.setInputType(InputType.TYPE_NULL);*/
         }
         else {
             ingredient = new IngredientItem();
-            binding.editIngredientButton.setVisibility(View.GONE);
             binding.deleteIngredientButton.setVisibility(View.GONE);
         }
 
@@ -167,14 +187,15 @@ public class AddEditViewIngredientFragment extends Fragment {
                     ingredient.setBbd(selectedDate);
                 }
 
-                if (selectedImageUri != null) {
-                    ingredient.setPhoto(selectedImageUri.toString());
+                if (selectedImage != null) {
+                    ByteArrayOutputStream baos = new  ByteArrayOutputStream();
+                    selectedImage.compress(Bitmap.CompressFormat.PNG,100, baos);
+                    ingredient.setPhoto(Base64.encodeToString(baos.toByteArray(), Base64.DEFAULT));
                 }
 
                 listener.onDonePressed(ingredient);
 
                 if (getActivity() instanceof RecipeStorageActivity) {
-                    ((RecipeStorageActivity)getActivity()).onDonePressed(ingredient);
                     NavHostFragment.findNavController(AddEditViewIngredientFragment.this).popBackStack(R.id.addEditViewRecipeFragment, false);
                 }
                 else if (getActivity() instanceof IngredientStorageActivity) {
@@ -188,10 +209,10 @@ public class AddEditViewIngredientFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 listener.onDeletePressed(ingredient);
-                NavHostFragment.findNavController(AddEditViewIngredientFragment.this).navigateUp();
+                NavHostFragment.findNavController(AddEditViewIngredientFragment.this).popBackStack(R.id.IngredientStorageMainFragment, false);
             }
         });
-
+        /*
         binding.editIngredientButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -205,7 +226,7 @@ public class AddEditViewIngredientFragment extends Fragment {
                 binding.deleteIngredientButton.setVisibility(View.GONE);
                 binding.editIngredientButton.setVisibility(View.GONE);
             }
-        });
+        });*/
 
         binding.ingredientBbdEdittext.setInputType(InputType.TYPE_NULL);
         binding.ingredientBbdEdittext.setOnClickListener(new View.OnClickListener() {
@@ -235,15 +256,11 @@ public class AddEditViewIngredientFragment extends Fragment {
 
         // this launcher should open up a chooser to select an image from the gallery and display it
         ActivityResultLauncher<Intent> selectImageLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+
             @Override
             public void onActivityResult(ActivityResult result) {
-                if (result.getResultCode() == Activity.RESULT_OK) {
-                    Uri image = result.getData().getData();
-                    getActivity().getContentResolver().takePersistableUriPermission(image, Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                    setIngredientImage(image);
-                }
-                else {
-                    Log.d("AddEditViewIngred", String.valueOf(result.getResultCode()));
+                if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
+                    setIngredientImage((Bitmap) result.getData().getExtras().get("data"));
                 }
             }
         });
@@ -255,9 +272,8 @@ public class AddEditViewIngredientFragment extends Fragment {
                 // when the edit button is clicked, the done visibility turns visible so we know if it has been pressed
                 if (binding.doneIngredientButton.getVisibility() == View.VISIBLE) {
                     Intent intent = new Intent();
-                    intent.setType("image/*");
-                    intent.setAction(Intent.ACTION_OPEN_DOCUMENT);
-                    selectImageLauncher.launch(Intent.createChooser(intent, "Select Image"));
+                    intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
+                    selectImageLauncher.launch(Intent.createChooser(intent, "Take photo"));
                 }
             }
         });
@@ -272,18 +288,9 @@ public class AddEditViewIngredientFragment extends Fragment {
     /** setIngredientImage -sets the ingredient item image
      *
      * */
-    private void setIngredientImage(Uri imageUri) {
-        // https://stackoverflow.com/questions/38352148/get-image-from-the-gallery-and-show-in-imageview
-        try {
-            selectedImageUri = imageUri;
-
-            final InputStream imageStream;
-            imageStream = getActivity().getApplicationContext().getContentResolver().openInputStream(selectedImageUri);
-            final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
-            binding.ingredientImageImageview.setImageBitmap(selectedImage);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+    private void setIngredientImage(Bitmap image) {
+        selectedImage = image;
+        binding.ingredientImageImageview.setImageBitmap(selectedImage);
     }
 
     /** OnIngredientItemChangeListener - interface for button presses
