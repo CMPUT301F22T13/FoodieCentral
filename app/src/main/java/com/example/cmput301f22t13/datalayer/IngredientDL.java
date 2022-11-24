@@ -90,7 +90,7 @@ public class IngredientDL extends FireBaseDL {
                     IngredientItem i = new IngredientItem();
                     i.setName(name);
                     i.setDescription(description);
-                    i.setAmount(amount.intValue());
+                    i.setAmount(amount.doubleValue());
                     i.setUnit(unit);
                     i.setCategory(category);
                     i.setLocation(location);
@@ -115,7 +115,7 @@ public class IngredientDL extends FireBaseDL {
         String ing_description = item.getDescription();
         GregorianCalendar ing_bestBefore = item.getBbd();
         String ing_location = item.getLocation();
-        Integer ing_amount = item.getAmount();
+        Double ing_amount = item.getAmount();
         String ing_unit = item.getUnit();
         String ing_category = item.getCategory();
         String ing_photo = item.getPhoto();

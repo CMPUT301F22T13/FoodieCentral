@@ -21,7 +21,7 @@ import java.util.Comparator;
 public class IngredientItem extends Item implements Serializable {
 
     private String description;
-    private Integer amount;
+    private Double amount;
     private String unit;
     private String category;
     private GregorianCalendar bbd;
@@ -32,7 +32,7 @@ public class IngredientItem extends Item implements Serializable {
      */
     public IngredientItem () {
         this.description = "";
-        this.amount = 0;
+        this.amount = 0.0;
         this.unit = "";
         this.category = "";
         this.bbd = new GregorianCalendar();
@@ -51,7 +51,7 @@ public class IngredientItem extends Item implements Serializable {
      * @param photo the uri string for storing images for the ingredient
      * @param location the location of the ingredient stored
      */
-    public IngredientItem (String name, String description, Integer amount, String unit, String category, GregorianCalendar bbd, String photo, String location) {
+    public IngredientItem (String name, String description, Double amount, String unit, String category, GregorianCalendar bbd, String photo, String location) {
         super(name, photo);
         this.description = description;
         this.amount = amount;
@@ -105,7 +105,7 @@ public class IngredientItem extends Item implements Serializable {
      * Gets the amount/number of units there are of this ingredient
      * @return amount
      */
-    public Integer getAmount() {
+    public Double getAmount() {
         return amount;
     }
 
@@ -113,7 +113,7 @@ public class IngredientItem extends Item implements Serializable {
      * Sets the amount/number of units there are of this ingredient
      * @param amount new amount
      */
-    public void setAmount(Integer amount) {
+    public void setAmount(Double amount) {
         this.amount = amount;
     }
 

@@ -62,7 +62,7 @@ public class IngredientListAdapter extends ArrayAdapter<IngredientItem> {
                 image.setImageBitmap(bmp);
             }
             else {
-                image.setVisibility(View.INVISIBLE);
+                image.setImageResource(android.R.color.transparent);
             }
         } catch (Exception e) {
             Log.d("IngredientListAdapter", "Could not set image bitmap: " + e.getMessage());
