@@ -1,5 +1,7 @@
 package com.example.cmput301f22t13.domainlayer.item;
 
+import com.example.cmput301f22t13.domainlayer.utils.Utils;
+
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -23,6 +25,7 @@ public class MealPlan implements Serializable {
     private TreeMap<GregorianCalendar, ArrayList<Item>> mealPlanItems;
     private GregorianCalendar startDate;
     private GregorianCalendar endDate;
+    private String hashId;
 
     /**
      * Default constructor. Start date will be set to the current date and end date will be set to
@@ -33,6 +36,7 @@ public class MealPlan implements Serializable {
         this.endDate = new GregorianCalendar(startDate.get(Calendar.YEAR), startDate.get(Calendar.MONTH),
                 startDate.get(Calendar.DAY_OF_MONTH) + 1);
         this.mealPlanItems = new TreeMap<GregorianCalendar, ArrayList<Item>>();
+        this.hashId = Utils.getUniqueHash();
         validateTreeMap(this.mealPlanItems);
     }
 
@@ -57,6 +61,8 @@ public class MealPlan implements Serializable {
             GregorianCalendar date = new GregorianCalendar(year, month, day + i);
             mealPlanItems.put(date, new ArrayList<Item>());
         }
+
+        this.hashId = Utils.getUniqueHash();
     }
 
     /**
@@ -293,5 +299,15 @@ public class MealPlan implements Serializable {
         }
 
         return true;
+    }
+
+
+    // Need to talk to logan - meal plan needs a unique hash - items may or may not depending
+    public String getHashId() {
+        return this.hashId;
+    }
+
+    public void setHashId(String id) {
+        this.hashId = id;
     }
 }
