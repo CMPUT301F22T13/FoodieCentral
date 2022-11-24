@@ -18,4 +18,17 @@
 
     </style>
 
+    <style name="ListView" parent="android:style/Widget.ListView">
+        <item name="android:divider">@android:color/transparent</item>
+        <item name="android:dividerHeight">5dp</item>
+        <item name="android:background">@color/white</item>
+    </style>
+
+    <style name="FabButton" parent="Widget.MaterialComponents.FloatingActionButton">
+        <item name="android:backgroundTint">@color/storagebackground</item>
+        <item name="tint">@color/white</item>
+    </style>
+
+
+
 </resources>

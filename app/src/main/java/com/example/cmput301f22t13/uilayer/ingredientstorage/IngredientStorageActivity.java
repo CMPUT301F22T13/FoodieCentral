@@ -6,6 +6,7 @@ import android.os.Bundle;
 import com.example.cmput301f22t13.databinding.ActivityIngredientStorageBinding;
 import com.example.cmput301f22t13.datalayer.IngredientDL;
 import com.example.cmput301f22t13.domainlayer.item.IngredientItem;
+import com.example.cmput301f22t13.uilayer.mealplanstorage.MealPlanActivity;
 import com.example.cmput301f22t13.uilayer.recipestorage.RecipeStorageActivity;
 
 import androidx.annotation.NonNull;
@@ -65,6 +66,10 @@ public class IngredientStorageActivity extends AppCompatActivity implements AddE
                     case R.id.shoppingList:
                         Intent shoppingListIntent = new Intent(IngredientStorageActivity.this, ShoppingListActivity.class);
                         startActivity(shoppingListIntent);
+                        return true;
+                    case R.id.mealPlanning:
+                        Intent mealPlanIntent = new Intent(IngredientStorageActivity.this, MealPlanActivity.class);
+                        startActivity(mealPlanIntent);
                         return true;
                 }
                 return false;
