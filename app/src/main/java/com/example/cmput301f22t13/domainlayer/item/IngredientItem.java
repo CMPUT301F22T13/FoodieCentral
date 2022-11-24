@@ -27,6 +27,8 @@ public class IngredientItem extends Item implements Serializable {
     private GregorianCalendar bbd;
     private String location;
 
+    private boolean fromShoppingList;
+
     /**
      * Constructor that initializes all ingredient fields to default values
      */
@@ -37,6 +39,7 @@ public class IngredientItem extends Item implements Serializable {
         this.category = "";
         this.bbd = new GregorianCalendar();
         this.location = "";
+        this.fromShoppingList = false;
     }
 
 
@@ -59,6 +62,7 @@ public class IngredientItem extends Item implements Serializable {
         this.category = category;
         this.bbd = bbd;
         this.location = location;
+        this.fromShoppingList = false;
 
         int timestamp = new Timestamp(new Date()).getNanoseconds();
         String timeStampString = Integer.toString(timestamp);
@@ -177,6 +181,13 @@ public class IngredientItem extends Item implements Serializable {
         this.location = location;
     }
 
+    public boolean isFromShoppingList() {
+        return fromShoppingList;
+    }
+
+    public void setFromShoppingList(boolean fromShoppingList) {
+        this.fromShoppingList = fromShoppingList;
+    }
 }
 
 
