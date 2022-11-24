@@ -10,8 +10,7 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:scaleType="fitXY"
-        app:srcCompat="@android:drawable/ic_menu_gallery" />
+        android:scaleType="fitXY" />
 
     <TextView
         android:id="@+id/name_item_list_textview"
