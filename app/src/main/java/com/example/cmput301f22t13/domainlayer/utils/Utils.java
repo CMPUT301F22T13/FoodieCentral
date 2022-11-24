@@ -13,6 +13,7 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicLong;
 /** Public class for utility functions such as getting a hash
@@ -96,18 +97,25 @@ public class Utils {
 
         TreeMap<GregorianCalendar, ArrayList<Item>> mealPlanItems = mealPlan.getMealPlanItems();
         Collection<ArrayList<Item>> allMealPlanItems = mealPlanItems.values();
-        ArrayList<IngredientItem> mealPlanIngredients = new ArrayList<>();
+        HashMap<String, Integer> mealPlanIngredients = new HashMap<>();
         for (ArrayList<Item> itemList : allMealPlanItems) {
             for (Item item : itemList) {
                 if (item instanceof RecipeItem) {
-                    mealPlanIngredients.addAll(((RecipeItem) item).getIngredients());
+                    for (IngredientItem ingredient : ((RecipeItem) item).getIngredients()) {
+                        if (mealPlanIngredients.containsKey(ingredient.getName())) {
+                            mealPlanIngredients.put(ingredient.getName(), mealPlanIngredients.get(ingredient.getName()) + 1);
+                        }
+                        mealPlanIngredients.put(ingredient.getName(), ingredient.getAmount());
+                    }
                 } else if (item instanceof IngredientItem) {
-                    mealPlanIngredients.add((IngredientItem) item);
+                    mealPlanIngredients.put(item.getName(), ((IngredientItem) item).getAmount());
                 }
             }
         }
 
         ArrayList<IngredientItem> storedIngredients = IngredientDL.getInstance().getStorage();
+
+
 
         return countedIngredients;
     }
