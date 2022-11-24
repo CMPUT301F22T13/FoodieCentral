@@ -37,7 +37,7 @@ import java.util.ArrayList;
  * @author Shiv Chopra
  * @version 1.0
  */
-public class RecipeStorageActivity extends AppCompatActivity implements AddEditViewRecipeFragment.OnRecipeItemChangedListener, AddEditViewIngredientFragment.OnIngredientItemChangeListener {
+public class RecipeStorageActivity extends AppCompatActivity implements ViewRecipeFragment.OnRecipeItemChangedListener, AddEditViewRecipeFragment.OnRecipeItemChangedListener, AddEditViewIngredientFragment.OnIngredientItemChangeListener {
 
     /**
      * This variable is for configuration of the app bar.

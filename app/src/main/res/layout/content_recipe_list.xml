@@ -10,24 +10,27 @@
         android:layout_weight="1"
         android:orientation="horizontal">
 
-        <ImageView
-            android:id="@+id/recipe_image"
-            android:layout_width="51dp"
-            android:layout_height="91dp"
-            android:layout_weight="1"
-            android:adjustViewBounds="false"
-            android:foregroundGravity="center"
-            android:scaleType="fitXY"
-            app:srcCompat="@android:drawable/picture_frame" />
-
         <TextView
             android:id="@+id/recipe_name_for_view"
-            android:layout_width="wrap_content"
-            android:layout_height="124dp"
+            style="@style/RecipeStorageListItem"
+            android:layout_width="130dp"
+            android:layout_height="75dp"
             android:layout_weight="1"
             android:gravity="center|center_horizontal|center_vertical"
             android:textAlignment="gravity"
             android:textSize="25dp" />
+
+        <ImageView
+            android:id="@+id/recipe_image"
+            android:layout_width="5dp"
+            android:layout_height="70dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_weight="1"
+            android:adjustViewBounds="false"
+            android:foregroundGravity="center"
+            android:src="@drawable/noimage"
+            android:scaleType="fitXY" />
     </LinearLayout>
 
 </LinearLayout>
