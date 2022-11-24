@@ -90,7 +90,7 @@ public class AddIngredientToRecipeFragment extends Fragment {
 
         binding = FragmentAddIngredientToRecipeBinding.inflate(inflater, container, false);
 
-        ingredientDataList = ingredientDL.getIngredients();
+        ingredientDataList = ingredientDL.getStorage();
 
         return binding.getRoot();
 

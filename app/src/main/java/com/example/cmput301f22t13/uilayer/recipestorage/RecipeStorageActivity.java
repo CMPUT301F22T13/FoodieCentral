@@ -119,7 +119,7 @@ public class RecipeStorageActivity extends AppCompatActivity implements ViewReci
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_recipe_storage);
         Bundle bundle = new Bundle();
         bundle.putSerializable("init_recipes", recipeDL.getStorage());
-        navController.setGraph(R.navigation.nav_recipestorage_to_viewrecipe, bundle);
+        navController.setGraph(R.navigation.nav_recipestorage_to_viewfrag, bundle);
 
         appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
