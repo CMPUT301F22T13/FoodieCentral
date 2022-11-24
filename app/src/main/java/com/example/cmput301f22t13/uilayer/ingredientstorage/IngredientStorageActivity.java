@@ -70,8 +70,8 @@ public class IngredientStorageActivity extends AppCompatActivity implements AddE
                         startActivity(shoppingListIntent);
                         return true;
                     case R.id.mealPlanning:
-                        Intent mealplanIntent = new Intent(IngredientStorageActivity.this, MealPlanActivity.class);
-                        startActivity(mealplanIntent);
+                        Intent mealPlanIntent = new Intent(IngredientStorageActivity.this, MealPlanActivity.class);
+                        startActivity(mealPlanIntent);
                         return true;
                 }
                 return false;
