@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.cmput301f22t13.R;
+import com.example.cmput301f22t13.datalayer.MealPlanDL;
 import com.example.cmput301f22t13.domainlayer.item.MealPlan;
 
 import java.text.SimpleDateFormat;
@@ -20,11 +21,12 @@ public class MealPlanArrayAdapter extends ArrayAdapter<MealPlan> {
 
     private Context context;
     private ArrayList<MealPlan> mealPlans;
+    private MealPlanDL mealPlanDL = MealPlanDL.getInstance();
 
     public MealPlanArrayAdapter(Context context, ArrayList<MealPlan> mealPlans) {
         super(context, 0, mealPlans);
         this.context = context;
-        this.mealPlans = mealPlans;
+        this.mealPlans = mealPlanDL.getStorage();
     }
 
     @NonNull
