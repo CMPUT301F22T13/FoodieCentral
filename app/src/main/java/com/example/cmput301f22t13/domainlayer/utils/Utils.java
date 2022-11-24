@@ -1,5 +1,7 @@
 package com.example.cmput301f22t13.domainlayer.utils;
 
+import android.util.Log;
+
 import com.example.cmput301f22t13.datalayer.IngredientDL;
 import com.example.cmput301f22t13.domainlayer.item.CountedIngredient;
 import com.example.cmput301f22t13.domainlayer.item.IngredientItem;
@@ -7,7 +9,9 @@ import com.example.cmput301f22t13.domainlayer.item.Item;
 import com.example.cmput301f22t13.domainlayer.item.MealPlan;
 import com.example.cmput301f22t13.domainlayer.item.RecipeItem;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.GregorianCalendar;
 import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicLong;
@@ -80,13 +84,30 @@ public class Utils {
         recipes.add(mockRecipe2);
         recipes.add(mockRecipe3);
 
+        ArrayList<Item> ingredients = new ArrayList<>();
+        ingredients.add(mockIngredient1);
+        ingredients.add(mockIngredient2);
+
         TreeMap<GregorianCalendar, ArrayList<Item>> datedRecipes = new TreeMap<>();
         datedRecipes.put(new GregorianCalendar(2022, 11, 18), recipes);
+        datedRecipes.put(new GregorianCalendar(2022, 11, 19), ingredients);
 
-        MealPlan mealPlanItem = new MealPlan(startDate, endDate, datedRecipes);
+        MealPlan mealPlan = new MealPlan(startDate, endDate, datedRecipes);
 
-        IngredientDL ingredients = IngredientDL.getInstance();
+        TreeMap<GregorianCalendar, ArrayList<Item>> mealPlanItems = mealPlan.getMealPlanItems();
+        Collection<ArrayList<Item>> allMealPlanItems = mealPlanItems.values();
+        ArrayList<IngredientItem> mealPlanIngredients = new ArrayList<>();
+        for (ArrayList<Item> itemList : allMealPlanItems) {
+            for (Item item : itemList) {
+                if (item instanceof RecipeItem) {
+                    mealPlanIngredients.addAll(((RecipeItem) item).getIngredients());
+                } else if (item instanceof IngredientItem) {
+                    mealPlanIngredients.add((IngredientItem) item);
+                }
+            }
+        }
 
+        ArrayList<IngredientItem> storedIngredients = IngredientDL.getInstance().getStorage();
 
         return countedIngredients;
     }
