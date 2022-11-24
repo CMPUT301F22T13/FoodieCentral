@@ -32,6 +32,7 @@
 
     <style name="RecipeInfoStyle" parent="TextAppearance.AppCompat">
         <item name="android:textSize">17dp</item>
+        <item name="android:textColor">@color/black</item>
     </style>
     <style name="ListView" parent="android:style/Widget.ListView">
         <item name="android:divider">@android:color/transparent</item>
