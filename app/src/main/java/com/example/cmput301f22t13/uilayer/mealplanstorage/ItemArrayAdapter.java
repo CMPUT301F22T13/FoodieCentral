@@ -53,7 +53,7 @@ public class ItemArrayAdapter extends ArrayAdapter<Item> {
         ImageView image = view.findViewById(R.id.picture_item_list_imageview);
 
         name.setText(item.getName());
-        image.setImageURI(Uri.parse(item.getPhoto()));
+
         if (item.getPhoto() != null) {
             try {
                 byte[] encodedByte = Base64.decode(item.getPhoto(), Base64.DEFAULT);
