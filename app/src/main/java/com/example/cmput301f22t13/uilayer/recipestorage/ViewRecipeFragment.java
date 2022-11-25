@@ -142,7 +142,7 @@ public class ViewRecipeFragment extends Fragment {
 
         // Set ingredients of recipe.
         for (int i = 0; i < recipe.getIngredients().size(); i++) {
-            ingredientsAdapter.add(ingredients.get(i).getAmount() + ingredients.get(i).getUnit() + " " + ingredients.get(i).getName() + " " + ingredients.get(i).getDescription());
+            ingredientsAdapter.add(ingredients.get(i).getAmount() + " " + ingredients.get(i).getUnit() + " " + ingredients.get(i).getName() + ": " + ingredients.get(i).getDescription());
             ingredientsAdapter.notifyDataSetChanged();
         }
 

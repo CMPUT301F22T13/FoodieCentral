@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
@@ -225,16 +226,35 @@ public class AddEditViewRecipeFragment extends Fragment {
             binding.listOfIngredients.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                    binding.listOfIngredients.setSelected(true);
                     binding.deleteIngredientFromRecipe.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            ingredientsAdapter.remove(recipe.getIngredients().get(i).getName());
-                            recipe.deleteIngredient(i);
-                            ingredientsAdapter.notifyDataSetChanged();
+                            try {
+                                ingredientsAdapter.remove(recipe.getIngredients().get(i).getName());
+                                IngredientItem ingredientItem = recipe.getIngredients().get(i);
+                                //recipe.deleteIngredient(i);
+                                binding.listOfIngredients.setSelected(false);
+                                ingredientsAdapter.notifyDataSetChanged();
+                                listener.onDeletePressed(ingredientItem);
+                            } catch (IndexOutOfBoundsException e) {
+                            }
                         }
                     });
                 }
             });
+
+            int totalHeight = 0;
+            for (int i = 0; i < ingredientsAdapter.getCount(); i++) {
+                View listItem = ingredientsAdapter.getView(i, null, binding.listOfIngredients);
+                listItem.measure(0, 0);
+                totalHeight += listItem.getMeasuredHeight();
+            }
+
+            ViewGroup.LayoutParams params = binding.listOfIngredients.getLayoutParams();
+            params.height = totalHeight + (binding.listOfIngredients.getDividerHeight() * (ingredientsAdapter.getCount() - 1));
+            binding.listOfIngredients.setLayoutParams(params);
+            binding.listOfIngredients.requestLayout();
 
             // onClickListener for the save button.
             binding.saveButton.setOnClickListener(new View.OnClickListener() {
@@ -351,6 +371,7 @@ public class AddEditViewRecipeFragment extends Fragment {
     public interface OnRecipeItemChangedListener {
         void onAddDonePressed(RecipeItem recipe);
         void onDeletePressed(RecipeItem recipe);
+        void onDeletePressed(IngredientItem ingredientItem);
         void changeRecipe(RecipeItem oldRecipe, RecipeItem newRecipe);
         void onDonePressed(IngredientItem ingredientItem);
         void recipeSelected(RecipeItem recipe);

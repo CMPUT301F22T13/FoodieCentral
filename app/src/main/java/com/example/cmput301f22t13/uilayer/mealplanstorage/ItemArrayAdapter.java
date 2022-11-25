@@ -1,9 +1,12 @@
 package com.example.cmput301f22t13.uilayer.mealplanstorage;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,7 +53,19 @@ public class ItemArrayAdapter extends ArrayAdapter<Item> {
         ImageView image = view.findViewById(R.id.picture_item_list_imageview);
 
         name.setText(item.getName());
-        image.setImageURI(Uri.parse(item.getPhoto()));
+
+        if (item.getPhoto() != null) {
+            try {
+                byte[] encodedByte = Base64.decode(item.getPhoto(), Base64.DEFAULT);
+                Bitmap bmp = BitmapFactory.decodeByteArray(encodedByte, 0, encodedByte.length);
+                if (bmp != null) {
+                    image.setImageBitmap(bmp);
+                }
+            }
+            catch (IllegalArgumentException e) {
+
+            }
+        }
 
         if (item instanceof IngredientItem) {
             unit.setText(((IngredientItem)item).getUnit());
