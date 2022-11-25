@@ -4,10 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/storagebackground">
+    android:background="@color/heart_icon_background">
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/add_button"
+        style="@style/RecipeButtons"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -19,6 +20,7 @@
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/sort_button"
+        style="@style/RecipeButtons"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -31,10 +33,10 @@
 
     <ListView
         android:id="@+id/recipelistview"
+        style="@style/RecipeStorageListView"
         android:layout_width="409dp"
         android:layout_height="532dp"
         android:layout_marginTop="8dp"
-        style="@style/RecipeStorageListView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/sort_button" />

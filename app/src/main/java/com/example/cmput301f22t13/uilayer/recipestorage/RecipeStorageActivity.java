@@ -199,5 +199,7 @@ public class RecipeStorageActivity extends AppCompatActivity implements ViewReci
 
     @Override
     public void onDeletePressed(IngredientItem ingredientItem) {
+        recipeSelected.deleteIngredient(ingredientItem);
+        recipeDL.firebaseAddEdit(this.recipeSelected);
     }
 }
