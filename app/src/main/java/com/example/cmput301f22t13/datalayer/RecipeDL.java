@@ -88,7 +88,7 @@ public class RecipeDL extends FireBaseDL {
                     r.setPhoto(photo);
 
 
-                    Task<QuerySnapshot> getIngredients = fstore.collection("Users")
+                    fstore.collection("Users")
                             .document(auth.getCurrentUser().getUid())
                             .collection("Recipe Storage").document(r.getHashId())
                             .collection("Ingredients").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -156,6 +156,32 @@ public class RecipeDL extends FireBaseDL {
                 .document(auth.getCurrentUser().getUid())
                 .collection("Recipe Storage")
                 .document(item.getHashId());
+
+
+        // Clear the ingredient collection
+        fstore.collection("Users")
+                .document(auth.getCurrentUser().getUid())
+                .collection("Recipe Storage")
+                .document(item.getHashId())
+                .collection("Ingredients").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        for (QueryDocumentSnapshot doc: queryDocumentSnapshots) {
+
+                            fstore.collection("Users")
+                                    .document(auth.getCurrentUser().getUid())
+                                    .collection("Recipe Storage")
+                                    .document(item.getHashId())
+                                    .collection("Ingredients")
+                                    .document(doc.getId()).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void unused) {
+
+                                        }
+                                    });
+                        }
+                    }
+                });
 
 
         for (IngredientItem i: item.getIngredients()) {
