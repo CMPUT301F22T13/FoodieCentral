@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -85,12 +86,28 @@ public class ItemArrayAdapter extends ArrayAdapter<Item> {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (charSequence.length() > 0) {
+                Log.d("ItemArrayAdapter", String.valueOf(i2));
+                if (charSequence.length() > 0 && i2 > 0) {
                     if (item instanceof IngredientItem) {
                         ((IngredientItem)item).setAmount(Integer.valueOf(charSequence.toString()));
                     }
                     else if (item instanceof RecipeItem) {
-                        ((RecipeItem)item).setServings(Integer.valueOf(charSequence.toString()));
+                        double oldServings = ((RecipeItem)item).getServings();
+                        double newServings = Integer.parseInt(charSequence.toString());
+                        Log.d("ItemArrayAdapter", String.valueOf(oldServings));
+                        Log.d("ItemArrayAdapter", String.valueOf(newServings));
+
+                        if (oldServings == newServings) {
+                            return;
+                        }
+
+                        double scalingFactor = newServings / oldServings;
+                        ((RecipeItem)item).setServings((int) newServings);
+
+                        for (IngredientItem ingredient : ((RecipeItem)item).getIngredients()) {
+                            ingredient.setAmount((int) (ingredient.getAmount() * scalingFactor));
+                            Log.d("ItemArrayAdapter", ingredient.getName() + " " + ingredient.getAmount());
+                        }
                     }
                 }
             }

@@ -38,7 +38,7 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:scrollingCache="false"
-                android:smoothScrollbar="true"/>
+                android:smoothScrollbar="true" />
         </LinearLayout>
     </ScrollView>
 
