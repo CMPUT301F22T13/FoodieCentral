@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+
+    <TextView
+        android:id="@+id/meal_plan_view_date_range_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Mon, Nov 5 - Fri, Nov 9"
+        android:textColor="@color/black"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ListView
+        android:id="@+id/meal_plan_view_date_listview"
+        style="@style/ListView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/select_date_meal_plan_spinner" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/delete_item_button"
+        style="@style/FabButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:src="@android:drawable/ic_menu_delete"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/add_ingredient_meal_plan_item_button"
+        style="@style/FabButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:clickable="true"
+        android:src="@mipmap/ingredient_icon_foreground"
+        app:layout_constraintBottom_toTopOf="@+id/add_recipe_ingredient_meal_plan_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:maxImageSize="56dp" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/add_recipe_meal_plan_item_button"
+        style="@style/FabButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:clickable="true"
+        android:src="@drawable/recipe_icon_foreground"
+        app:layout_constraintBottom_toTopOf="@+id/add_ingredient_meal_plan_item_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:maxImageSize="56dp" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/add_recipe_ingredient_meal_plan_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:src="@android:drawable/ic_input_add"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/add_recipe_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="5dp"
+        android:text="Add Recipe"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="@+id/add_recipe_meal_plan_item_button"
+        app:layout_constraintEnd_toStartOf="@+id/add_recipe_meal_plan_item_button"
+        app:layout_constraintTop_toTopOf="@+id/add_recipe_meal_plan_item_button" />
+
+    <TextView
+        android:id="@+id/add_ingredient_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="5dp"
+        android:text="Add Ingredient"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="@+id/add_ingredient_meal_plan_item_button"
+        app:layout_constraintEnd_toStartOf="@+id/add_ingredient_meal_plan_item_button"
+        app:layout_constraintTop_toTopOf="@+id/add_ingredient_meal_plan_item_button" />
+
+    <!--
+    Idea for this type of dropdown came from a web resource
+    Date Accessed: 2022/11/14
+    Web Resource URL: https://www.youtube.com/watch?v=Bdm-pR3Nqkw
+    -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/select_date_meal_plan_spinner"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:hint="Select Date"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/meal_plan_view_date_range_label"
+        app:startIconDrawable="@android:drawable/ic_menu_day">
+
+        <AutoCompleteTextView
+            android:id="@+id/select_date_meal_plan_spinner_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="none"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

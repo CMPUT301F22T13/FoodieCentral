@@ -1,5 +1,20 @@
 package com.example.cmput301f22t13.domainlayer.utils;
 
+import android.util.Log;
+
+import com.example.cmput301f22t13.datalayer.IngredientDL;
+import com.example.cmput301f22t13.domainlayer.item.CountedIngredient;
+import com.example.cmput301f22t13.domainlayer.item.IngredientItem;
+import com.example.cmput301f22t13.domainlayer.item.Item;
+import com.example.cmput301f22t13.domainlayer.item.MealPlan;
+import com.example.cmput301f22t13.domainlayer.item.RecipeItem;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicLong;
 /** Public class for utility functions such as getting a hash
  *
@@ -32,5 +47,76 @@ public class Utils {
             if (TIME_STAMP.compareAndSet(last, now))
                 return Long.toString(now);
         }
+    }
+
+    public static ArrayList<CountedIngredient> populateShoppingList(){
+
+        ArrayList<CountedIngredient> countedIngredients = new ArrayList<>();
+        RecipeItem mockRecipe1 = new RecipeItem();
+        RecipeItem mockRecipe2 = new RecipeItem();
+        RecipeItem mockRecipe3 = new RecipeItem();
+
+        IngredientItem mockIngredient1 = new IngredientItem();
+        IngredientItem mockIngredient2 = new IngredientItem();
+        IngredientItem mockIngredient3 = new IngredientItem();
+
+        mockIngredient1.setName("Chicken");
+        mockIngredient2.setName("Broccoli");
+        mockIngredient3.setName("Rice");
+
+        mockRecipe1.setName("Chicken and Rice");
+        mockRecipe1.addIngredient(mockIngredient1);
+        mockRecipe1.addIngredient(mockIngredient3);
+
+        mockRecipe2.setName("Chicken, Broccoli and Rice");
+        mockRecipe2.addIngredient(mockIngredient1);
+        mockRecipe2.addIngredient(mockIngredient2);
+        mockRecipe2.addIngredient(mockIngredient3);
+
+        mockRecipe3.setName("Chicken and Broccoli");
+        mockRecipe3.addIngredient(mockIngredient1);
+        mockRecipe3.addIngredient(mockIngredient2);
+
+        GregorianCalendar startDate = new GregorianCalendar(2022, 11, 18);
+        GregorianCalendar endDate = new GregorianCalendar(2022, 11, 30);
+
+        ArrayList<Item> recipes = new ArrayList<>();
+        recipes.add(mockRecipe1);
+        recipes.add(mockRecipe2);
+        recipes.add(mockRecipe3);
+
+        ArrayList<Item> ingredients = new ArrayList<>();
+        ingredients.add(mockIngredient1);
+        ingredients.add(mockIngredient2);
+
+        TreeMap<GregorianCalendar, ArrayList<Item>> datedRecipes = new TreeMap<>();
+        datedRecipes.put(new GregorianCalendar(2022, 11, 18), recipes);
+        datedRecipes.put(new GregorianCalendar(2022, 11, 19), ingredients);
+
+        MealPlan mealPlan = new MealPlan(startDate, endDate, datedRecipes);
+
+        TreeMap<GregorianCalendar, ArrayList<Item>> mealPlanItems = mealPlan.getMealPlanItems();
+        Collection<ArrayList<Item>> allMealPlanItems = mealPlanItems.values();
+        HashMap<String, Integer> mealPlanIngredients = new HashMap<>();
+        for (ArrayList<Item> itemList : allMealPlanItems) {
+            for (Item item : itemList) {
+                if (item instanceof RecipeItem) {
+                    for (IngredientItem ingredient : ((RecipeItem) item).getIngredients()) {
+                        if (mealPlanIngredients.containsKey(ingredient.getName())) {
+                            mealPlanIngredients.put(ingredient.getName(), mealPlanIngredients.get(ingredient.getName()) + 1);
+                        }
+                        mealPlanIngredients.put(ingredient.getName(), ingredient.getAmount());
+                    }
+                } else if (item instanceof IngredientItem) {
+                    mealPlanIngredients.put(item.getName(), ((IngredientItem) item).getAmount());
+                }
+            }
+        }
+
+        ArrayList<IngredientItem> storedIngredients = IngredientDL.getInstance().getStorage();
+
+
+
+        return countedIngredients;
     }
 }
