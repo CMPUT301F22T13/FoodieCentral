@@ -1,5 +1,6 @@
 package com.example.cmput301f22t13.uilayer.shoppinglist;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,11 +8,14 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import com.example.cmput301f22t13.databinding.FragmentShoppingListMainBinding;
 import com.example.cmput301f22t13.datalayer.IngredientDL;
 import com.example.cmput301f22t13.domainlayer.item.CountedIngredient;
 import com.example.cmput301f22t13.domainlayer.item.IngredientItem;
+import com.example.cmput301f22t13.domainlayer.utils.Utils;
+
 import java.util.ArrayList;
 
 public class ShoppingListMainFragment extends Fragment {
@@ -33,6 +37,8 @@ public class ShoppingListMainFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         binding.purchasedIngredientButton.setVisibility(View.GONE);
+
+        Utils.populateShoppingList();
 
         IngredientItem item1 = new IngredientItem();
         item1.setName("Apple");
@@ -70,6 +76,7 @@ public class ShoppingListMainFragment extends Fragment {
                 binding.purchasedIngredientButton.setText(buttonText);
 
                 binding.purchasedIngredientButton.setOnClickListener(new View.OnClickListener() {
+                    @RequiresApi(api = Build.VERSION_CODES.O)
                     @Override
                     public void onClick(View view) {
                         IngredientDL.getInstance().firebaseAddEdit(ingredientItem);
