@@ -211,14 +211,8 @@ public class AddEditViewRecipeFragment extends Fragment {
             binding.addIngredientToRecipe.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    //TODO UNCOMMENT THIS IF THINGS DON'T WORK
                     NavHostFragment.findNavController(AddEditViewRecipeFragment.this)
                             .navigate(R.id.action_add_ingredient_to_recipe);
-                    /*NavHostFragment.findNavController(AddEditViewRecipeFragment.this)
-                            .navigate(R.id.action_addEditViewRecipeFragment_to_ingredient_storage_nav_graph);
-
-                    RecipeItem newRecipe = createNewRecipe();
-                    listener.changeRecipe(recipe, newRecipe);*/
                 }
             });
 
@@ -226,15 +220,12 @@ public class AddEditViewRecipeFragment extends Fragment {
             binding.listOfIngredients.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                    binding.listOfIngredients.setSelected(true);
                     binding.deleteIngredientFromRecipe.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
                             try {
                                 ingredientsAdapter.remove(recipe.getIngredients().get(i).getName());
                                 IngredientItem ingredientItem = recipe.getIngredients().get(i);
-                                //recipe.deleteIngredient(i);
-                                binding.listOfIngredients.setSelected(false);
                                 ingredientsAdapter.notifyDataSetChanged();
                                 listener.onDeletePressed(ingredientItem);
                             } catch (IndexOutOfBoundsException e) {

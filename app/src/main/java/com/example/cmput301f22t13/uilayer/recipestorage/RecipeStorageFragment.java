@@ -223,8 +223,6 @@ public class RecipeStorageFragment extends Fragment {
         }
     }
 
-
-
     /**
      * This function is called when the view created has been detached from the fragment.
      */
