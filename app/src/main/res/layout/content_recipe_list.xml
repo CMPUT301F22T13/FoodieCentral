@@ -2,19 +2,23 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    android:background="@drawable/recipe_item_background_shiv"
+    android:padding="5dp">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="59dp"
+        android:layout_marginLeft="10dp"
         android:layout_weight="1"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingRight="5dp">
 
         <TextView
             android:id="@+id/recipe_name_for_view"
             style="@style/RecipeStorageListItem"
             android:layout_width="130dp"
-            android:layout_height="75dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center|center_horizontal|center_vertical"
             android:textAlignment="gravity"
@@ -29,8 +33,8 @@
             android:layout_weight="1"
             android:adjustViewBounds="false"
             android:foregroundGravity="center"
-            android:src="@drawable/noimage"
-            android:scaleType="fitXY" />
+            android:scaleType="fitXY"
+            android:src="@drawable/noimage" />
     </LinearLayout>
 
 </LinearLayout>

@@ -140,4 +140,3 @@ public class AddIngredientToRecipeFragment extends Fragment {
         binding = null;
     }
 }
-
