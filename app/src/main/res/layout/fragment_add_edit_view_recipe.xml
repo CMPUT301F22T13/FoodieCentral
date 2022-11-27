@@ -12,26 +12,6 @@
         android:layout_height="wrap_content"
         tools:context=".uilayer.ingredientstorage.AddEditViewIngredientFragment">
 
-        <TextView
-            android:id="@+id/preparation_time_heading"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:text="Preparation Time\n       (in mins.)"
-            android:textSize="16sp"
-            app:layout_constraintBaseline_toBaselineOf="@+id/preparation_time_edit"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <TextView
-            android:id="@+id/recipe_name_heading"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:text="Recipe Name"
-            android:textSize="16sp"
-            app:layout_constraintBaseline_toBaselineOf="@+id/recipe_name_edit"
-            app:layout_constraintStart_toStartOf="parent" />
-
         <Button
             android:id="@+id/save_button"
             android:layout_width="wrap_content"
@@ -44,114 +24,113 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/recipe_image_view" />
 
-        <TextView
-            android:id="@+id/servings_heading"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:text="Servings"
-            android:textSize="16sp"
-            app:layout_constraintBaseline_toBaselineOf="@+id/servings_edit"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <TextView
-            android:id="@+id/category_heading"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:text="Category"
-            android:textSize="16sp"
-            app:layout_constraintBaseline_toBaselineOf="@+id/category_edit"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <TextView
-            android:id="@+id/comments_heading"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="36dp"
-            android:text="Comments"
-            android:textSize="16sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/category_heading" />
-
-        <TextView
-            android:id="@+id/ingredients_heading"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="16dp"
-            android:text="Ingredients"
-            android:textSize="16sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/comments_edit" />
-
-        <EditText
-            android:id="@+id/recipe_name_edit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:ems="10"
-            android:inputType="textPersonName"
-            android:imeOptions="actionDone"
-            android:singleLine="true"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <EditText
-            android:id="@+id/preparation_time_edit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:ems="10"
-            android:gravity="start|top"
-            android:imeOptions="actionDone"
-            android:inputType="number"
-            android:singleLine="true"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/recipe_name_edit" />
-
-        <EditText
-            android:id="@+id/servings_edit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:ems="10"
-            android:inputType="number"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/preparation_time_edit" />
-
-        <EditText
-            android:id="@+id/category_edit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:ems="10"
-            android:inputType="textPersonName"
-            android:imeOptions="actionDone"
-            android:singleLine="true"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/servings_edit" />
-
-        <EditText
-            android:id="@+id/comments_edit"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/recipeNameTextLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:ems="10"
-            android:imeOptions="actionDone"
-            android:lines="4"
-            android:maxLength="100"
-            android:minLines="1"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="32dp"
+            android:hint="Recipe Name"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/comments_heading" />
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/recipe_name_edit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/preparationTimeTextLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="32dp"
+            android:hint="Preparation Time (in mins.)"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/recipeNameTextLayout">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/preparation_time_edit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/servingsTextLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="32dp"
+            android:hint="Servings"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/preparationTimeTextLayout">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/servings_edit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/categoryTextLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="32dp"
+            android:hint="Category"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/servingsTextLayout">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/category_edit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/commentsTextLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="32dp"
+            android:hint="Comments"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/categoryTextLayout">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/comments_edit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:text="Ingredients"
+            android:textSize="20dp"
+            app:layout_constraintBottom_toTopOf="@+id/list_of_ingredients"
+            app:layout_constraintStart_toStartOf="@+id/list_of_ingredients"
+            app:layout_constraintTop_toBottomOf="@+id/commentsTextLayout" />
 
         <ImageView
             android:id="@+id/recipe_image_view"
@@ -170,26 +149,25 @@
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/add_ingredient_to_recipe"
+            style="@style/RecipeButtons"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:clickable="true"
             android:src="@android:drawable/ic_input_add"
-            app:backgroundTint="#00BCD4"
-            app:fabCustomSize="30dp"
+            app:fabCustomSize="40dp"
             app:fabSize="mini"
-            app:layout_constraintEnd_toEndOf="@+id/comments_edit"
-            app:layout_constraintTop_toTopOf="@+id/list_of_ingredients" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/list_of_ingredients"
+            app:layout_constraintTop_toTopOf="@+id/textView2" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/delete_ingredient_from_recipe"
+            style="@style/RecipeButtons"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:layout_marginEnd="16dp"
             android:clickable="true"
             android:src="@android:drawable/ic_delete"
-            app:backgroundTint="#FF0000"
-            app:fabCustomSize="30dp"
+            app:fabCustomSize="40dp"
             app:fabSize="mini"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/list_of_ingredients"
@@ -199,15 +177,14 @@
             android:id="@+id/list_of_ingredients"
             android:layout_width="0dp"
             android:layout_height="100dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="20dp"
             android:drawSelectorOnTop="false"
-            android:listSelector="@android:color/holo_red_light"
             android:nestedScrollingEnabled="true"
             app:layout_constraintBottom_toTopOf="@+id/recipe_image_view"
-            app:layout_constraintEnd_toStartOf="@+id/add_ingredient_to_recipe"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ingredients_heading"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintEnd_toEndOf="@+id/commentsTextLayout"
+            app:layout_constraintStart_toStartOf="@+id/commentsTextLayout"
+            app:layout_constraintTop_toBottomOf="@+id/commentsTextLayout" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

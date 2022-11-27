@@ -50,11 +50,6 @@ public class RecipeStorageActivity extends AppCompatActivity implements ViewReci
      */
     private ActivityRecipeStorageBinding binding;
 
-    /**
-     * This variable holds an array list of {@link RecipeItem} objects.
-     */
-    private ArrayList<RecipeItem> recipeDataList;
-
     public static final String RECIPE = "recipe";
 
     /**
