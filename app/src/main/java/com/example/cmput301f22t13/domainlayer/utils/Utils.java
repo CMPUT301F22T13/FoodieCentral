@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicLong;
 /** Public class for utility functions such as getting a hash
@@ -61,8 +62,11 @@ public class Utils {
         IngredientItem mockIngredient3 = new IngredientItem();
 
         mockIngredient1.setName("Chicken");
+        mockIngredient1.setAmount(5);
         mockIngredient2.setName("Broccoli");
+        mockIngredient2.setAmount(3);
         mockIngredient3.setName("Rice");
+        mockIngredient3.setAmount(10);
 
         mockRecipe1.setName("Chicken and Rice");
         mockRecipe1.addIngredient(mockIngredient1);
@@ -102,20 +106,45 @@ public class Utils {
             for (Item item : itemList) {
                 if (item instanceof RecipeItem) {
                     for (IngredientItem ingredient : ((RecipeItem) item).getIngredients()) {
-                        if (mealPlanIngredients.containsKey(ingredient.getName())) {
-                            mealPlanIngredients.put(ingredient.getName(), mealPlanIngredients.get(ingredient.getName()) + 1);
+                        if (mealPlanIngredients.containsKey(ingredient.getName().toLowerCase())) {
+                            int currentIngredientCount = mealPlanIngredients.get(ingredient.getName().toLowerCase());
+                            int newAmount = currentIngredientCount + currentIngredientCount;
+                            mealPlanIngredients.put(ingredient.getName().toLowerCase(), newAmount);
+                        } else {
+                            mealPlanIngredients.put(ingredient.getName().toLowerCase(), ingredient.getAmount());
                         }
-                        mealPlanIngredients.put(ingredient.getName(), ingredient.getAmount());
                     }
                 } else if (item instanceof IngredientItem) {
-                    mealPlanIngredients.put(item.getName(), ((IngredientItem) item).getAmount());
+                    if (mealPlanIngredients.containsKey(item.getName().toLowerCase())) {
+                        int currentIngredientCount = mealPlanIngredients.get(item.getName().toLowerCase());
+                        int newAmount = currentIngredientCount + currentIngredientCount;
+                        mealPlanIngredients.put(item.getName().toLowerCase(), newAmount);
+                    } else {
+                        mealPlanIngredients.put(item.getName().toLowerCase(), ((IngredientItem) item).getAmount());
+                    }
                 }
             }
         }
 
-        ArrayList<IngredientItem> storedIngredients = IngredientDL.getInstance().getStorage();
-
-
+        ArrayList<IngredientItem> storedIngredientsDL = IngredientDL.getInstance().getStorage();
+        HashMap<String, Integer> storedIngredient = new HashMap<>();
+        for (IngredientItem ingredientItem : storedIngredientsDL) {
+            storedIngredient.put(ingredientItem.getName().toLowerCase(), ingredientItem.getAmount());
+        }
+        for (String ingredientName : mealPlanIngredients.keySet()) {
+            if (storedIngredient.containsKey(ingredientName)) {
+                int neededIngredients = mealPlanIngredients.get(ingredientName) - storedIngredient.get(ingredientName);
+                CountedIngredient countedIngredient = new CountedIngredient();
+                countedIngredient.setName(ingredientName);
+                countedIngredient.setCount(neededIngredients);
+                countedIngredients.add(countedIngredient);
+            } else {
+                CountedIngredient countedIngredient = new CountedIngredient();
+                countedIngredient.setName(ingredientName);
+                countedIngredient.setCount(mealPlanIngredients.get(ingredientName));
+                countedIngredients.add(countedIngredient);
+            }
+        }
 
         return countedIngredients;
     }
