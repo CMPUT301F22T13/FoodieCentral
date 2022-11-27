@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -49,6 +51,7 @@ public class Login extends AppCompatActivity {
    // GoogleSignInOptions gso;
     //GoogleSignInClient gsc;
     private LoginDL loginDL = LoginDL.getInstance();
+    private Button logoutBtn;
 
 ////    @Override
 ////    protected void onStart() {
@@ -61,6 +64,9 @@ public class Login extends AppCompatActivity {
 ////        }
 //    }
 
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,6 +78,7 @@ public class Login extends AppCompatActivity {
         loginEmail = findViewById(R.id.loginEmail);
         loginPassword = findViewById(R.id.loginPassword);
         loginBtn = findViewById(R.id.loginBtn);
+        logoutBtn = findViewById(R.id.menuShare);
         createBtn = findViewById(R.id.createClick);
         forgotPasswordBtn = findViewById(R.id.forgetPasswordBtn);
         loginProgressBar = findViewById(R.id.loginProgressBar);
@@ -139,6 +146,8 @@ public class Login extends AppCompatActivity {
             }
         });
 
+
+
         //Forgot password clicked - reset password dialog along side reset email conditon
         forgotPasswordBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -181,4 +190,27 @@ public class Login extends AppCompatActivity {
 
 
     }
+
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        // R.menu.mymenu is a reference to an xml file named mymenu.xml which should be inside your res/menu directory.
+//        // If you don't have res/menu, just create a directory named "menu" inside res
+//        getMenuInflater().inflate(R.menu.mymenu, menu);
+//        return super.onCreateOptionsMenu(menu);
+//    }
+//
+//    // handle button activities
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        int id = item.getItemId();
+//
+//        if (id == R.id.menuShare) {
+//            // do something here
+//
+//
+//
+//        }
+//        return super.onOptionsItemSelected(item);
+//    }
+
 }

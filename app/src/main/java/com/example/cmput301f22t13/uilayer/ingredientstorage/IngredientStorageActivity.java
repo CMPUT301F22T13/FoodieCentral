@@ -99,6 +99,8 @@ public class IngredientStorageActivity extends AppCompatActivity implements AddE
 
     }
 
+
+
     @Override
     public boolean onSupportNavigateUp() {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_ingredient_storage);
@@ -118,5 +120,7 @@ public class IngredientStorageActivity extends AppCompatActivity implements AddE
         Log.d("IngredientStorage", "onDeletePressed");
         ingredientDL.firebaseDelete(ingredientItem);
     }
+
+
 
 }

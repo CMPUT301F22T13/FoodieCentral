@@ -3,9 +3,14 @@ package com.example.cmput301f22t13.uilayer.recipestorage;
 import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -23,7 +28,9 @@ import com.example.cmput301f22t13.R;
 import com.example.cmput301f22t13.databinding.FragmentRecipeStorageBinding;
 import com.example.cmput301f22t13.datalayer.RecipeDL;
 import com.example.cmput301f22t13.domainlayer.item.RecipeItem;
+import com.example.cmput301f22t13.uilayer.userlogin.Login;
 import com.example.cmput301f22t13.uilayer.userlogin.ResultListener;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -102,6 +109,7 @@ public class RecipeStorageFragment extends Fragment {
      */
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        setHasOptionsMenu(true);
 
         if (recipeDataList != null) {
             recipeAdapter = new RecipeListArrayAdapter(getActivity(), recipeDataList);
@@ -221,6 +229,41 @@ public class RecipeStorageFragment extends Fragment {
             });
 
         }
+    }
+
+    /** onCreateOptionsMenu - inflates the menu xml file into the action bar
+     *
+     * */
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.mymenu, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    /** onOptionsItemSelected - handles on click events with menu items
+     *
+     * */
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if(item.getItemId() ==R.id.menuLogout){
+            logoutUser();
+            return true;
+
+        }
+        return false;
+    }
+
+    /** logoutUser - signs current user out and sends user to the login page
+     *
+     * */
+
+    private void logoutUser() {
+        //Normal user logout
+        Log.d("TAG", "logoutUser: " + FirebaseAuth.getInstance().getCurrentUser().getUid());
+        FirebaseAuth.getInstance().signOut();
+        Intent intent = new Intent(getActivity(), Login.class);
+        startActivity(intent);
+
     }
 
     /**
