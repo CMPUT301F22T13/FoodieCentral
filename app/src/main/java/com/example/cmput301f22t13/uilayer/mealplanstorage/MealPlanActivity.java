@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import com.example.cmput301f22t13.uilayer.ingredientstorage.IngredientStorageActivity;
 import com.example.cmput301f22t13.uilayer.recipestorage.RecipeStorageActivity;
+import com.example.cmput301f22t13.uilayer.shoppinglist.ShoppingListActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.snackbar.Snackbar;
@@ -58,7 +59,7 @@ public class MealPlanActivity extends AppCompatActivity {
                         startActivity(recipeIntent);
                         return true;
                     case R.id.shoppingList:
-                        Intent shoppingListIntent = new Intent(MealPlanActivity.this, RecipeStorageActivity.class);
+                        Intent shoppingListIntent = new Intent(MealPlanActivity.this, ShoppingListActivity.class);
                         startActivity(shoppingListIntent);
                     case R.id.mealPlanning:
                         return true;
