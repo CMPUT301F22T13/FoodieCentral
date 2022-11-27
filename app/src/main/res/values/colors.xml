@@ -10,4 +10,8 @@
     <color name="light_grey">#DDDDDD</color>
     <color name="dark_grey">#8A8A8A</color>
     <color name="storagebackground">#3367CF</color>
+    <color name="recipelistcolor">#CAF2F0</color>
+    <color name="listcolor1">#F8CBAD</color>
+    <color name="listcolor2">#C5E0B4</color>
+    <color name="listcolor3">#F6C2FF</color>
 </resources>

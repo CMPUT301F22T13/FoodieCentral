@@ -15,14 +15,14 @@
             app:destination="@id/mealPlanViewFragment" />
     </fragment>
     <fragment
-        android:id="@+id/mealPlanViewFragment"
-        android:name="com.example.cmput301f22t13.uilayer.mealplanstorage.MealPlanViewFragment"
-        android:label="Meal Plan">
+        android:id="@+id/mealPlanEditFragment"
+        android:name="com.example.cmput301f22t13.uilayer.mealplanstorage.MealPlanEditFragment"
+        android:label="Edit Meal Plan">
         <action
-            android:id="@+id/action_mealPlanViewFragment_to_mealPlanAddIngredientFragment"
+            android:id="@+id/action_mealPlanEditFragment_to_mealPlanAddIngredientFragment"
             app:destination="@id/mealPlanAddIngredientFragment" />
         <action
-            android:id="@+id/action_mealPlanViewFragment_to_mealPlanAddRecipeFragment"
+            android:id="@+id/action_mealPlanEditFragment_to_mealPlanAddRecipeFragment"
             app:destination="@id/mealPlanAddRecipeFragment" />
     </fragment>
     <fragment
@@ -35,4 +35,13 @@
         android:name="com.example.cmput301f22t13.uilayer.mealplanstorage.MealPlanAddRecipeFragment"
         android:label="fragment_meal_plan_add_recipe"
         tools:layout="@layout/fragment_meal_plan_add_recipe" />
+    <fragment
+        android:id="@+id/mealPlanViewFragment"
+        android:name="com.example.cmput301f22t13.uilayer.mealplanstorage.MealPlanViewFragment"
+        android:label="fragment_meal_plan_view"
+        tools:layout="@layout/fragment_meal_plan_view" >
+        <action
+            android:id="@+id/action_mealPlanViewFragment_to_mealPlanEditFragment"
+            app:destination="@id/mealPlanEditFragment" />
+    </fragment>
 </navigation>

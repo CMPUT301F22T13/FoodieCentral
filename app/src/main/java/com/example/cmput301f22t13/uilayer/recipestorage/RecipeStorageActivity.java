@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import android.view.MenuItem;
 
 import com.example.cmput301f22t13.uilayer.ingredientstorage.IngredientStorageActivity;
+import com.example.cmput301f22t13.uilayer.mealplanstorage.MealPlanActivity;
 import com.example.cmput301f22t13.uilayer.shoppinglist.ShoppingListActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
@@ -37,7 +38,7 @@ import java.util.ArrayList;
  * @author Shiv Chopra
  * @version 1.0
  */
-public class RecipeStorageActivity extends AppCompatActivity implements AddEditViewRecipeFragment.OnRecipeItemChangedListener, AddEditViewIngredientFragment.OnIngredientItemChangeListener {
+public class RecipeStorageActivity extends AppCompatActivity implements ViewRecipeFragment.OnRecipeItemChangedListener, AddEditViewRecipeFragment.OnRecipeItemChangedListener, AddEditViewIngredientFragment.OnIngredientItemChangeListener {
 
     /**
      * This variable is for configuration of the app bar.
@@ -48,11 +49,6 @@ public class RecipeStorageActivity extends AppCompatActivity implements AddEditV
      * This variable is for data binding.
      */
     private ActivityRecipeStorageBinding binding;
-
-    /**
-     * This variable holds an array list of {@link RecipeItem} objects.
-     */
-    private ArrayList<RecipeItem> recipeDataList;
 
     public static final String RECIPE = "recipe";
 
@@ -109,6 +105,10 @@ public class RecipeStorageActivity extends AppCompatActivity implements AddEditV
                         Intent shoppingListIntent = new Intent(RecipeStorageActivity.this, ShoppingListActivity.class);
                         startActivity(shoppingListIntent);
                         return true;
+                    case R.id.mealPlanning:
+                        Intent mealPlanningIntent = new Intent(RecipeStorageActivity.this, MealPlanActivity.class);
+                        startActivity(mealPlanningIntent);
+                        return true;
                 }
                 return false;
             }
@@ -119,7 +119,7 @@ public class RecipeStorageActivity extends AppCompatActivity implements AddEditV
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_recipe_storage);
         Bundle bundle = new Bundle();
         bundle.putSerializable("init_recipes", recipeDL.getStorage());
-        navController.setGraph(R.navigation.nav_recipestorage_to_viewrecipe, bundle);
+        navController.setGraph(R.navigation.nav_recipestorage_to_viewfrag, bundle);
 
         appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
@@ -194,5 +194,7 @@ public class RecipeStorageActivity extends AppCompatActivity implements AddEditV
 
     @Override
     public void onDeletePressed(IngredientItem ingredientItem) {
+        recipeSelected.deleteIngredient(ingredientItem);
+        recipeDL.firebaseAddEdit(this.recipeSelected);
     }
 }

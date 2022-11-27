@@ -112,9 +112,9 @@ public class RecipeStorageFragment extends Fragment {
                     RecipeItem recipe = (RecipeItem) adapterView.getItemAtPosition(i);
                     ((RecipeStorageActivity) getActivity()).recipeSelected(recipe);
                     Bundle bundle = new Bundle();
-                    bundle.putSerializable(AddEditViewRecipeFragment.RECIPE_PASSED, recipe);
+                    bundle.putSerializable(ViewRecipeFragment.RECIPE_PASSED, recipe);
                     NavHostFragment.findNavController(RecipeStorageFragment.this)
-                            .navigate(R.id.recipe_action_storage_to_view, bundle);
+                            .navigate(R.id.view_recipe_action, bundle);
                 }
             });
 
@@ -125,7 +125,7 @@ public class RecipeStorageFragment extends Fragment {
                    Bundle bundle = new Bundle();
                    bundle.putSerializable(AddEditViewRecipeFragment.RECIPE_PASSED, new RecipeItem());
                     NavHostFragment.findNavController(RecipeStorageFragment.this)
-                            .navigate(R.id.recipe_action_storage_to_view, bundle);
+                            .navigate(R.id.recipe_action_storage_to_addedit, bundle);
 
                 }
             });
@@ -222,8 +222,6 @@ public class RecipeStorageFragment extends Fragment {
 
         }
     }
-
-
 
     /**
      * This function is called when the view created has been detached from the fragment.

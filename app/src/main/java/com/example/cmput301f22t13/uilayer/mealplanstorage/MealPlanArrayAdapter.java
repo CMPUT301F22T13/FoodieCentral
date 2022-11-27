@@ -26,7 +26,7 @@ public class MealPlanArrayAdapter extends ArrayAdapter<MealPlan> {
     public MealPlanArrayAdapter(Context context, ArrayList<MealPlan> mealPlans) {
         super(context, 0, mealPlans);
         this.context = context;
-        this.mealPlans = mealPlanDL.getStorage();
+        this.mealPlans = mealPlans;
     }
 
     @NonNull
@@ -39,12 +39,10 @@ public class MealPlanArrayAdapter extends ArrayAdapter<MealPlan> {
         }
 
         MealPlan item = mealPlans.get(position);
-        TextView start = view.findViewById(R.id.meal_plan_list_item_start_date);
-        TextView end = view.findViewById(R.id.meal_plan_list_item_end_date);
+        TextView text = view.findViewById(R.id.meal_plan_list_item_start_date);
 
         SimpleDateFormat formatter = new SimpleDateFormat("EEE, MMM d");
-        start.setText(formatter.format(item.getStartDate().getTime()));
-        end.setText(formatter.format(item.getEndDate().getTime()));
+        text.setText(formatter.format(item.getStartDate().getTime()) + " - " + formatter.format(item.getEndDate().getTime()));
 
         return view;
     }
