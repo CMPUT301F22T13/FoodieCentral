@@ -69,19 +69,16 @@ public class IngredientViewFragment extends Fragment {
         }
 
         if (ingredient.getName() != null) {
-            binding.viewIngredientNameTextview.setText(ingredient.getName());
+            if (ingredient.getAmount() != null && ingredient.getAmount() != 0.0 && ingredient.getUnit() != null && !ingredient.getUnit().equals("")) {
+                binding.viewIngredientHeaderTextview.setText(ingredient.getName() + " - " + ingredient.getAmount() + " " + ingredient.getUnit());
+            }
+            else {
+                binding.viewIngredientHeaderTextview.setText(ingredient.getName());
+            }
         }
 
         if (ingredient.getDescription() != null) {
             binding.viewIngredientDescriptionTextview.setText(ingredient.getDescription());
-        }
-
-        if (ingredient.getAmount() != null) {
-            binding.viewIngredientAmountTextview.setText(ingredient.getAmount().toString());
-        }
-
-        if (ingredient.getUnit() != null) {
-            binding.viewIngredientUnitTextview.setText(ingredient.getUnit());
         }
 
         if (ingredient.getCategory() != null) {
