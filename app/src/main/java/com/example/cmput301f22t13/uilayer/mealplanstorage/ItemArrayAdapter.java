@@ -87,7 +87,7 @@ public class ItemArrayAdapter extends ArrayAdapter<Item> {
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if (charSequence.length() > 0) {
                     if (item instanceof IngredientItem) {
-                        ((IngredientItem)item).setAmount(Double.valueOf(charSequence.toString()));
+                        ((IngredientItem)item).setAmount(Integer.valueOf(charSequence.toString()));
                     }
                     else if (item instanceof RecipeItem) {
                         ((RecipeItem)item).setServings(Integer.valueOf(charSequence.toString()));
