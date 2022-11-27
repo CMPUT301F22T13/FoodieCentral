@@ -106,8 +106,8 @@ public class Utils {
             for (Item item : itemList) {
                 if (item instanceof RecipeItem) {
                     for (IngredientItem ingredient : ((RecipeItem) item).getIngredients()) {
-                        if (mealPlanIngredients.containsKey(ingredient.getName())) {
-                            int currentIngredientCount = mealPlanIngredients.get(ingredient.getName());
+                        if (mealPlanIngredients.containsKey(ingredient.getName().toLowerCase())) {
+                            int currentIngredientCount = mealPlanIngredients.get(ingredient.getName().toLowerCase());
                             int newAmount = currentIngredientCount + currentIngredientCount;
                             mealPlanIngredients.put(ingredient.getName().toLowerCase(), newAmount);
                         } else {
@@ -115,8 +115,8 @@ public class Utils {
                         }
                     }
                 } else if (item instanceof IngredientItem) {
-                    if (mealPlanIngredients.containsKey(item.getName())) {
-                        int currentIngredientCount = mealPlanIngredients.get(item.getName());
+                    if (mealPlanIngredients.containsKey(item.getName().toLowerCase())) {
+                        int currentIngredientCount = mealPlanIngredients.get(item.getName().toLowerCase());
                         int newAmount = currentIngredientCount + currentIngredientCount;
                         mealPlanIngredients.put(item.getName().toLowerCase(), newAmount);
                     } else {
@@ -132,20 +132,20 @@ public class Utils {
             storedIngredient.put(ingredientItem.getName().toLowerCase(), ingredientItem.getAmount());
         }
         for (String ingredientName : mealPlanIngredients.keySet()) {
-
+            if (storedIngredient.containsKey(ingredientName)) {
+                int neededIngredients = mealPlanIngredients.get(ingredientName) - storedIngredient.get(ingredientName);
+                CountedIngredient countedIngredient = new CountedIngredient();
+                countedIngredient.setName(ingredientName);
+                countedIngredient.setCount(neededIngredients);
+                countedIngredients.add(countedIngredient);
+            } else {
+                CountedIngredient countedIngredient = new CountedIngredient();
+                countedIngredient.setName(ingredientName);
+                countedIngredient.setCount(mealPlanIngredients.get(ingredientName));
+                countedIngredients.add(countedIngredient);
+            }
         }
-//        for (IngredientItem item : storedIngredients) {
-//            item.setName(item.getName().toLowerCase());
-//            if (mealPlanIngredients.containsKey(item.getName())) {
-//                int countDifference = mealPlanIngredients.get(item.getName()) - item.getAmount();
-//                if (countDifference > 0) {
-//                    CountedIngredient countedIngredient = new CountedIngredient();
-//                    countedIngredient.setName(item.getName());
-//                    countedIngredient.setCount(countDifference);
-//                    countedIngredients.add(countedIngredient);
-//                }
-//            }
-//        }
+
         return countedIngredients;
     }
 }
