@@ -105,95 +105,98 @@ public class MealPlanDL extends FireBaseDL {
                                 days.document(doc.getId()).collection("Recipe Storage").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                                     @Override
                                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                                        RecipeItem r = new RecipeItem();
+                                        for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
+                                            RecipeItem r = new RecipeItem();
 
-                                        String hash = doc.getId();
-                                        String title = doc.getString("Title");
-                                        try {
-                                            int prep = doc.getDouble("Prep Time").intValue();
-                                            int servings = doc.getDouble("Servings").intValue();
-                                            r.setPrepTime(prep);
-                                            r.setServings(servings);
-                                        } catch (Exception e) {
-                                        }
+                                            String hash = doc.getId();
+                                            String title = doc.getString("Title");
+                                            try {
+                                                int prep = doc.getDouble("Prep Time").intValue();
+                                                int servings = doc.getDouble("Servings").intValue();
+                                                r.setPrepTime(prep);
+                                                r.setServings(servings);
+                                            } catch (Exception e) {
+                                            }
 
-                                        String category = doc.getString("Category");
-                                        String comments = doc.getString("Comments");
-                                        String photo = doc.getString("Photo");
-
-
-                                        r.setTitle(title);
-                                        r.setHashId(hash);
-                                        r.setCategory(category);
-                                        r.setComments(comments);
-                                        r.setPhoto(photo);
+                                            String category = doc.getString("Category");
+                                            String comments = doc.getString("Comments");
+                                            String photo = doc.getString("Photo");
 
 
-                                        days.document(doc.getId())
-                                                .collection("Recipe Storage").document(r.getHashId())
-                                                .collection("Ingredients").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                                                    @Override
-                                                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                                                        for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
-                                                            String hash = doc.getId();
-                                                            String name = doc.getString("Name");
-                                                            String description = (String) doc.getData().get("Description");
-                                                            String unit = (String) doc.getData().get("Unit");
-                                                            String category = (String) doc.getData().get("Category");
-                                                            String photo = doc.getString("Photo");
-                                                            Double amount = 0.0;
-                                                            try {
-                                                                amount = (Double) doc.getDouble("Amount");
-                                                            } catch (Exception e) {
+                                            r.setTitle(title);
+                                            r.setHashId(hash);
+                                            r.setCategory(category);
+                                            r.setComments(comments);
+                                            r.setPhoto(photo);
+
+
+                                            days.document(doc.getId())
+                                                    .collection("Recipe Storage").document(r.getHashId())
+                                                    .collection("Ingredients").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                                        @Override
+                                                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                                            for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
+                                                                String hash = doc.getId();
+                                                                String name = doc.getString("Name");
+                                                                String description = (String) doc.getData().get("Description");
+                                                                String unit = (String) doc.getData().get("Unit");
+                                                                String category = (String) doc.getData().get("Category");
+                                                                String photo = doc.getString("Photo");
+                                                                Double amount = 0.0;
+                                                                try {
+                                                                    amount = (Double) doc.getDouble("Amount");
+                                                                } catch (Exception e) {
+                                                                }
+
+
+                                                                IngredientItem i = new IngredientItem();
+                                                                i.setName(name);
+                                                                i.setDescription(description);
+                                                                i.setAmount(amount.intValue());
+                                                                i.setUnit(unit);
+                                                                i.setCategory(category);
+                                                                i.setHashId(hash);
+                                                                i.setPhoto(photo);
+                                                                r.addIngredient(i);
                                                             }
-
-
-                                                            IngredientItem i = new IngredientItem();
-                                                            i.setName(name);
-                                                            i.setDescription(description);
-                                                            i.setAmount(amount.intValue());
-                                                            i.setUnit(unit);
-                                                            i.setCategory(category);
-                                                            i.setHashId(hash);
-                                                            i.setPhoto(photo);
-                                                            r.addIngredient(i);
                                                         }
-                                                    }
-                                                });
+                                                    });
 
-                                        m.addItemForDay(date, r);
+                                            m.addItemForDay(date, r);
+                                        }
                                     }
                                 });
 
                                 days.document(doc.getId()).collection("Ingredients").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                                     @Override
                                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                                        String hash = doc.getId();
-                                        String name = doc.getString("Name");
-                                        String description = (String) doc.getData().get("Description");
+                                        for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
+                                            String hash = doc.getId();
+                                            String name = doc.getString("Name");
+                                            String description = (String) doc.getData().get("Description");
 
-                                        String unit = (String) doc.getData().get("Unit");
-                                        String category = (String) doc.getData().get("Category");
-                                        String location = (String) doc.getData().get("Location");
-                                        String photo = doc.getString("Photo");
-                                        GregorianCalendar bestbefore = new GregorianCalendar();
-                                        Double amount = 0.0;
-                                        try {
-                                            bestbefore.setTimeInMillis(doc.getDouble("Best Before").longValue());
+                                            String unit = (String) doc.getData().get("Unit");
+                                            String category = (String) doc.getData().get("Category");
+                                            String location = (String) doc.getData().get("Location");
+                                            String photo = doc.getString("Photo");
+                                            GregorianCalendar bestbefore = new GregorianCalendar();
+                                            Double amount = 0.0;
+                                            try {
+                                                bestbefore.setTimeInMillis(doc.getDouble("Best Before").longValue());
 
-                                        } catch (Exception e) {
-                                        }
-                                        try {
-                                            amount = (Double) doc.getDouble("Amount");
-                                        } catch (Exception e) {
-                                        }
+                                            } catch (Exception e) { }
+                                            try {
+                                                amount = (Double) doc.getDouble("Amount");
+                                            } catch (Exception e) { }
 
 
-                                        try {
                                             IngredientItem i = new IngredientItem();
                                             i.setName(name);
                                             i.setDescription(description);
-                                            i.setAmount(amount.intValue());
+                                            try {
+                                                i.setAmount(amount.intValue());
+                                            } catch (Exception e) { }
+
                                             i.setUnit(unit);
                                             i.setCategory(category);
                                             i.setLocation(location);
@@ -202,17 +205,15 @@ public class MealPlanDL extends FireBaseDL {
                                             i.setPhoto(photo);
 
                                             m.addItemForDay(date, i);
-                                        } catch (Exception e) {
                                         }
-
                                     }
                                 });
-
                             }
+                            mealPlanStorage.add(m);
+                            listener.onSuccess();
                         }
                     });
-                    mealPlanStorage.add(m);
-                    listener.onSuccess();
+
                 }
             }
         });
@@ -278,7 +279,6 @@ public class MealPlanDL extends FireBaseDL {
                     Log.d("TAG", "firebaseAdd does not work");
                 }
             });
-
 
             // Mealplan Items
             for(Item j : i.getValue()) {
@@ -379,8 +379,8 @@ public class MealPlanDL extends FireBaseDL {
 
     }
 
-    /** Getter for ingredient storage
-     * @Returns: ArrayList<IngredientItem> representing ingredients in storage
+    /** Getter for mealplan storage
+     * @Returns: ArrayList<MealPlan> representing mealplans in storage
      * */
     public ArrayList<MealPlan> getStorage() {
         return mealPlanStorage;
