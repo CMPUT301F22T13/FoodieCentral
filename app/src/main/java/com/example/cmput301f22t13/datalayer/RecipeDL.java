@@ -131,33 +131,6 @@ public class RecipeDL extends FireBaseDL {
      * @Input: IngredientItem item - item to add or edit
      * */
     public void firebaseAddEdit(RecipeItem item) {
-        // Clear the ingredient collection
-//        fstore.collection("Users")
-//                .document(auth.getCurrentUser().getUid())
-//                .collection("Recipe Storage")
-//                .document(item.getHashId())
-//                .collection("Ingredients").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-//                    @Override
-//                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-//                        for (QueryDocumentSnapshot doc: queryDocumentSnapshots) {
-//
-//                            fstore.collection("Users")
-//                                    .document(auth.getCurrentUser().getUid())
-//                                    .collection("Recipe Storage")
-//                                    .document(item.getHashId())
-//                                    .collection("Ingredients")
-//                                    .document(doc.getId()).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-//                                        @Override
-//                                        public void onSuccess(Void unused) {
-//
-//                                        }
-//                                    });
-//                        }
-//                    }
-//                });
-
-
-
         Map<String, Object> recipe = GetRecipeHashMap(item);
 
         //Storing data in Hashmap to correct location in Firebase using uniqueKey as document reference
@@ -167,8 +140,6 @@ public class RecipeDL extends FireBaseDL {
                 .document(item.getHashId());
 
         ArrayList<IngredientItem> ingredientItems = item.getIngredients();
-
-
 
         for (IngredientItem i: ingredientItems) {
             Map<String, Object> ingredient = new HashMap<>();
