@@ -15,6 +15,7 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -36,6 +37,7 @@ public class IngredientDL extends FireBaseDL {
     /** Stores ingredients
      * */
     public static ArrayList<IngredientItem> ingredientStorage = new ArrayList<IngredientItem>();
+    private ListenerRegistration registration;
 
     /** Gets or creates current instance of the firebase DL
      * */
@@ -48,23 +50,27 @@ public class IngredientDL extends FireBaseDL {
 
     public IngredientDL() {
         // Populate ingredients here
-        populateOnStartup();
+//        populateOnStartup();
     }
 
+    public void deRegisterListener(){
+        registration.remove();
+    }
 
     /** populateIngredientsOnStartup - called when first instance of IngredientDL is made
      * listens for db changes and updates the ingredient storage accordingly
      * */
-    private void populateOnStartup() {
+    public void populateOnStartup() {
         CollectionReference getIngredients = fstore.collection("Users")
         .document(auth.getCurrentUser().getUid())
         .collection("Ingredient Storage");
 
-        getIngredients.addSnapshotListener(new EventListener<QuerySnapshot>() {
+        registration = getIngredients.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable
                     FirebaseFirestoreException error) {
                 ingredientStorage.clear();
+                if(queryDocumentSnapshots!=null)
                 for(QueryDocumentSnapshot doc: queryDocumentSnapshots)
                 {
                     String hash = doc.getId();

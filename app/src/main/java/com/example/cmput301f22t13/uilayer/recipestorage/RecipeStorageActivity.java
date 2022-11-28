@@ -72,6 +72,7 @@ public class RecipeStorageActivity extends AppCompatActivity implements ViewReci
         super.onCreate(savedInstanceState);
         binding = ActivityRecipeStorageBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        RecipeDL.getInstance().populateStorageOnStartup();
 
         RecipeItem sampleRecipe = new RecipeItem();
         sampleRecipe.setTitle("Sample Recipe");
@@ -196,5 +197,11 @@ public class RecipeStorageActivity extends AppCompatActivity implements ViewReci
     public void onDeletePressed(IngredientItem ingredientItem) {
         recipeSelected.deleteIngredient(ingredientItem);
         recipeDL.firebaseAddEdit(this.recipeSelected);
+    }
+
+    @Override
+    protected void onDestroy() {
+        RecipeDL.getInstance().deRegisterListener();
+        super.onDestroy();
     }
 }

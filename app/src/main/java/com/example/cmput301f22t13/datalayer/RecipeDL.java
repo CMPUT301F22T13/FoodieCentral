@@ -18,6 +18,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -50,22 +51,29 @@ public class RecipeDL extends FireBaseDL {
     }
 
     public RecipeDL() {
-        populateStorageOnStartup();
+        //populateStorageOnStartup();
     }
 
+    private ListenerRegistration registration;
+
+
+    public void deRegisterListener(){
+        registration.remove();
+    }
     /** populateRecipesOnStartup - called when first instance of IngredientDL is made
      * listens for db changes and updates the ingredient storage accordingly
      * */
-    private void populateStorageOnStartup() {
+     public void populateStorageOnStartup() {
         CollectionReference getRecipes = fstore.collection("Users")
                 .document(auth.getCurrentUser().getUid())
                 .collection("Recipe Storage");
 
-        getRecipes.addSnapshotListener(new EventListener<QuerySnapshot>() {
+        registration = getRecipes.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable
                     FirebaseFirestoreException error) {
                 recipeStorage.clear();
+                if(queryDocumentSnapshots!=null)
                 for(QueryDocumentSnapshot doc: queryDocumentSnapshots)
                 {
                     // TODO set all recipe dataums

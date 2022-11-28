@@ -111,7 +111,7 @@ public class AddEditViewIngredientFragment extends Fragment {
     @SuppressLint("SetTextI18n")
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        setHasOptionsMenu(true);
+
 
         if (ingredient != null) {
             if (ingredient.getName() != null) {
@@ -297,43 +297,6 @@ public class AddEditViewIngredientFragment extends Fragment {
     /** onCreaterOptionsMenu - inflates the menu xml file into the action bar
      *
      * */
-
-    @Override
-    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        inflater.inflate(R.menu.mymenu, menu);
-        super.onCreateOptionsMenu(menu, inflater);
-
-//        MenuItem item = menu.findItem(R.id.menuShare);
-//        item.setVisible(false);
-    }
-
-    /** onOptionsItemSelected - handles on click events with menu items
-     *
-     * */
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if(item.getItemId() ==R.id.menuLogout){
-            logoutUser();
-            return true;
-
-        }
-        return false;
-    }
-
-    /** logoutUser - signs current user out and sends user to the login page
-     *
-     * */
-
-    private void logoutUser() {
-
-        //Normal user logout
-        Log.d("TAG", "logoutUser: " + FirebaseAuth.getInstance().getCurrentUser().getUid());
-        FirebaseAuth.getInstance().signOut();
-        Intent intent = new Intent(getActivity(), Login.class);
-        startActivity(intent);
-
-    }
 
 
     @Override
