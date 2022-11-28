@@ -16,6 +16,22 @@
         </shape>
     </item>
 
+    <item android:state_activated="true">
+        <shape android:shape="rectangle">
+            <corners android:radius="10dp"></corners>
+            <stroke
+                android:color="#2196F3"
+                android:width="2dp">
+            </stroke>
+            <gradient
+                android:angle="270"
+                android:startColor="#2196F3"
+                android:endColor="#2196F3">
+
+            </gradient>
+        </shape>
+    </item>
+
     <item>
         <shape android:shape="rectangle">
             <corners android:radius="10dp"></corners>

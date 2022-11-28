@@ -29,8 +29,6 @@ import com.example.cmput301f22t13.domainlayer.item.RecipeItem;
 
 import com.example.cmput301f22t13.uilayer.ingredientstorage.AddEditViewIngredientFragment;
 
-import java.util.ArrayList;
-
 /**
  * This is the Activity class for the Recipe Storage. The class is a subclass of {@link AppCompatActivity} and implements {@link AddEditViewRecipeFragment.OnRecipeItemChangedListener} and {@link AddEditViewIngredientFragment.OnIngredientItemChangeListener}
  * The class inflates the layout and initializes the recipes data.
@@ -72,23 +70,6 @@ public class RecipeStorageActivity extends AppCompatActivity implements ViewReci
         super.onCreate(savedInstanceState);
         binding = ActivityRecipeStorageBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
-        RecipeItem sampleRecipe = new RecipeItem();
-        sampleRecipe.setTitle("Sample Recipe");
-        sampleRecipe.setPrepTime(120);
-        sampleRecipe.setServings(3);
-        sampleRecipe.setComments("This is a sample recipe");
-        sampleRecipe.setCategory("Dessert");
-
-        IngredientItem item1 = new IngredientItem();
-        item1.setName("Eggs");
-
-        IngredientItem item2 = new IngredientItem();
-        item2.setName("Batter");
-
-        sampleRecipe.addIngredient(item1);
-        sampleRecipe.addIngredient(item2);
-
 
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {

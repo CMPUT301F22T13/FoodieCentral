@@ -3,7 +3,6 @@ package com.example.cmput301f22t13.uilayer.recipestorage;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -37,11 +36,6 @@ public class RecipeListArrayAdapter extends ArrayAdapter<RecipeItem> {
      */
 
     private ArrayList<RecipeItem> recipes;
-
-    /**
-     * This variable stores the resource id of type {@link Integer} that is used for instantiating views.
-     */
-    private int resource;
 
     /**
      * This is the constructor to create the Recipe list array adapter.
