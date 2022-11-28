@@ -1,9 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/listcolor1"
+    android:backgroundTint="@color/listcolor1"
+    android:backgroundTintMode="add"
     app:cardBackgroundColor="#00000000"
-    app:cardCornerRadius="15dp">
+    app:cardCornerRadius="15dp"
+    app:cardElevation="8dp"
+    app:cardUseCompatPadding="true"
+    app:strokeColor="@color/listcolor1"
+    app:strokeWidth="2dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="16dp"
+        android:elevation="-10dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/mpview_date_title_textview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Mon, Nov 24"
+            android:textColor="@color/black"
+            android:textSize="24sp" />
+
+        <LinearLayout
+            android:id="@+id/meal_plan_view_item_linearlayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/meal_plan_view_list_item_compact_background"
+            android:orientation="vertical"
+            android:padding="8dp"></LinearLayout>
+    </LinearLayout>
 
 </com.google.android.material.card.MaterialCardView>
