@@ -93,7 +93,7 @@ public class MealPlanAddRecipeFragment extends Fragment {
 
     private void setSelectedItemColors() {
         // iterate through checked items and change colors of each row based on their selected state
-        SparseBooleanArray checkedItems = binding.addRecipeMealPlanListview.getCheckedItemPositions();
+        /*SparseBooleanArray checkedItems = binding.addRecipeMealPlanListview.getCheckedItemPositions();
         for (int i = 0; i < binding.addRecipeMealPlanListview.getCount(); i++) {
             View row = binding.addRecipeMealPlanListview.getChildAt(i);
             if (checkedItems.get(i)) {
@@ -102,6 +102,6 @@ public class MealPlanAddRecipeFragment extends Fragment {
             else {
                 row.setBackgroundColor(Color.WHITE);
             }
-        }
+        }*/
     }
 }

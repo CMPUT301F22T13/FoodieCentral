@@ -1,19 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="50dp"
+    android:layout_height="wrap_content"
     android:background="@drawable/meal_plan_list_item_background"
-    android:orientation="horizontal">
+    android:orientation="vertical"
+    android:padding="10dp">
 
     <TextView
         android:id="@+id/meal_plan_list_item_start_date"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
         android:layout_weight="1"
         android:gravity="center_vertical"
-        android:textAlignment="textStart"
+        android:text="Mon, Nov 15 - Wed, Nov 17"
         android:textColor="@color/black"
         android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/meal_plan_list_item_unconfigured_textview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        android:layout_weight="1"
+        android:drawableStart="@android:drawable/stat_sys_warning"
+        android:drawableTint="#FFC107"
+        android:gravity="center_vertical"
+        android:text="4 unconfigured days"
+        android:textColor="@color/black" />
 
 </LinearLayout>

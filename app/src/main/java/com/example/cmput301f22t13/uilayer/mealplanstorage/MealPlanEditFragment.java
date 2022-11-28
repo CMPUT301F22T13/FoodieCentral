@@ -1,6 +1,7 @@
 package com.example.cmput301f22t13.uilayer.mealplanstorage;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,14 +14,19 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.cmput301f22t13.R;
 import com.example.cmput301f22t13.databinding.FragmentMealPlanEditBinding;
+import com.example.cmput301f22t13.datalayer.IngredientDL;
+import com.example.cmput301f22t13.datalayer.RecipeDL;
+import com.example.cmput301f22t13.domainlayer.item.IngredientItem;
 import com.example.cmput301f22t13.domainlayer.item.Item;
 import com.example.cmput301f22t13.domainlayer.item.MealPlan;
+import com.example.cmput301f22t13.domainlayer.item.RecipeItem;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 /**
  * {@link Fragment} that allows the user to view details of a meal plan. User can also add ingredients
@@ -54,6 +60,9 @@ public class MealPlanEditFragment extends Fragment {
 
     // date selected from the dropdown
     private GregorianCalendar selectedDate;
+
+    private ArrayList<Item> hardcodedRecipes;
+    private ArrayList<Item> hardcodedIngredients;
 
     @Override
     public View onCreateView(
@@ -93,6 +102,7 @@ public class MealPlanEditFragment extends Fragment {
                 binding.mealPlanViewDateListview.setAdapter(itemsArrayAdapters.get(selectedDate));
                 itemsArrayAdapters.get(selectedDate).notifyDataSetChanged();
                 binding.addRecipeIngredientMealPlanButton.show();
+                setAutoGenerateVisibility();
             }
         });
 
@@ -114,6 +124,27 @@ public class MealPlanEditFragment extends Fragment {
             }
         });
 
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                view.requestFocus();
+                binding.mealPlanViewDateListview.setItemChecked(binding.mealPlanViewDateListview.getCheckedItemPosition(), false);
+            }
+        });
+
+        /*binding.mealPlanViewDateListview.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                selectedItem = (Item) adapterView.getItemAtPosition(i);
+                binding.deleteItemButton.show();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                binding.mealPlanViewDateListview.requestFocus();
+            }
+        });*/
+
         // only show delete button if an item is selected
         binding.deleteItemButton.setVisibility(View.GONE);
         binding.deleteItemButton.setOnClickListener(new View.OnClickListener() {
@@ -123,6 +154,7 @@ public class MealPlanEditFragment extends Fragment {
                 selectedItem = null;
                 binding.deleteItemButton.hide();
                 itemsArrayAdapters.get(selectedDate).notifyDataSetChanged();
+                setAutoGenerateVisibility();
             }
         });
 
@@ -168,12 +200,77 @@ public class MealPlanEditFragment extends Fragment {
             }
         });
 
+        setAutoGenerateVisibility();
+        binding.mealPlanAutoGenerateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ArrayList<RecipeItem> recipes = RecipeDL.getInstance().getStorage();
+
+                Random rand = new Random();
+                mealPlanItem.addItemForDay(selectedDate, new RecipeItem(recipes.get(rand.nextInt(recipes.size()))));
+                mealPlanItem.addItemForDay(selectedDate, new RecipeItem(recipes.get(rand.nextInt(recipes.size()))));
+                mealPlanItem.addItemForDay(selectedDate, new RecipeItem(recipes.get(rand.nextInt(recipes.size()))));
+                itemsArrayAdapters.get(selectedDate).notifyDataSetChanged();
+                setAutoGenerateVisibility();
+            }
+        });
+
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+
+    private void setAutoGenerateVisibility() {
+        if (selectedDate != null) {
+            if (binding.mealPlanViewDateListview.getCount() == 0) {
+                binding.mealPlanAutoGenerateButton.setVisibility(View.VISIBLE);
+            }
+            else {
+                binding.mealPlanAutoGenerateButton.setVisibility(View.GONE);
+            }
+        }
+        else {
+            binding.mealPlanAutoGenerateButton.setVisibility(View.GONE);
+        }
+    }
+
+    private void generateRandomItems() {
+        RecipeItem tacos = new RecipeItem();
+        tacos.setName("Tacos");
+        tacos.setCategory("Mexican");
+        tacos.setServings(4);
+        ArrayList<IngredientItem> tacoIngredients = new ArrayList<IngredientItem>();
+        tacoIngredients.add(new IngredientItem("Ground Beef", "", 1, "lb", "", new GregorianCalendar(), "", ""));
+        tacoIngredients.add(new IngredientItem("Tortilla", "", 4, "", "", new GregorianCalendar(), "", ""));
+        tacoIngredients.add(new IngredientItem("Salsa", "", 1, "cup", "", new GregorianCalendar(), "", ""));
+        tacoIngredients.add(new IngredientItem("Sour Cream", "", 1, "cup", "", new GregorianCalendar(), "", ""));
+        tacos.setIngredients(tacoIngredients);
+        hardcodedRecipes.add(tacos);
+
+        RecipeItem steak = new RecipeItem();
+        steak.setName("Steak & Potatoes");
+        steak.setServings(2);
+        ArrayList<IngredientItem> steakIngredients = new ArrayList<IngredientItem>();
+        steakIngredients.add(new IngredientItem("Steak (10 oz)", "", 2, "", "", new GregorianCalendar(), "", ""));
+        steakIngredients.add(new IngredientItem("Potato", "", 2, "", "", new GregorianCalendar(), "", ""));
+        steakIngredients.add(new IngredientItem("Pepper", "", 1, "tsp", "", new GregorianCalendar(), "", ""));
+        steak.setIngredients(steakIngredients);
+        hardcodedRecipes.add(steak);
+
+        RecipeItem waffles = new RecipeItem();
+        waffles.setName("Waffles");
+        waffles.setServings(2);
+        ArrayList<IngredientItem> waffleIngredients = new ArrayList<IngredientItem>();
+        waffleIngredients.add(new IngredientItem("Eggs", "", 2, "", "", new GregorianCalendar(), "", ""));
+        waffleIngredients.add(new IngredientItem("Flour", "", 2, "cup", "", new GregorianCalendar(), "", ""));
+        waffleIngredients.add(new IngredientItem("Sugar", "", 2, "tbsp", "", new GregorianCalendar(), "", ""));
+        waffleIngredients.add(new IngredientItem("Milk", "", 1, "cup", "", new GregorianCalendar(), "", ""));
+        waffleIngredients.add(new IngredientItem("Vanilla", "", 1, "tsp", "", new GregorianCalendar(), "", ""));
+        waffles.setIngredients(waffleIngredients);
+        hardcodedRecipes.add(waffles);
     }
 
 }

@@ -20,6 +20,7 @@
 
     <ListView
         android:id="@+id/add_ingredient_meal_plan_listview"
+        style="@style/ListView"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="16dp"
