@@ -259,7 +259,7 @@ public class MealPlanDL extends FireBaseDL {
                     //Storing data in Hashmap to correct location in Firebase using uniqueKey as document reference
                     DocumentReference recipeStorage = daysStorage
                             .collection("Recipe Storage")
-                            .document(item.getHashId());
+                            .document(j.getHashId());
 
                     ArrayList<IngredientItem> ingredientItems = ((RecipeItem) j).getIngredients();
 
@@ -268,7 +268,7 @@ public class MealPlanDL extends FireBaseDL {
 
                         DocumentReference ingredientStorage = daysStorage
                                 .collection("Recipe Storage")
-                                .document(item.getHashId())
+                                .document(j.getHashId())
                                 .collection("Ingredients")
                                 .document(k.getHashId());
 
