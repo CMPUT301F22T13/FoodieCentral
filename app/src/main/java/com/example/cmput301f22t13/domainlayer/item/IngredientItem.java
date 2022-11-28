@@ -16,22 +16,25 @@ import java.security.NoSuchAlgorithmException;
 public class IngredientItem extends Item implements Serializable {
 
     private String description;
-    private Integer amount;
+    private Double amount;
     private String unit;
     private String category;
     private GregorianCalendar bbd;
     private String location;
+
+    private boolean fromShoppingList;
 
     /**
      * Constructor that initializes all ingredient fields to default values
      */
     public IngredientItem () {
         this.description = "";
-        this.amount = 0;
+        this.amount = 0.0;
         this.unit = "";
         this.category = "";
         this.bbd = new GregorianCalendar();
         this.location = "";
+        this.fromShoppingList = false;
     }
 
 
@@ -46,7 +49,7 @@ public class IngredientItem extends Item implements Serializable {
      * @param photo the uri string for storing images for the ingredient
      * @param location the location of the ingredient stored
      */
-    public IngredientItem (String name, String description, Integer amount, String unit, String category, GregorianCalendar bbd, String photo, String location) {
+    public IngredientItem (String name, String description, Double amount, String unit, String category, GregorianCalendar bbd, String photo, String location) {
         super(name, photo);
         this.description = description;
         this.amount = amount;
@@ -54,6 +57,7 @@ public class IngredientItem extends Item implements Serializable {
         this.category = category;
         this.bbd = bbd;
         this.location = location;
+        this.fromShoppingList = false;
 
         int timestamp = new Timestamp(new Date()).getNanoseconds();
         String timeStampString = Integer.toString(timestamp);
@@ -100,7 +104,7 @@ public class IngredientItem extends Item implements Serializable {
      * Gets the amount/number of units there are of this ingredient
      * @return amount
      */
-    public Integer getAmount() {
+    public Double getAmount() {
         return amount;
     }
 
@@ -108,7 +112,7 @@ public class IngredientItem extends Item implements Serializable {
      * Sets the amount/number of units there are of this ingredient
      * @param amount new amount
      */
-    public void setAmount(Integer amount) {
+    public void setAmount(Double amount) {
         this.amount = amount;
     }
 
@@ -172,6 +176,13 @@ public class IngredientItem extends Item implements Serializable {
         this.location = location;
     }
 
+    public boolean isFromShoppingList() {
+        return fromShoppingList;
+    }
+
+    public void setFromShoppingList(boolean fromShoppingList) {
+        this.fromShoppingList = fromShoppingList;
+    }
 }
 
 

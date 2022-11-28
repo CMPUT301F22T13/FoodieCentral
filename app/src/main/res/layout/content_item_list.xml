@@ -45,7 +45,7 @@
                 android:layout_height="wrap_content"
                 android:focusable="auto"
                 android:gravity="top|fill_vertical"
-                android:inputType="number"
+                android:inputType="numberDecimal"
                 android:maxLines="1"
                 android:paddingTop="16dp"
                 android:paddingRight="5dp"

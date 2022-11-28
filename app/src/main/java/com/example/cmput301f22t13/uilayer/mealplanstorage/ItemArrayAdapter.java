@@ -91,7 +91,7 @@ public class ItemArrayAdapter extends ArrayAdapter<Item> {
                 Log.d("ItemArrayAdapter", String.valueOf(i2));
                 if (charSequence.length() > 0 && i2 > 0) {
                     if (item instanceof IngredientItem) {
-                        ((IngredientItem)item).setAmount(Integer.valueOf(charSequence.toString()));
+                        ((IngredientItem)item).setAmount(Double.valueOf(charSequence.toString()));
                     }
                     else if (item instanceof RecipeItem) {
                         double oldServings = ((RecipeItem)item).getServings();
@@ -107,7 +107,7 @@ public class ItemArrayAdapter extends ArrayAdapter<Item> {
                         ((RecipeItem)item).setServings((int) newServings);
 
                         for (IngredientItem ingredient : ((RecipeItem)item).getIngredients()) {
-                            ingredient.setAmount((int) (ingredient.getAmount() * scalingFactor));
+                            ingredient.setAmount((ingredient.getAmount() * scalingFactor));
                             Log.d("ItemArrayAdapter", ingredient.getName() + " " + ingredient.getAmount());
                         }
                     }

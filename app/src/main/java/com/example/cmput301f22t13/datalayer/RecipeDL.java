@@ -109,7 +109,7 @@ public class RecipeDL extends FireBaseDL {
                                         IngredientItem i = new IngredientItem();
                                         i.setName(name);
                                         i.setDescription(description);
-                                        i.setAmount(amount.intValue());
+                                        i.setAmount(amount);
                                         i.setUnit(unit);
                                         i.setCategory(category);
                                         i.setHashId(hash);

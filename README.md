@@ -1,5 +1,5 @@
 # CMPUT301F22T13
-Team 13 Meal plan App
+FoodieCentral
 
 
 Description 
