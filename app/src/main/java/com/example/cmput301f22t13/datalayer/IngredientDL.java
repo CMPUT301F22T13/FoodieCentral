@@ -50,7 +50,7 @@ public class IngredientDL extends FireBaseDL {
 
     public IngredientDL() {
         // Populate ingredients here
-//        populateOnStartup();
+        populateOnStartup();
     }
 
     public void deRegisterListener(){
@@ -79,7 +79,6 @@ public class IngredientDL extends FireBaseDL {
                         String location = (String) doc.getData().get("Location");
                         String photo = doc.getString("Photo");
                         GregorianCalendar bestbefore = new GregorianCalendar();
-                        String image = (String) doc.getData().get("Image");
                         Double amount = 0.0;
                         try {
                             bestbefore.setTimeInMillis(doc.getDouble("Best Before").longValue());

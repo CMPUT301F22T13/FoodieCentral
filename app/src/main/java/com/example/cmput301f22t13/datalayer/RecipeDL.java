@@ -165,30 +165,10 @@ public class RecipeDL extends FireBaseDL {
                     .collection("Ingredients")
                     .document(i.getHashId());
 
-            ingredientStorage.set(ingredient).addOnSuccessListener(new OnSuccessListener<Void>() {
-                @Override
-                public void onSuccess(Void unused) {
-                    Log.d("TAG", "firebaseAdd works as wanted");
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Log.d("TAG", "firebaseAdd does not work");
-                }
-            });
+            addToFireBase(ingredient, ingredientStorage);
         }
 
-        recipeStorage.set(recipe).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void unused) {
-                Log.d("TAG", "firebaseAdd works as wanted");
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.d("TAG", "firebaseAdd does not work");
-            }
-        });
+        addToFireBase(recipe, recipeStorage);
     }
 
     public static Map<String, Object>  GetRecipeHashMap(RecipeItem item) {

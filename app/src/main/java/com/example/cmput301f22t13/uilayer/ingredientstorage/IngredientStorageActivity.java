@@ -48,16 +48,7 @@ public class IngredientStorageActivity extends AppCompatActivity implements AddE
 
         binding = ActivityIngredientStorageBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        IngredientDL.getInstance().populateOnStartup();
 
-//        IngredientItem item1 = new IngredientItem();
-//        item1.setName("Apple");
-//        item1.setDescription("This is an apple");
-//        ingredientDL.ingredientStorage.add(item1);
-//        IngredientItem item2 = new IngredientItem();
-//        item2.setName("Pear");
-//        item2.setDescription("This is a pear");
-//        ingredientDL.ingredientStorage.add(item1);
         // https://www.geeksforgeeks.org/bottom-navigation-bar-in-android/
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
