@@ -76,6 +76,10 @@ public class AddEditIngredientForRecipe extends Fragment {
         if (ingredient != null) {
             // Set EditText text to the current name of the ingredient.
             binding.editIngredientNameForRecipe.setText(ingredient.getName());
+            binding.editIngredientDescriptionForRecipe.setText(ingredient.getDescription());
+            binding.editIngredientUnitForRecipe.setText(ingredient.getUnit());
+
+
         }
 
         // OnClickListener for the save button creates an ingredient with the user typed attributes and sends it to the recipe.
