@@ -78,6 +78,15 @@ public class MealPlanViewFragment extends Fragment {
             }
         });
 
+        binding.deleteMealPlanButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // call firebase here
+                NavHostFragment.findNavController(MealPlanViewFragment.this)
+                        .navigate(R.id.action_mealPlanViewFragment_to_MealPlanMainFragment);
+            }
+        });
+
 
     }
 
