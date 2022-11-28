@@ -59,7 +59,6 @@ public class IngredientDL extends FireBaseDL {
         CollectionReference getIngredients = fstore.collection("Users")
         .document(auth.getCurrentUser().getUid())
         .collection("Ingredient Storage");
-
         getIngredients.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable
@@ -70,7 +69,6 @@ public class IngredientDL extends FireBaseDL {
                     String hash = doc.getId();
                     String name = doc.getString("Name");
                     String description = (String) doc.getData().get("Description");
-
                     String unit = (String) doc.getData().get("Unit");
                     String category = (String) doc.getData().get("Category");
                     String location = (String) doc.getData().get("Location");
@@ -80,12 +78,10 @@ public class IngredientDL extends FireBaseDL {
                     Double amount = 0.0;
                     try {
                         bestbefore.setTimeInMillis(doc.getDouble("Best Before").longValue());
-
                     } catch (Exception e) {}
                     try {
                         amount = (Double) doc.getDouble("Amount");
                     } catch (Exception e) {}
-
 
                     IngredientItem i = new IngredientItem();
                     i.setName(name);
@@ -120,7 +116,6 @@ public class IngredientDL extends FireBaseDL {
         String ing_category = item.getCategory();
         String ing_photo = item.getPhoto();
 
-
         //Storing data collected from object in a HashMap
         Map<String, Object> ingredientItem = new HashMap<>();
         ingredientItem.put("Name", ing_name);
@@ -139,18 +134,7 @@ public class IngredientDL extends FireBaseDL {
                 .collection("Ingredient Storage")
                 .document(item.getHashId());
 
-        ingredientStorage.set(ingredientItem).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void unused) {
-                Log.d("TAG", "firebaseAdd works as wanted");
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.d("TAG", "firebaseAdd does not work");
-            }
-        });
-
+        addToFireBase(ingredientItem, ingredientStorage);
     }
 
 
@@ -163,18 +147,8 @@ public class IngredientDL extends FireBaseDL {
                 .document(auth.getCurrentUser().getUid())
                 .collection("Ingredient Storage")
                 .document(item.getHashId());
-
-        deleteIngredient.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void unused) {
-                Log.d("tag", "Ingredient item successfully deleted from Firebase");
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.d("TAG", "Ingredient item not deleted");
-            }
-        });
+        
+        deleteFromFireBase(deleteIngredient);
     }
 
     /** Getter for ingredient storage
