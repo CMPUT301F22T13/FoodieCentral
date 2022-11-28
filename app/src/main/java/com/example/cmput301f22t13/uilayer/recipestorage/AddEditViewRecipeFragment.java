@@ -31,6 +31,7 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.cmput301f22t13.R;
 import com.example.cmput301f22t13.databinding.FragmentAddEditViewRecipeBinding;
+import com.example.cmput301f22t13.datalayer.RecipeDL;
 import com.example.cmput301f22t13.domainlayer.item.IngredientItem;
 import com.example.cmput301f22t13.domainlayer.item.RecipeItem;
 import com.example.cmput301f22t13.uilayer.ingredientstorage.AddEditViewIngredientFragment;
@@ -224,8 +225,9 @@ public class AddEditViewRecipeFragment extends Fragment {
                         @Override
                         public void onClick(View view) {
                             try {
-                                ingredientsAdapter.remove(recipe.getIngredients().get(i).getName());
                                 IngredientItem ingredientItem = recipe.getIngredients().get(i);
+                                RecipeDL.getInstance().deleteIngredient(recipe, ingredientItem);
+                                ingredientsAdapter.remove(recipe.getIngredients().get(i).getName());
                                 ingredientsAdapter.notifyDataSetChanged();
                                 listener.onDeletePressed(ingredientItem);
                             } catch (IndexOutOfBoundsException e) {

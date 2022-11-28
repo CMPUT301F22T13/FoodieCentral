@@ -18,9 +18,11 @@ import android.widget.ArrayAdapter;
 import com.example.cmput301f22t13.R;
 import com.example.cmput301f22t13.databinding.FragmentMealPlanAddIngredientBinding;
 import com.example.cmput301f22t13.datalayer.IngredientDL;
+import com.example.cmput301f22t13.datalayer.MealPlanDL;
 import com.example.cmput301f22t13.domainlayer.item.IngredientItem;
 import com.example.cmput301f22t13.domainlayer.item.Item;
 import com.example.cmput301f22t13.uilayer.ingredientstorage.IngredientListAdapter;
+import com.example.cmput301f22t13.uilayer.userlogin.ResultListener;
 
 import java.util.ArrayList;
 
@@ -76,6 +78,18 @@ public class MealPlanAddIngredientFragment extends Fragment {
                 NavHostFragment.findNavController(MealPlanAddIngredientFragment.this).navigateUp();
             }
         });
+
+        MealPlanDL.getInstance().listener = new ResultListener() {
+            @Override
+            public void onSuccess() {
+                ingredientAdapter.notifyDataSetChanged();
+            }
+            @Override
+            public void onFailure(Exception e) {
+
+            }
+        };
+
 
     }
 

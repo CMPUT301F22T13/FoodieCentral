@@ -41,6 +41,21 @@ public class MealPlan implements Serializable {
     }
 
     /**
+     * Default constructor. Start date will be set to the current date and end date will be set to
+     * one day after the start date. Tree map for the items are initialized to empty TreeMap
+     */
+    public MealPlan(GregorianCalendar startDate, GregorianCalendar endDate, String hashId) {
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.mealPlanItems = new TreeMap<GregorianCalendar, ArrayList<Item>>();
+        this.hashId = hashId;
+        validateTreeMap(this.mealPlanItems);
+
+//        MealPlanDL.getInstance().firebaseAddEdit(this);
+    }
+
+
+    /**
      * Constructor that takes in a start and end date. TreeMap of items is created and a key for each
      * day between the start and end date is created
      *
@@ -63,6 +78,8 @@ public class MealPlan implements Serializable {
         }
 
         this.hashId = Utils.getUniqueHash();
+//        MealPlanDL.getInstance().firebaseAddEdit(this);
+
     }
 
     /**
@@ -77,6 +94,14 @@ public class MealPlan implements Serializable {
         this.mealPlanItems = items;
         this.startDate = startDate;
         this.endDate = endDate;
+//        MealPlanDL.getInstance().firebaseAddEdit(this);
+    }
+
+    public MealPlan(MealPlan mealPlan) {
+        this.mealPlanItems = mealPlan.getMealPlanItems();
+        this.startDate = mealPlan.getStartDate();
+        this.endDate = mealPlan.getEndDate();
+        this.hashId = mealPlan.hashId;
     }
 
     /**
