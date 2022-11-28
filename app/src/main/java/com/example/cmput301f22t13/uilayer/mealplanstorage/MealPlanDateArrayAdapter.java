@@ -12,11 +12,18 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.cmput301f22t13.R;
+import com.example.cmput301f22t13.domainlayer.item.Item;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 
+/**
+ * {@link ArrayAdapter} to display {@link GregorianCalendar}s
+ * The getDropdownView method is overridden so this adapter can be used for dropdown menus
+ *
+ * @author Logan Thimer
+ */
 public class MealPlanDateArrayAdapter extends ArrayAdapter<GregorianCalendar> {
 
     private Context context;
@@ -66,6 +73,7 @@ public class MealPlanDateArrayAdapter extends ArrayAdapter<GregorianCalendar> {
 
     @Override
     public Filter getFilter() {
+        // had to do this because the toString method on GregorianCalendar doesn't display relevant info
         return new Filter() {
             @Override
             public String convertResultToString(Object resultValue) {

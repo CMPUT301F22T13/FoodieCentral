@@ -30,7 +30,9 @@ import java.util.GregorianCalendar;
 
 /**
  * {@link Fragment} for listing all of the meal plans. User can add and delete a meal plan as well
- * as click on one to view more information about it
+ * as click on one to view more information about it.
+ *
+ * @author Logan Thimer
  */
 public class MealPlanMainFragment extends Fragment {
 
