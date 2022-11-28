@@ -147,7 +147,7 @@ public class AddEditViewRecipeFragment extends Fragment {
      */
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        setHasOptionsMenu(true);
+
 
         // Initializing ingredients adapter.
         ingredientsAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1);;
@@ -362,44 +362,7 @@ public class AddEditViewRecipeFragment extends Fragment {
         binding.recipeImageView.setImageBitmap(selectedImage);
     }
 
-    /** onCreateOptionsMenu - inflates the menu xml file into the action bar
-     *
-     * */
 
-    @Override
-    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        inflater.inflate(R.menu.mymenu, menu);
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    /** onOptionsItemSelected - handles on click events with menu items
-     *
-     * */
-
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if(item.getItemId() ==R.id.menuLogout){
-            logoutUser();
-            return true;
-
-        }
-        return false;
-    }
-
-    /** logoutUser - signs current user out and sends user to the login page
-     *
-     * */
-
-    private void logoutUser() {
-
-        //Normal user logout
-        Log.d("TAG", "logoutUser: " + FirebaseAuth.getInstance().getCurrentUser().getUid());
-        FirebaseAuth.getInstance().signOut();
-        Intent intent = new Intent(getActivity(), Login.class);
-        startActivity(intent);
-
-    }
 
     /**
      * Interface of the listener for {@link RecipeItem} changes.

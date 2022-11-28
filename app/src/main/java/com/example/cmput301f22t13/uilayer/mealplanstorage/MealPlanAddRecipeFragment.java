@@ -64,7 +64,7 @@ public class MealPlanAddRecipeFragment extends Fragment {
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        setHasOptionsMenu(true);
+
 
         recipes = RecipeDL.getInstance().getStorage();
         recipeAdapter = new RecipeListArrayAdapter(getActivity(), recipes);
@@ -113,29 +113,4 @@ public class MealPlanAddRecipeFragment extends Fragment {
         }
     }
 
-    @Override
-    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        inflater.inflate(R.menu.mymenu, menu);
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if(item.getItemId() ==R.id.menuLogout){
-            logoutUser();
-            return true;
-
-        }
-        return false;
-    }
-
-    private void logoutUser() {
-
-        //Normal user logout
-        Log.d("TAG", "logoutUser: " + FirebaseAuth.getInstance().getCurrentUser().getUid());
-        FirebaseAuth.getInstance().signOut();
-        Intent intent = new Intent(getActivity(), Login.class);
-        startActivity(intent);
-
-    }
 }

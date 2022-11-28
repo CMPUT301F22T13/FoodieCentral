@@ -260,27 +260,11 @@ public class ViewRecipeFragment extends Fragment {
             shareRecipe();
             return true;
         }
-        else if(item.getItemId() ==R.id.menuLogout){
-            logoutUser();
-            return true;
 
-        }
         return false;
     }
 
-    /** logoutUser - signs current user out and sends user to the login page
-     *
-     * */
-    private void logoutUser() {
 
-        //Normal user logout
-        Log.d("TAG", "logoutUser: " + FirebaseAuth.getInstance().getCurrentUser().getUid());
-        FirebaseAuth.getInstance().signOut();
-        Intent intent = new Intent(getActivity(), Login.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
-
-    }
 
     /** shareRecipe - shares recipe with other people using (gmail,bluetooth,message or any other app)
      *

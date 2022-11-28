@@ -3,8 +3,10 @@ package com.example.cmput301f22t13.uilayer.mealplanstorage;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.example.cmput301f22t13.datalayer.MealPlanDL;
 import com.example.cmput301f22t13.uilayer.ingredientstorage.IngredientStorageActivity;
 import com.example.cmput301f22t13.uilayer.recipestorage.RecipeStorageActivity;
+import com.example.cmput301f22t13.uilayer.userlogin.Login;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.snackbar.Snackbar;
@@ -12,6 +14,8 @@ import com.google.android.material.snackbar.Snackbar;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -23,6 +27,7 @@ import androidx.navigation.ui.NavigationUI;
 import com.example.cmput301f22t13.databinding.ActivityMealPlanBinding;
 
 import com.example.cmput301f22t13.R;
+import com.google.firebase.auth.FirebaseAuth;
 
 /**
  * {@link AppCompatActivity} to house all meal plan functions and fragments
@@ -40,6 +45,7 @@ public class MealPlanActivity extends AppCompatActivity {
 
         binding = ActivityMealPlanBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        MealPlanDL.getInstance().populateOnStartup();
 
         setSupportActionBar(binding.toolbar);
 
@@ -71,6 +77,45 @@ public class MealPlanActivity extends AppCompatActivity {
 
 
     }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.mymenu, menu);
+        return  true;
+    }
+
+
+    /** onOptionsItemSelected - handles on click events with menu items
+     *
+     * */
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if(item.getItemId() ==R.id.menuLogout){
+            logoutUser();
+            return true;
+
+        }
+        return false;
+    }
+
+    /** logoutUser - signs current user out and sends user to the login page
+     *
+     * */
+
+    private void logoutUser() {
+
+        //Normal user logout
+        Log.d("TAG", "logoutUser: " + FirebaseAuth.getInstance().getCurrentUser().getUid());
+        FirebaseAuth.getInstance().signOut();
+        Intent intent = new Intent(this, Login.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+
+    }
+
+
 
     @Override
     public boolean onSupportNavigateUp() {
