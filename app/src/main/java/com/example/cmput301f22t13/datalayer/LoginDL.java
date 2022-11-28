@@ -125,7 +125,7 @@ public class LoginDL extends FireBaseDL {
                 }
             }
         });
-    };
+    }
 
     /** Logs the user out of the app onto the Login page
      * @param  listener - Interface that helps check if a particular method called in UI works as expected
