@@ -45,14 +45,6 @@ public class IngredientStorageActivity extends AppCompatActivity implements AddE
         binding = ActivityIngredientStorageBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-//        IngredientItem item1 = new IngredientItem();
-//        item1.setName("Apple");
-//        item1.setDescription("This is an apple");
-//        ingredientDL.ingredientStorage.add(item1);
-//        IngredientItem item2 = new IngredientItem();
-//        item2.setName("Pear");
-//        item2.setDescription("This is a pear");
-//        ingredientDL.ingredientStorage.add(item1);
         // https://www.geeksforgeeks.org/bottom-navigation-bar-in-android/
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
@@ -88,14 +80,6 @@ public class IngredientStorageActivity extends AppCompatActivity implements AddE
         navController.setGraph(R.navigation.ingredient_storage_nav_graph, bundle);
         appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
-
-        /*binding.fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });*/
 
     }
 

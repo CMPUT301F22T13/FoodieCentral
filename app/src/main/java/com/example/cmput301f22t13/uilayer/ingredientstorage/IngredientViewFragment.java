@@ -21,7 +21,9 @@ import com.example.cmput301f22t13.domainlayer.item.IngredientItem;
 import java.util.Calendar;
 
 /**
+ * {@link Fragment} to view all details of an ingredient
  *
+ * @author Logan Thimer
  */
 public class IngredientViewFragment extends Fragment {
 
