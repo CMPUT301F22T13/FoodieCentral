@@ -19,6 +19,7 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -45,6 +46,7 @@ public class MealPlanDL extends FireBaseDL {
     /** Stores ingredients
      * */
     public static ArrayList<MealPlan> mealPlanStorage = new ArrayList<MealPlan>();
+    private ListenerRegistration registration;
 
     /** Gets or creates current instance of the firebase DL
      * */
@@ -60,167 +62,158 @@ public class MealPlanDL extends FireBaseDL {
         populateOnStartup();
     }
 
+    public void deRegisterListener(){
+        registration.remove();
+    }
+
     /** populateIngredientsOnStartup - called when first instance of IngredientDL is made
      * listens for db changes and updates the ingredient storage accordingly
      * */
     private void populateOnStartup() {
-        CollectionReference getIngredients = fstore.collection("Users")
+        registration = fstore.collection("Users")
                 .document(auth.getCurrentUser().getUid())
-                .collection("MealPlan Storage");
+                .collection("MealPlan Storage")
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable
+                            FirebaseFirestoreException error) {
+                        mealPlanStorage.clear();
+                    if (queryDocumentSnapshots != null) {
+                        for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
+                            String hash = doc.getId();
+                            GregorianCalendar startDate = new GregorianCalendar();
+                            GregorianCalendar endDate = new GregorianCalendar();
 
-        getIngredients.addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable
-                    FirebaseFirestoreException error) {
-                mealPlanStorage.clear();
-                for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
-                    String hash = doc.getId();
-                    GregorianCalendar startDate = new GregorianCalendar();
-                    GregorianCalendar endDate = new GregorianCalendar();
-
-                    try {
-                        startDate.setTimeInMillis(doc.getDouble("Start Date").longValue());
-                    } catch (Exception e) {
-                    }
-                    try {
-                        endDate.setTimeInMillis(doc.getDouble("End Date").longValue());
-                    } catch (Exception e) {
-                    }
-
-                    MealPlan m = new MealPlan(startDate, endDate, doc.getId());
-
-                    CollectionReference days = fstore.collection("Users")
-                            .document(auth.getCurrentUser().getUid())
-                            .collection("MealPlan Storage")
-                            .document(hash)
-                            .collection("Days");
-
-                    days.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                        @Override
-                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                            for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
-                                GregorianCalendar date = new GregorianCalendar();
-                                date.setTimeInMillis(doc.getDouble("Date").longValue());
-
-                                days.document(doc.getId()).collection("Recipe Storage").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                                    @Override
-                                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                                        for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
-                                            RecipeItem r = new RecipeItem();
-
-                                            String hash = doc.getId();
-                                            String title = doc.getString("Title");
-                                            try {
-                                                int prep = doc.getDouble("Prep Time").intValue();
-                                                int servings = doc.getDouble("Servings").intValue();
-                                                r.setPrepTime(prep);
-                                                r.setServings(servings);
-                                            } catch (Exception e) {
-                                            }
-
-                                            String category = doc.getString("Category");
-                                            String comments = doc.getString("Comments");
-                                            String photo = doc.getString("Photo");
-
-
-                                            r.setTitle(title);
-                                            r.setHashId(hash);
-                                            r.setCategory(category);
-                                            r.setComments(comments);
-                                            r.setPhoto(photo);
-
-
-                                            days.document(doc.getId())
-                                                    .collection("Recipe Storage").document(r.getHashId())
-                                                    .collection("Ingredients").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                                                        @Override
-                                                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                                                            for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
-                                                                String hash = doc.getId();
-                                                                String name = doc.getString("Name");
-                                                                String description = (String) doc.getData().get("Description");
-                                                                String unit = (String) doc.getData().get("Unit");
-                                                                String category = (String) doc.getData().get("Category");
-                                                                String photo = doc.getString("Photo");
-                                                                Double amount = 0.0;
-                                                                try {
-                                                                    amount = (Double) doc.getDouble("Amount");
-                                                                } catch (Exception e) {
-                                                                }
-
-
-                                                                IngredientItem i = new IngredientItem();
-                                                                i.setName(name);
-                                                                i.setDescription(description);
-                                                                i.setAmount(amount.doubleValue());
-                                                                i.setUnit(unit);
-                                                                i.setCategory(category);
-                                                                i.setHashId(hash);
-                                                                i.setPhoto(photo);
-                                                                r.addIngredient(i);
-                                                            }
-                                                        }
-                                                    });
-
-                                            m.addItemForDay(date, r);
-                                        }
-                                    }
-                                });
-
-                                days.document(doc.getId()).collection("Ingredients").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                                    @Override
-                                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                                        for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
-                                            String hash = doc.getId();
-                                            String name = doc.getString("Name");
-                                            String description = (String) doc.getData().get("Description");
-
-                                            String unit = (String) doc.getData().get("Unit");
-                                            String category = (String) doc.getData().get("Category");
-                                            String location = (String) doc.getData().get("Location");
-                                            String photo = doc.getString("Photo");
-                                            GregorianCalendar bestbefore = new GregorianCalendar();
-                                            Double amount = 0.0;
-                                            try {
-                                                bestbefore.setTimeInMillis(doc.getDouble("Best Before").longValue());
-
-                                            } catch (Exception e) { }
-                                            try {
-                                                amount = (Double) doc.getDouble("Amount");
-                                            } catch (Exception e) { }
-
-
-                                            IngredientItem i = new IngredientItem();
-                                            i.setName(name);
-                                            i.setDescription(description);
-                                            try {
-                                                i.setAmount(amount);
-                                            } catch (Exception e) { }
-
-                                            i.setUnit(unit);
-                                            i.setCategory(category);
-                                            i.setLocation(location);
-                                            i.setHashId(hash);
-                                            i.setBbd(bestbefore);
-                                            i.setPhoto(photo);
-
-                                            m.addItemForDay(date, i);
-                                        }
-                                    }
-                                });
+                            try {
+                                startDate.setTimeInMillis(doc.getDouble("Start Date").longValue());
+                            } catch (Exception e) {
                             }
-                            mealPlanStorage.add(m);
-                            listener.onSuccess();
-                        }
-                    });
+                            try {
+                                endDate.setTimeInMillis(doc.getDouble("End Date").longValue());
+                            } catch (Exception e) {
+                            }
 
+                            MealPlan m = new MealPlan(startDate, endDate, doc.getId());
+
+                            CollectionReference days = fstore.collection("Users")
+                                    .document(auth.getCurrentUser().getUid())
+                                    .collection("MealPlan Storage")
+                                    .document(hash)
+                                    .collection("Days");
+
+                            days.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                @Override
+                                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                    for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
+                                        GregorianCalendar date = new GregorianCalendar();
+                                        date.setTimeInMillis(doc.getDouble("Date").longValue());
+
+                                        days.document(doc.getId()).collection("Recipe Storage").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                            @Override
+                                            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                                for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
+                                                    RecipeItem r = new RecipeItem();
+
+                                                    String hash = doc.getId();
+                                                    String title = doc.getString("Title");
+                                                    int prep = doc.getDouble("Prep Time").intValue();
+                                                    int servings = doc.getDouble("Servings").intValue();
+                                                    r.setPrepTime(prep);
+                                                    r.setServings(servings);
+
+                                                    String category = doc.getString("Category");
+                                                    String comments = doc.getString("Comments");
+                                                    String photo = doc.getString("Photo");
+
+                                                    r.setTitle(title);
+                                                    r.setHashId(hash);
+                                                    r.setCategory(category);
+                                                    r.setComments(comments);
+                                                    r.setPhoto(photo);
+
+                                                    days.document(doc.getId())
+                                                            .collection("Recipe Storage").document(r.getHashId())
+                                                            .collection("Ingredients").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                                                @Override
+                                                                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                                                    for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
+                                                                        String hash = doc.getId();
+                                                                        String name = doc.getString("Name");
+                                                                        String description = (String) doc.getData().get("Description");
+                                                                        String unit = (String) doc.getData().get("Unit");
+                                                                        String category = (String) doc.getData().get("Category");
+                                                                        String photo = doc.getString("Photo");
+                                                                        Double amount = 0.0;
+                                                                        amount = (Double) doc.getDouble("Amount");
+
+                                                                        IngredientItem i = new IngredientItem();
+                                                                        i.setName(name);
+                                                                        i.setDescription(description);
+                                                                        i.setAmount(amount);
+                                                                        i.setUnit(unit);
+                                                                        i.setCategory(category);
+                                                                        i.setHashId(hash);
+                                                                        i.setPhoto(photo);
+                                                                        r.addIngredient(i);
+                                                                    }
+                                                                }
+                                                            });
+
+                                                    m.addItemForDay(date, r);
+                                                }
+                                            }
+                                        });
+
+                                        days.document(doc.getId()).collection("Ingredients").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                            @Override
+                                            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                                for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
+                                                    String hash = doc.getId();
+                                                    String name = doc.getString("Name");
+                                                    String description = (String) doc.getData().get("Description");
+
+                                                    String unit = (String) doc.getData().get("Unit");
+                                                    String category = (String) doc.getData().get("Category");
+                                                    String location = (String) doc.getData().get("Location");
+                                                    String photo = doc.getString("Photo");
+                                                    GregorianCalendar bestbefore = new GregorianCalendar();
+                                                    Double amount = (Double) doc.getDouble("Amount");
+                                                    try {
+                                                        bestbefore.setTimeInMillis(doc.getDouble("Best Before").longValue());
+
+                                                    } catch (Exception e) { }
+
+                                                    IngredientItem i = new IngredientItem();
+                                                    i.setName(name);
+                                                    i.setDescription(description);
+                                                    i.setAmount(amount);
+                                                    i.setUnit(unit);
+                                                    i.setCategory(category);
+                                                    i.setLocation(location);
+                                                    i.setHashId(hash);
+                                                    i.setBbd(bestbefore);
+                                                    i.setPhoto(photo);
+
+                                                    m.addItemForDay(date, i);
+                                                }
+                                            }
+                                        });
+                                    }
+                                    mealPlanStorage.add(m);
+                                    if (listener != null) {
+                                        listener.onSuccess();
+                                    }
+                                }
+                            });
+
+                        }
+                    }
                 }
-            }
         });
     }
 
-    /** Add/Edit item recieved from Domain Layer into FireStore Ingredient storage collection
-     * @Input: IngredientItem item - item to add or edit
+    /** Add/Edit item recieved from Domain Layer into FireStore MealPlan storage collection
+     * @Input: MealPlan item - item to add or edit
      * */
     public void firebaseAddEdit(MealPlan item) {
         //Initializing data value from item object
@@ -240,20 +233,9 @@ public class MealPlanDL extends FireBaseDL {
                 .collection("MealPlan Storage")
                 .document(item.getHashId());
 
-        mealPlanStorage.set(mealPlanItem).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void unused) {
-                Log.d("TAG", "firebaseAdd works as wanted");
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.d("TAG", "firebaseAdd does not work");
-            }
-        });
+        addToFireBase(mealPlanItem, mealPlanStorage);
 
-
-        // Food tings
+        // Logic area for adding the items
         for (Map.Entry<GregorianCalendar, ArrayList<Item>>
             i : item.getMealPlanItems().entrySet()) {
 
@@ -268,17 +250,7 @@ public class MealPlanDL extends FireBaseDL {
                     .collection("Days")
                     .document(hash);
 
-            daysStorage.set(day).addOnSuccessListener(new OnSuccessListener<Void>() {
-                @Override
-                public void onSuccess(Void unused) {
-                    Log.d("TAG", "firebaseAdd works as wanted");
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Log.d("TAG", "firebaseAdd does not work");
-                }
-            });
+            addToFireBase(day, daysStorage);
 
             // Mealplan Items
             for(Item j : i.getValue()) {
@@ -316,38 +288,15 @@ public class MealPlanDL extends FireBaseDL {
                         ingredient.put("Unit", k.getUnit());
                         ingredient.put("Category", k.getCategory());
 
-
                         DocumentReference ingredientStorage = daysStorage
                                 .collection("Recipe Storage")
                                 .document(item.getHashId())
                                 .collection("Ingredients")
                                 .document(k.getHashId());
 
-                        ingredientStorage.set(ingredient).addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void unused) {
-                                Log.d("TAG", "firebaseAdd works as wanted");
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Log.d("TAG", "firebaseAdd does not work");
-                            }
-                        });
+                        addToFireBase(ingredient, ingredientStorage);
                     }
-
-                    recipeStorage.set(recipe).addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void unused) {
-                            Log.d("TAG", "firebaseAdd works as wanted");
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Log.d("TAG", "firebaseAdd does not work");
-                        }
-                    });
-
+                    addToFireBase(recipe, recipeStorage);
 
                 } else {
                     Map<String, Object> ingredient = new HashMap<>();
@@ -361,23 +310,43 @@ public class MealPlanDL extends FireBaseDL {
                             .collection("Ingredients")
                             .document(j.getHashId());
 
-                    ingredientStorage.set(ingredient).addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void unused) {
-                            Log.d("TAG", "firebaseAdd works as wanted");
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Log.d("TAG", "firebaseAdd does not work");
-                        }
-                    });
+                    addToFireBase(ingredient, ingredientStorage);
                 }
-
             }
         }
-
     }
+
+    /** Deletes data from Firestore for a particular passed in Recipe item - by doing so the recipe document is deleted from Firestore
+     *  @param item - Recipe item to be deleted from Firestore
+     * */
+    public void firebaseDelete(MealPlan item){
+        //Referencing wanted document from correct location in Firestore database
+        DocumentReference doc = fstore.collection("Users")
+                .document(auth.getCurrentUser().getUid())
+                .collection("MealPlan Storage")
+                .document(item.getHashId());
+
+        deleteFromFireBase(doc);
+    }
+
+
+    public void deleteItem(MealPlan mealPlanItem, Item item, GregorianCalendar date) {
+        String coll = "Ingredients";
+        if (item instanceof RecipeItem)
+            coll = "Recipe Storage";
+
+        DocumentReference deleteIngredient = fstore.collection("Users")
+                .document(auth.getCurrentUser().getUid())
+                .collection("MealPlan Storage")
+                .document(mealPlanItem.getHashId())
+                .collection("Days")
+                .document(String.valueOf(date.getTimeInMillis()))
+                .collection(coll)
+                .document(item.getHashId());
+
+        deleteFromFireBase(deleteIngredient);
+    }
+
 
     /** Getter for mealplan storage
      * @Returns: ArrayList<MealPlan> representing mealplans in storage

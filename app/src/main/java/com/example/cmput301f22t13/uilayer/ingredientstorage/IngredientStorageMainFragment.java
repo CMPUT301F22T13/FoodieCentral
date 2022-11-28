@@ -3,9 +3,14 @@ package com.example.cmput301f22t13.uilayer.ingredientstorage;
 import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -22,7 +27,9 @@ import com.example.cmput301f22t13.databinding.FragmentIngredientStorageMainBindi
 import com.example.cmput301f22t13.datalayer.IngredientDL;
 import com.example.cmput301f22t13.domainlayer.item.IngredientItem;
 import com.example.cmput301f22t13.uilayer.recipestorage.RecipeStorageActivity;
+import com.example.cmput301f22t13.uilayer.userlogin.Login;
 import com.example.cmput301f22t13.uilayer.userlogin.ResultListener;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -58,6 +65,7 @@ public class IngredientStorageMainFragment extends Fragment {
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
 
         ingredientListAdapter = new IngredientListAdapter(getActivity(), ingredients);
         binding.ingredientListview.setAdapter(ingredientListAdapter);
@@ -205,6 +213,13 @@ public class IngredientStorageMainFragment extends Fragment {
         });
 
     }
+
+
+    /** onCreateOptionsMenu - inflates the menu xml file into the action bar
+     *
+     * */
+
+
 
     @Override
     public void onDestroyView() {

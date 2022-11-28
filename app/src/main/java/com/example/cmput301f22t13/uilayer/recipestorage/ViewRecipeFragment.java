@@ -1,16 +1,36 @@
 package com.example.cmput301f22t13.uilayer.recipestorage;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.text.InputType;
 import android.util.Base64;
+import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Toast;
+import android.widget.Toolbar;
 
+
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
@@ -18,7 +38,17 @@ import com.example.cmput301f22t13.R;
 import com.example.cmput301f22t13.databinding.FragmentViewRecipeBinding;
 import com.example.cmput301f22t13.domainlayer.item.IngredientItem;
 import com.example.cmput301f22t13.domainlayer.item.RecipeItem;
+import com.example.cmput301f22t13.uilayer.ingredientstorage.AddEditViewIngredientFragment;
+import com.example.cmput301f22t13.uilayer.ingredientstorage.IngredientStorageActivity;
+import com.example.cmput301f22t13.uilayer.ingredientstorage.IngredientStorageMainFragment;
+import com.example.cmput301f22t13.uilayer.userlogin.Login;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
+import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 /**
@@ -64,6 +94,10 @@ public class ViewRecipeFragment extends Fragment {
     private ArrayList<IngredientItem> ingredients;
 
     public static final String RECIPE_PASSED = "recipe_passed";
+    String imagePath;
+
+
+
 
 
     /**
@@ -80,6 +114,9 @@ public class ViewRecipeFragment extends Fragment {
         }
     }
 
+
+
+
     /**
      * Called to have the fragment instantiate its UI view. Also sets the recipe passed.
      * @param inflater Of type {@link LayoutInflater}
@@ -91,14 +128,21 @@ public class ViewRecipeFragment extends Fragment {
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState
-    ) {
+
+
+    )
+
+    {
         binding = FragmentViewRecipeBinding.inflate(inflater, container, false);
 
+        //this is the recipe object
         recipe = (RecipeItem) getArguments().getSerializable(RECIPE_PASSED);
 
         return binding.getRoot();
 
     }
+
+
 
     /**
      * Called after onCreateView.
@@ -108,9 +152,15 @@ public class ViewRecipeFragment extends Fragment {
      * @param view Of type {@link View}
      * @param savedInstanceState Of type {@link Bundle}
      */
+    @SuppressLint("WrongThread")
+    @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+
+
+
+        setHasOptionsMenu(true);
         // Initializing ingredients adapter.
         ingredientsAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1);;
         ingredientsOfRecipeList = new ArrayList<String>();
@@ -161,6 +211,9 @@ public class ViewRecipeFragment extends Fragment {
             try {
                 byte[] encodeByte = Base64.decode(recipe.getPhoto(), Base64.DEFAULT);
                 Bitmap bmp = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
+  //              ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+//                bmp.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+                imagePath = MediaStore.Images.Media.insertImage(getContext().getContentResolver(), bmp, recipe.getTitle(), "description");
                 if (bmp != null) {
                     binding.viewfragRecipeImage.setImageBitmap(bmp);
                 }
@@ -180,6 +233,77 @@ public class ViewRecipeFragment extends Fragment {
                 NavHostFragment.findNavController(ViewRecipeFragment.this).navigateUp();
             }
         });
+    }
+
+    /** onCreateOptionsMenu - inflates the menu xml file into the action bar
+     *
+     * */
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.mymenu, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+
+        MenuItem item = menu.findItem(R.id.menuShare);
+        item.setVisible(true);
+    }
+
+    /** onOptionsItemSelected - handles on click events with menu items
+     *
+     * */
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if(item.getItemId()==R.id.menuShare){
+            shareRecipe();
+            return true;
+        }
+
+        return false;
+    }
+
+
+
+    /** shareRecipe - shares recipe with other people using (gmail,bluetooth,message or any other app)
+     *
+     * */
+    private void shareRecipe(){
+        StringBuilder builder = new StringBuilder();
+        builder.append("Recipe name: ");
+        builder.append(recipe.getTitle());
+        builder.append("\n");
+        builder.append("Servings : ");
+        builder.append(recipe.getServings());
+        builder.append("\n");
+        builder.append("Prep time: ");
+        builder.append(recipe.getComments());
+        builder.append("\n");
+        builder.append("Category: ");
+        builder.append(recipe.getCategory());
+        builder.append("\n");
+        builder.append("Comments: ");
+        builder.append(recipe.getComments());
+        builder.append("\n");
+        builder.append("\n");
+
+
+        builder.append("Ingredients:  ") ;
+        for (int i = 0; i < recipe.getIngredients().size(); i++) {
+             builder.append(ingredients.get(i).getName()) ;
+             if(i <= recipe.getIngredients().size() - 2){
+                 builder.append(",") ;
+             }
+
+
+
+        }
+
+
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+    //    String url = getString(R.string.deep_link_url) + "?id="+recipe.getHashId();
+        shareIntent.setType("image/jpeg");
+        shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Please check the recipe");
+        shareIntent.putExtra(Intent.EXTRA_TEXT, builder.toString());
+        shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(imagePath));
+        startActivity(Intent.createChooser(shareIntent, "Please choose"));
     }
 
     /**

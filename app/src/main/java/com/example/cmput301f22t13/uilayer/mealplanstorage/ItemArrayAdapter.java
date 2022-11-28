@@ -30,6 +30,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * {@link ArrayAdapter} to display {@link Item}s
+ * The name, amount, and image are displayed and the amount field
+ * is editable
+ *
+ * @author Logan Thimer
+ */
 public class ItemArrayAdapter extends ArrayAdapter<Item> {
 
     private Context context;

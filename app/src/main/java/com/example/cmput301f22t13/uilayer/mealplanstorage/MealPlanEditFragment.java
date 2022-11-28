@@ -1,8 +1,12 @@
 package com.example.cmput301f22t13.uilayer.mealplanstorage;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -21,6 +25,8 @@ import com.example.cmput301f22t13.datalayer.RecipeDL;
 import com.example.cmput301f22t13.domainlayer.item.IngredientItem;
 import com.example.cmput301f22t13.domainlayer.item.Item;
 import com.example.cmput301f22t13.domainlayer.item.MealPlan;
+import com.example.cmput301f22t13.uilayer.userlogin.Login;
+import com.google.firebase.auth.FirebaseAuth;
 import com.example.cmput301f22t13.domainlayer.item.RecipeItem;
 
 import java.text.SimpleDateFormat;
@@ -31,9 +37,12 @@ import java.util.Map;
 import java.util.Random;
 
 /**
- * {@link Fragment} that allows the user to view details of a meal plan. User can also add ingredients
+ * {@link Fragment} that allows the user to edit details of a meal plan. User can also add ingredients
  * & recipes to a certain day in the meal plan. Recipes and Ingredients can also be removed from
- * each day.
+ * each day. There is also an autogenerate feature that will add 3 random recipes from recipe
+ * storage to the meal plan.
+ *
+ * @author Logan Thimer
  */
 public class MealPlanEditFragment extends Fragment {
 
@@ -81,6 +90,7 @@ public class MealPlanEditFragment extends Fragment {
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
 
         // initialize the adapters for every date
         for (GregorianCalendar date : dates) {
@@ -151,6 +161,7 @@ public class MealPlanEditFragment extends Fragment {
         binding.deleteItemButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                MealPlanDL.getInstance().deleteItem(mealPlanItem, selectedItem, selectedDate);
                 mealPlanItem.removeItemForDay(selectedDate, selectedItem);
                 selectedItem = null;
                 binding.deleteItemButton.hide();
@@ -221,17 +232,11 @@ public class MealPlanEditFragment extends Fragment {
             public void onClick(View view) {
                 MealPlanDL.getInstance().firebaseAddEdit(mealPlanItem);
                 NavHostFragment.findNavController(MealPlanEditFragment.this).popBackStack();
-
             }
         });
 
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        binding = null;
-    }
 
     private void setAutoGenerateVisibility() {
         if (selectedDate != null) {

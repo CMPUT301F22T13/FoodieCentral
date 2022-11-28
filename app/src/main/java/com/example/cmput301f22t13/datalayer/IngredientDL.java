@@ -15,6 +15,7 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -36,6 +37,7 @@ public class IngredientDL extends FireBaseDL {
     /** Stores ingredients
      * */
     public static ArrayList<IngredientItem> ingredientStorage = new ArrayList<IngredientItem>();
+    private ListenerRegistration registration;
 
     /** Gets or creates current instance of the firebase DL
      * */
@@ -48,58 +50,62 @@ public class IngredientDL extends FireBaseDL {
 
     public IngredientDL() {
         // Populate ingredients here
-        populateOnStartup();
+//        populateOnStartup();
     }
 
+    public void deRegisterListener(){
+        registration.remove();
+    }
 
     /** populateIngredientsOnStartup - called when first instance of IngredientDL is made
      * listens for db changes and updates the ingredient storage accordingly
      * */
-    private void populateOnStartup() {
+    public void populateOnStartup() {
         CollectionReference getIngredients = fstore.collection("Users")
         .document(auth.getCurrentUser().getUid())
         .collection("Ingredient Storage");
-
-        getIngredients.addSnapshotListener(new EventListener<QuerySnapshot>() {
+        registration = getIngredients.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable
                     FirebaseFirestoreException error) {
                 ingredientStorage.clear();
-                for(QueryDocumentSnapshot doc: queryDocumentSnapshots)
-                {
-                    String hash = doc.getId();
-                    String name = doc.getString("Name");
-                    String description = (String) doc.getData().get("Description");
+                if(queryDocumentSnapshots!=null) {
+                    for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
+                        String hash = doc.getId();
+                        String name = doc.getString("Name");
+                        String description = (String) doc.getData().get("Description");
+                        String unit = (String) doc.getData().get("Unit");
+                        String category = (String) doc.getData().get("Category");
+                        String location = (String) doc.getData().get("Location");
+                        String photo = doc.getString("Photo");
+                        GregorianCalendar bestbefore = new GregorianCalendar();
+                        String image = (String) doc.getData().get("Image");
+                        Double amount = 0.0;
+                        try {
+                            bestbefore.setTimeInMillis(doc.getDouble("Best Before").longValue());
+                        } catch (Exception e) {
+                        }
+                        try {
+                            amount = (Double) doc.getDouble("Amount");
+                        } catch (Exception e) {
+                        }
 
-                    String unit = (String) doc.getData().get("Unit");
-                    String category = (String) doc.getData().get("Category");
-                    String location = (String) doc.getData().get("Location");
-                    String photo = doc.getString("Photo");
-                    GregorianCalendar bestbefore = new GregorianCalendar();
-                    String image = (String) doc.getData().get("Image");
-                    Double amount = 0.0;
-                    try {
-                        bestbefore.setTimeInMillis(doc.getDouble("Best Before").longValue());
-
-                    } catch (Exception e) {}
-                    try {
-                        amount = (Double) doc.getDouble("Amount");
-                    } catch (Exception e) {}
-
-
-                    IngredientItem i = new IngredientItem();
-                    i.setName(name);
-                    i.setDescription(description);
-                    i.setAmount(amount);
-                    i.setUnit(unit);
-                    i.setCategory(category);
-                    i.setLocation(location);
-                    i.setHashId(hash);
-                    i.setBbd(bestbefore);
-                    i.setPhoto(photo);
-                    ingredientStorage.add(i);
+                        IngredientItem i = new IngredientItem();
+                        i.setName(name);
+                        i.setDescription(description);
+                        i.setAmount(amount);
+                        i.setUnit(unit);
+                        i.setCategory(category);
+                        i.setLocation(location);
+                        i.setHashId(hash);
+                        i.setBbd(bestbefore);
+                        i.setPhoto(photo);
+                        ingredientStorage.add(i);
+                    }
                 }
-                listener.onSuccess();
+                if (listener != null) {
+                    listener.onSuccess();
+                }
             }
         });
     }
@@ -120,7 +126,6 @@ public class IngredientDL extends FireBaseDL {
         String ing_category = item.getCategory();
         String ing_photo = item.getPhoto();
 
-
         //Storing data collected from object in a HashMap
         Map<String, Object> ingredientItem = new HashMap<>();
         ingredientItem.put("Name", ing_name);
@@ -139,18 +144,7 @@ public class IngredientDL extends FireBaseDL {
                 .collection("Ingredient Storage")
                 .document(item.getHashId());
 
-        ingredientStorage.set(ingredientItem).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void unused) {
-                Log.d("TAG", "firebaseAdd works as wanted");
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.d("TAG", "firebaseAdd does not work");
-            }
-        });
-
+        addToFireBase(ingredientItem, ingredientStorage);
     }
 
 
@@ -163,18 +157,8 @@ public class IngredientDL extends FireBaseDL {
                 .document(auth.getCurrentUser().getUid())
                 .collection("Ingredient Storage")
                 .document(item.getHashId());
-
-        deleteIngredient.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void unused) {
-                Log.d("tag", "Ingredient item successfully deleted from Firebase");
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.d("TAG", "Ingredient item not deleted");
-            }
-        });
+        
+        deleteFromFireBase(deleteIngredient);
     }
 
     /** Getter for ingredient storage

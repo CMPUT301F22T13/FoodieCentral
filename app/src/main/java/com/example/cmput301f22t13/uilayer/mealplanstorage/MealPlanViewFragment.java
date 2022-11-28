@@ -1,12 +1,17 @@
 package com.example.cmput301f22t13.uilayer.mealplanstorage;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -16,9 +21,12 @@ import android.widget.TextView;
 import com.example.cmput301f22t13.R;
 import com.example.cmput301f22t13.databinding.FragmentMealPlanEditBinding;
 import com.example.cmput301f22t13.databinding.FragmentMealPlanViewBinding;
+import com.example.cmput301f22t13.datalayer.MealPlanDL;
 import com.example.cmput301f22t13.domainlayer.item.IngredientItem;
 import com.example.cmput301f22t13.domainlayer.item.Item;
 import com.example.cmput301f22t13.domainlayer.item.MealPlan;
+import com.example.cmput301f22t13.uilayer.userlogin.Login;
+import com.google.firebase.auth.FirebaseAuth;
 import com.example.cmput301f22t13.domainlayer.item.RecipeItem;
 
 import org.w3c.dom.Text;
@@ -30,7 +38,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * {@link Fragment} that allows the user to view details of a meal plan. Each day in the meal plan
+ * is displayed and a list of the ingredients & recipes are displayed in a list format below it
  *
+ * @author Logan Thimer
  */
 public class MealPlanViewFragment extends Fragment {
 
@@ -41,8 +52,6 @@ public class MealPlanViewFragment extends Fragment {
 
     // meal plan item that is passed in through the bundle
     private MealPlan mealPlanItem;
-
-    private ViewGroup linearLayout;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -55,7 +64,6 @@ public class MealPlanViewFragment extends Fragment {
                              Bundle savedInstanceState) {
         binding = FragmentMealPlanViewBinding.inflate(inflater, container, false);
         mealPlanItem = (MealPlan) getArguments().getSerializable(ARG_MEAL_PLAN_ITEM);
-        linearLayout = (ViewGroup) binding.mealPlanViewLinearLayout;
 
         addItemsToLayout();
 
@@ -78,7 +86,16 @@ public class MealPlanViewFragment extends Fragment {
             }
         });
 
-
+        binding.deleteMealPlanButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // call firebase here
+                MealPlanDL.getInstance().firebaseDelete(mealPlanItem);
+                MealPlanDL.getInstance().getStorage().remove(mealPlanItem);
+                NavHostFragment.findNavController(MealPlanViewFragment.this)
+                        .navigate(R.id.action_mealPlanViewFragment_to_MealPlanMainFragment);
+            }
+        });
     }
 
     private void addItemsToLayout() {

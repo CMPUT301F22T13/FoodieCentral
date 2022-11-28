@@ -81,7 +81,7 @@ public class RecipeItem extends Item implements Serializable {
         this(recipeItem.getName(), recipeItem.getPrepTime(), recipeItem.getServings(), recipeItem.getCategory(),
                 recipeItem.getComments(), recipeItem.getPhoto(), recipeItem.getIngredients(), recipeItem.getHashId());
 
-        setHashId(recipeItem.getHashId());
+//        setHashId(recipeItem.getHashId());
 
         ArrayList<IngredientItem> ingredients = new ArrayList<>();
         for (IngredientItem item : recipeItem.getIngredients()) {
