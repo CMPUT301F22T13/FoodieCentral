@@ -17,12 +17,15 @@ import android.widget.ArrayAdapter;
 import com.example.cmput301f22t13.R;
 import com.example.cmput301f22t13.databinding.FragmentMealPlanAddRecipeBinding;
 import com.example.cmput301f22t13.datalayer.IngredientDL;
+import com.example.cmput301f22t13.datalayer.MealPlanDL;
 import com.example.cmput301f22t13.datalayer.RecipeDL;
 import com.example.cmput301f22t13.domainlayer.item.IngredientItem;
 import com.example.cmput301f22t13.domainlayer.item.Item;
+import com.example.cmput301f22t13.domainlayer.item.MealPlan;
 import com.example.cmput301f22t13.domainlayer.item.RecipeItem;
 import com.example.cmput301f22t13.uilayer.ingredientstorage.IngredientListAdapter;
 import com.example.cmput301f22t13.uilayer.recipestorage.RecipeListArrayAdapter;
+import com.example.cmput301f22t13.uilayer.userlogin.ResultListener;
 
 import java.util.ArrayList;
 
@@ -67,6 +70,18 @@ public class MealPlanAddRecipeFragment extends Fragment {
                 setSelectedItemColors();
             }
         });
+
+        MealPlanDL.getInstance().listener = new ResultListener() {
+            @Override
+            public void onSuccess() {
+                recipeAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+
+            }
+        };
 
         binding.confirmAddRecipeMealPlanButton.setOnClickListener(new View.OnClickListener() {
             @Override

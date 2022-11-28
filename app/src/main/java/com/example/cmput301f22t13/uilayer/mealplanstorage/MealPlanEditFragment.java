@@ -14,6 +14,8 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.cmput301f22t13.R;
 import com.example.cmput301f22t13.databinding.FragmentMealPlanEditBinding;
+import com.example.cmput301f22t13.datalayer.FireBaseDL;
+import com.example.cmput301f22t13.datalayer.MealPlanDL;
 import com.example.cmput301f22t13.datalayer.IngredientDL;
 import com.example.cmput301f22t13.datalayer.RecipeDL;
 import com.example.cmput301f22t13.domainlayer.item.IngredientItem;
@@ -121,6 +123,8 @@ public class MealPlanEditFragment extends Fragment {
             }
         });
 
+//        MealPlanDL.getInstance()
+
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -209,6 +213,15 @@ public class MealPlanEditFragment extends Fragment {
                 mealPlanItem.addItemForDay(selectedDate, new RecipeItem(recipes.get(rand.nextInt(recipes.size()))));
                 itemsArrayAdapters.get(selectedDate).notifyDataSetChanged();
                 setAutoGenerateVisibility();
+            }
+        });
+
+        binding.doneMealplanEditButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                MealPlanDL.getInstance().firebaseAddEdit(mealPlanItem);
+                NavHostFragment.findNavController(MealPlanEditFragment.this).popBackStack();
+
             }
         });
 
