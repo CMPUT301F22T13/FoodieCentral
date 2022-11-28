@@ -84,15 +84,12 @@ public class IngredientDL extends FireBaseDL {
                         String location = (String) doc.getData().get("Location");
                         String photo = doc.getString("Photo");
                         GregorianCalendar bestbefore = new GregorianCalendar();
-                        Double amount = 0.0;
+                        Double amount = doc.getDouble("Amount");
+
                         try {
                             bestbefore.setTimeInMillis(doc.getDouble("Best Before").longValue());
-                        } catch (Exception e) {
-                        }
-                        try {
-                            amount = (Double) doc.getDouble("Amount");
-                        } catch (Exception e) {
-                        }
+                        } catch (Exception e) {}
+
 
                         IngredientItem i = new IngredientItem();
                         i.setName(name);
