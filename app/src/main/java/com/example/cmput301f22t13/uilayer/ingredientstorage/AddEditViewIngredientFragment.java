@@ -1,5 +1,6 @@
 package com.example.cmput301f22t13.uilayer.ingredientstorage;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Context;
@@ -14,6 +15,9 @@ import android.text.InputType;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
@@ -26,6 +30,7 @@ import androidx.activity.result.contract.ActivityResultContract;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
@@ -36,6 +41,8 @@ import com.example.cmput301f22t13.datalayer.IngredientDL;
 import com.example.cmput301f22t13.domainlayer.item.IngredientItem;
 import com.example.cmput301f22t13.domainlayer.utils.Utils;
 import com.example.cmput301f22t13.uilayer.recipestorage.RecipeStorageActivity;
+import com.example.cmput301f22t13.uilayer.userlogin.Login;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -54,6 +61,8 @@ import java.util.GregorianCalendar;
  */
 public class AddEditViewIngredientFragment extends Fragment {
 
+
+
     // argument id for passing ingredient through bundle
     public static final String ARG_INGREDIENT = "arg_ingredient";
 
@@ -68,6 +77,9 @@ public class AddEditViewIngredientFragment extends Fragment {
     private GregorianCalendar selectedDate;
     private Bitmap selectedImage;
 
+
+
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -81,6 +93,7 @@ public class AddEditViewIngredientFragment extends Fragment {
 
     @Override
     public View onCreateView(
+
             LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState
     ) {
@@ -95,8 +108,10 @@ public class AddEditViewIngredientFragment extends Fragment {
     /** Mainfunction that handles creating the fragment and taking user input
      *
      * */
+    @SuppressLint("SetTextI18n")
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
 
         if (ingredient != null) {
             if (ingredient.getName() != null) {
@@ -279,6 +294,11 @@ public class AddEditViewIngredientFragment extends Fragment {
         });
     }
 
+    /** onCreaterOptionsMenu - inflates the menu xml file into the action bar
+     *
+     * */
+
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -300,5 +320,11 @@ public class AddEditViewIngredientFragment extends Fragment {
         void onDonePressed(IngredientItem ingredientItem);
         void onDeletePressed(IngredientItem ingredientItem);
     }
+
+
+
+
+
+
 
 }

@@ -46,6 +46,7 @@ public class MealPlanDL extends FireBaseDL {
     /** Stores ingredients
      * */
     public static ArrayList<MealPlan> mealPlanStorage = new ArrayList<MealPlan>();
+    private ListenerRegistration registration;
 
     /** Gets or creates current instance of the firebase DL
      * */
@@ -56,15 +57,13 @@ public class MealPlanDL extends FireBaseDL {
         return mealPlanDL;
     }
 
-    private ListenerRegistration registration;
-
-    public void deRegisterListener(){
-        registration.remove();
-    }
-
     public MealPlanDL() {
         // Populate ingredients here
         populateOnStartup();
+    }
+
+    public void deRegisterListener(){
+        registration.remove();
     }
 
     /** populateIngredientsOnStartup - called when first instance of IngredientDL is made

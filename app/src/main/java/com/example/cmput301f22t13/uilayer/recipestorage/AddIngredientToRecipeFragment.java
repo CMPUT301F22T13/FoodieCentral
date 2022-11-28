@@ -3,9 +3,14 @@ package com.example.cmput301f22t13.uilayer.recipestorage;
 import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -27,7 +32,9 @@ import com.example.cmput301f22t13.datalayer.RecipeDL;
 import com.example.cmput301f22t13.domainlayer.item.IngredientItem;
 import com.example.cmput301f22t13.domainlayer.item.RecipeItem;
 import com.example.cmput301f22t13.uilayer.ingredientstorage.IngredientListAdapter;
+import com.example.cmput301f22t13.uilayer.userlogin.Login;
 import com.example.cmput301f22t13.uilayer.userlogin.ResultListener;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -130,6 +137,12 @@ public class AddIngredientToRecipeFragment extends Fragment {
             });
         }
     }
+
+    /** onCreateOptionsMenu - inflates the menu xml file into the action bar
+     *
+     * */
+
+
 
     /**
      * This function is called when the view created has been detached from the fragment.

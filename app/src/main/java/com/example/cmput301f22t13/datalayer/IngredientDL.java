@@ -38,6 +38,7 @@ public class IngredientDL extends FireBaseDL {
      * */
     public static ArrayList<IngredientItem> ingredientStorage = new ArrayList<IngredientItem>();
     private ListenerRegistration registration;
+
     /** Gets or creates current instance of the firebase DL
      * */
     public static IngredientDL getInstance(){
@@ -49,7 +50,7 @@ public class IngredientDL extends FireBaseDL {
 
     public IngredientDL() {
         // Populate ingredients here
-        populateOnStartup();
+//        populateOnStartup();
     }
 
     public void deRegisterListener(){
@@ -59,7 +60,7 @@ public class IngredientDL extends FireBaseDL {
     /** populateIngredientsOnStartup - called when first instance of IngredientDL is made
      * listens for db changes and updates the ingredient storage accordingly
      * */
-    private void populateOnStartup() {
+    public void populateOnStartup() {
         CollectionReference getIngredients = fstore.collection("Users")
         .document(auth.getCurrentUser().getUid())
         .collection("Ingredient Storage");

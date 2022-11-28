@@ -1,8 +1,13 @@
 package com.example.cmput301f22t13.uilayer.mealplanstorage;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -20,9 +25,11 @@ import com.example.cmput301f22t13.datalayer.MealPlanDL;
 import com.example.cmput301f22t13.domainlayer.item.IngredientItem;
 import com.example.cmput301f22t13.domainlayer.item.Item;
 import com.example.cmput301f22t13.domainlayer.item.MealPlan;
+import com.example.cmput301f22t13.uilayer.userlogin.Login;
 import com.example.cmput301f22t13.uilayer.userlogin.ResultListener;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -61,6 +68,7 @@ public class MealPlanMainFragment extends Fragment {
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
 
         mealPlanAdapter = new MealPlanArrayAdapter(getActivity(), mealPlans);
         binding.mealPlanListView.setAdapter(mealPlanAdapter);
@@ -126,6 +134,8 @@ public class MealPlanMainFragment extends Fragment {
             }
         });
     }
+
+
 
     @Override
     public void onDestroyView() {
