@@ -173,10 +173,10 @@ public class AddEditViewIngredientFragment extends Fragment {
 
                 // in case nothing was entered in the edit text
                 try {
-                    ingredient.setAmount(Integer.valueOf(binding.ingredientAmountEdittext.getText().toString()));
+                    ingredient.setAmount(Double.valueOf(binding.ingredientAmountEdittext.getText().toString()));
                 }
                 catch(NumberFormatException e) {
-                    ingredient.setAmount(0);
+                    ingredient.setAmount(0.0);
                 }
 
                 ingredient.setUnit(binding.ingredientUnitEdittext.getText().toString());

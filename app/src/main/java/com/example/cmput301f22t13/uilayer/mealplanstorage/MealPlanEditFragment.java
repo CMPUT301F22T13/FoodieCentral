@@ -61,9 +61,6 @@ public class MealPlanEditFragment extends Fragment {
     // date selected from the dropdown
     private GregorianCalendar selectedDate;
 
-    private ArrayList<Item> hardcodedRecipes;
-    private ArrayList<Item> hardcodedIngredients;
-
     @Override
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container,
@@ -235,42 +232,6 @@ public class MealPlanEditFragment extends Fragment {
         else {
             binding.mealPlanAutoGenerateButton.setVisibility(View.GONE);
         }
-    }
-
-    private void generateRandomItems() {
-        RecipeItem tacos = new RecipeItem();
-        tacos.setName("Tacos");
-        tacos.setCategory("Mexican");
-        tacos.setServings(4);
-        ArrayList<IngredientItem> tacoIngredients = new ArrayList<IngredientItem>();
-        tacoIngredients.add(new IngredientItem("Ground Beef", "", 1, "lb", "", new GregorianCalendar(), "", ""));
-        tacoIngredients.add(new IngredientItem("Tortilla", "", 4, "", "", new GregorianCalendar(), "", ""));
-        tacoIngredients.add(new IngredientItem("Salsa", "", 1, "cup", "", new GregorianCalendar(), "", ""));
-        tacoIngredients.add(new IngredientItem("Sour Cream", "", 1, "cup", "", new GregorianCalendar(), "", ""));
-        tacos.setIngredients(tacoIngredients);
-        hardcodedRecipes.add(tacos);
-
-        RecipeItem steak = new RecipeItem();
-        steak.setName("Steak & Potatoes");
-        steak.setServings(2);
-        ArrayList<IngredientItem> steakIngredients = new ArrayList<IngredientItem>();
-        steakIngredients.add(new IngredientItem("Steak (10 oz)", "", 2, "", "", new GregorianCalendar(), "", ""));
-        steakIngredients.add(new IngredientItem("Potato", "", 2, "", "", new GregorianCalendar(), "", ""));
-        steakIngredients.add(new IngredientItem("Pepper", "", 1, "tsp", "", new GregorianCalendar(), "", ""));
-        steak.setIngredients(steakIngredients);
-        hardcodedRecipes.add(steak);
-
-        RecipeItem waffles = new RecipeItem();
-        waffles.setName("Waffles");
-        waffles.setServings(2);
-        ArrayList<IngredientItem> waffleIngredients = new ArrayList<IngredientItem>();
-        waffleIngredients.add(new IngredientItem("Eggs", "", 2, "", "", new GregorianCalendar(), "", ""));
-        waffleIngredients.add(new IngredientItem("Flour", "", 2, "cup", "", new GregorianCalendar(), "", ""));
-        waffleIngredients.add(new IngredientItem("Sugar", "", 2, "tbsp", "", new GregorianCalendar(), "", ""));
-        waffleIngredients.add(new IngredientItem("Milk", "", 1, "cup", "", new GregorianCalendar(), "", ""));
-        waffleIngredients.add(new IngredientItem("Vanilla", "", 1, "tsp", "", new GregorianCalendar(), "", ""));
-        waffles.setIngredients(waffleIngredients);
-        hardcodedRecipes.add(waffles);
     }
 
 }
