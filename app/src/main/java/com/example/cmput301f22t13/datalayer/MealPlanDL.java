@@ -101,26 +101,26 @@ public class MealPlanDL extends FireBaseDL {
                             days.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                                 @Override
                                 public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                                    for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
+                                    for (QueryDocumentSnapshot doc2 : queryDocumentSnapshots) {
                                         GregorianCalendar date = new GregorianCalendar();
-                                        date.setTimeInMillis(doc.getDouble("Date").longValue());
+                                        date.setTimeInMillis(doc2.getDouble("Date").longValue());
 
                                         days.document(doc.getId()).collection("Recipe Storage").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                                             @Override
                                             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                                                for (QueryDocumentSnapshot doc2 : queryDocumentSnapshots) {
+                                                for (QueryDocumentSnapshot doc3 : queryDocumentSnapshots) {
                                                     RecipeItem r = new RecipeItem();
 
-                                                    String hash = doc2.getId();
-                                                    String title = doc2.getString("Title");
-                                                    int prep = doc2.getDouble("Prep Time").intValue();
-                                                    int servings = doc2.getDouble("Servings").intValue();
+                                                    String hash = doc3.getId();
+                                                    String title = doc3.getString("Title");
+                                                    int prep = doc3.getDouble("Prep Time").intValue();
+                                                    int servings = doc3.getDouble("Servings").intValue();
                                                     r.setPrepTime(prep);
                                                     r.setServings(servings);
 
-                                                    String category = doc2.getString("Category");
-                                                    String comments = doc2.getString("Comments");
-                                                    String photo = doc2.getString("Photo");
+                                                    String category = doc3.getString("Category");
+                                                    String comments = doc3.getString("Comments");
+                                                    String photo = doc3.getString("Photo");
 
                                                     r.setTitle(title);
                                                     r.setHashId(hash);
@@ -133,15 +133,15 @@ public class MealPlanDL extends FireBaseDL {
                                                             .collection("Ingredients").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                                                                 @Override
                                                                 public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                                                                    for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
-                                                                        String hash = doc.getId();
-                                                                        String name = doc.getString("Name");
-                                                                        String description = (String) doc.getData().get("Description");
-                                                                        String unit = (String) doc.getData().get("Unit");
-                                                                        String category = (String) doc.getData().get("Category");
-                                                                        String photo = doc.getString("Photo");
+                                                                    for (QueryDocumentSnapshot doc4 : queryDocumentSnapshots) {
+                                                                        String hash = doc4.getId();
+                                                                        String name = doc4.getString("Name");
+                                                                        String description = (String) doc4.getData().get("Description");
+                                                                        String unit = (String) doc4.getData().get("Unit");
+                                                                        String category = (String) doc4.getData().get("Category");
+                                                                        String photo = doc4.getString("Photo");
                                                                         Double amount = 0.0;
-                                                                        amount = (Double) doc.getDouble("Amount");
+                                                                        amount = (Double) doc4.getDouble("Amount");
 
                                                                         IngredientItem i = new IngredientItem();
                                                                         i.setName(name);
@@ -164,19 +164,19 @@ public class MealPlanDL extends FireBaseDL {
                                         days.document(doc.getId()).collection("Ingredients").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                                             @Override
                                             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                                                for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
-                                                    String hash = doc.getId();
-                                                    String name = doc.getString("Name");
-                                                    String description = (String) doc.getData().get("Description");
+                                                for (QueryDocumentSnapshot doc5 : queryDocumentSnapshots) {
+                                                    String hash = doc5.getId();
+                                                    String name = doc5.getString("Name");
+                                                    String description = (String) doc5.getData().get("Description");
 
-                                                    String unit = (String) doc.getData().get("Unit");
-                                                    String category = (String) doc.getData().get("Category");
-                                                    String location = (String) doc.getData().get("Location");
-                                                    String photo = doc.getString("Photo");
+                                                    String unit = (String) doc5.getData().get("Unit");
+                                                    String category = (String) doc5.getData().get("Category");
+                                                    String location = (String) doc5.getData().get("Location");
+                                                    String photo = doc5.getString("Photo");
                                                     GregorianCalendar bestbefore = new GregorianCalendar();
-                                                    Double amount = (Double) doc.getDouble("Amount");
+                                                    Double amount = (Double) doc5.getDouble("Amount");
                                                     try {
-                                                        bestbefore.setTimeInMillis(doc.getDouble("Best Before").longValue());
+                                                        bestbefore.setTimeInMillis(doc5.getDouble("Best Before").longValue());
 
                                                     } catch (Exception e) { }
 
