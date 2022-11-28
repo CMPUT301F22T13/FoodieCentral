@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.example.cmput301f22t13.R;
 import com.example.cmput301f22t13.databinding.FragmentMealPlanEditBinding;
 import com.example.cmput301f22t13.databinding.FragmentMealPlanViewBinding;
+import com.example.cmput301f22t13.datalayer.MealPlanDL;
 import com.example.cmput301f22t13.domainlayer.item.IngredientItem;
 import com.example.cmput301f22t13.domainlayer.item.Item;
 import com.example.cmput301f22t13.domainlayer.item.MealPlan;
@@ -82,6 +83,8 @@ public class MealPlanViewFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 // call firebase here
+                MealPlanDL.getInstance().firebaseDelete(mealPlanItem);
+                MealPlanDL.getInstance().getStorage().remove(mealPlanItem);
                 NavHostFragment.findNavController(MealPlanViewFragment.this)
                         .navigate(R.id.action_mealPlanViewFragment_to_MealPlanMainFragment);
             }
