@@ -31,9 +31,12 @@ import java.util.Map;
 import java.util.Random;
 
 /**
- * {@link Fragment} that allows the user to view details of a meal plan. User can also add ingredients
+ * {@link Fragment} that allows the user to edit details of a meal plan. User can also add ingredients
  * & recipes to a certain day in the meal plan. Recipes and Ingredients can also be removed from
- * each day.
+ * each day. There is also an autogenerate feature that will add 3 random recipes from recipe
+ * storage to the meal plan.
+ *
+ * @author Logan Thimer
  */
 public class MealPlanEditFragment extends Fragment {
 

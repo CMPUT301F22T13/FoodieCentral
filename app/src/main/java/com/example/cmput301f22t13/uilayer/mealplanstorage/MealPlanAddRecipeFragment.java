@@ -30,7 +30,10 @@ import com.example.cmput301f22t13.uilayer.userlogin.ResultListener;
 import java.util.ArrayList;
 
 /**
- * {@link Fragment} to add a recipe to a meal plan
+ * {@link Fragment} to add recipe to a meal plan.
+ * User can select multiple recipes at a time to add
+ *
+ * @author Logan Thimer
  */
 public class MealPlanAddRecipeFragment extends Fragment {
 

@@ -30,7 +30,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * {@link Fragment} that allows the user to view details of a meal plan. Each day in the meal plan
+ * is displayed and a list of the ingredients & recipes are displayed in a list format below it
  *
+ * @author Logan Thimer
  */
 public class MealPlanViewFragment extends Fragment {
 
@@ -41,8 +44,6 @@ public class MealPlanViewFragment extends Fragment {
 
     // meal plan item that is passed in through the bundle
     private MealPlan mealPlanItem;
-
-    private ViewGroup linearLayout;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -55,7 +56,6 @@ public class MealPlanViewFragment extends Fragment {
                              Bundle savedInstanceState) {
         binding = FragmentMealPlanViewBinding.inflate(inflater, container, false);
         mealPlanItem = (MealPlan) getArguments().getSerializable(ARG_MEAL_PLAN_ITEM);
-        linearLayout = (ViewGroup) binding.mealPlanViewLinearLayout;
 
         addItemsToLayout();
 
@@ -75,6 +75,15 @@ public class MealPlanViewFragment extends Fragment {
                 bundle.putSerializable(MealPlanEditFragment.ARG_MEAL_PLAN_ITEM, mealPlanItem);
                 NavHostFragment.findNavController(MealPlanViewFragment.this)
                         .navigate(R.id.action_mealPlanViewFragment_to_mealPlanEditFragment, bundle);
+            }
+        });
+
+        binding.deleteMealPlanButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // call firebase here
+                NavHostFragment.findNavController(MealPlanViewFragment.this)
+                        .navigate(R.id.action_mealPlanViewFragment_to_MealPlanMainFragment);
             }
         });
 

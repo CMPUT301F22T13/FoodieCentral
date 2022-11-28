@@ -17,7 +17,13 @@ import com.example.cmput301f22t13.domainlayer.item.MealPlan;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
 
+/**
+ * {@link ArrayAdapter} to display two {@link GregorianCalendar}s as a date range
+ *
+ * @author Logan Thimer
+ */
 public class MealPlanArrayAdapter extends ArrayAdapter<MealPlan> {
 
     private Context context;

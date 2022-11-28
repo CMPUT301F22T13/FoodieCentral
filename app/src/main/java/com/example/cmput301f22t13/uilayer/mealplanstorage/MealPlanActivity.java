@@ -27,6 +27,8 @@ import com.example.cmput301f22t13.R;
 
 /**
  * {@link AppCompatActivity} to house all meal plan functions and fragments
+ *
+ * @author Logan Thimer
  */
 public class MealPlanActivity extends AppCompatActivity {
 
