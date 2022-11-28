@@ -108,19 +108,19 @@ public class MealPlanDL extends FireBaseDL {
                                         days.document(doc.getId()).collection("Recipe Storage").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                                             @Override
                                             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                                                for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
+                                                for (QueryDocumentSnapshot doc2 : queryDocumentSnapshots) {
                                                     RecipeItem r = new RecipeItem();
 
-                                                    String hash = doc.getId();
-                                                    String title = doc.getString("Title");
-                                                    int prep = doc.getDouble("Prep Time").intValue();
-                                                    int servings = doc.getDouble("Servings").intValue();
+                                                    String hash = doc2.getId();
+                                                    String title = doc2.getString("Title");
+                                                    int prep = doc2.getDouble("Prep Time").intValue();
+                                                    int servings = doc2.getDouble("Servings").intValue();
                                                     r.setPrepTime(prep);
                                                     r.setServings(servings);
 
-                                                    String category = doc.getString("Category");
-                                                    String comments = doc.getString("Comments");
-                                                    String photo = doc.getString("Photo");
+                                                    String category = doc2.getString("Category");
+                                                    String comments = doc2.getString("Comments");
+                                                    String photo = doc2.getString("Photo");
 
                                                     r.setTitle(title);
                                                     r.setHashId(hash);

@@ -27,6 +27,9 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 
+/**
+ * Fragment to show shopping list
+ */
 public class ShoppingListMainFragment extends Fragment {
     private FragmentShoppingListMainBinding binding;
     private ArrayAdapter<CountedIngredient> countedIngredientListAdapter;
@@ -42,6 +45,11 @@ public class ShoppingListMainFragment extends Fragment {
         return binding.getRoot();
     }
 
+    /**
+     * Function to create view
+     * @param view
+     * @param savedInstanceState
+     */
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setHasOptionsMenu(true);

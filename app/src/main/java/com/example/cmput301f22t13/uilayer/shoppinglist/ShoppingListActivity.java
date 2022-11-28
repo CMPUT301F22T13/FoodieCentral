@@ -25,6 +25,9 @@ import com.google.android.material.navigation.NavigationBarView;
 
 import java.util.ArrayList;
 
+/**
+ * Activity to render shopping list
+ */
 public class ShoppingListActivity extends AppCompatActivity {
     private AppBarConfiguration appBarConfiguration;
     private ActivityShoppingListBinding binding;
