@@ -105,7 +105,7 @@ public class MealPlanDL extends FireBaseDL {
                                         GregorianCalendar date = new GregorianCalendar();
                                         date.setTimeInMillis(doc2.getDouble("Date").longValue());
 
-                                        days.document(doc.getId()).collection("Recipe Storage").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                        days.document(doc2.getId()).collection("Recipe Storage").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                                             @Override
                                             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                                                 for (QueryDocumentSnapshot doc3 : queryDocumentSnapshots) {
