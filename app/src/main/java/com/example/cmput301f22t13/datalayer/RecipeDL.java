@@ -51,7 +51,7 @@ public class RecipeDL extends FireBaseDL {
     }
 
     public RecipeDL() {
-        //populateStorageOnStartup();
+        populateStorageOnStartup();
     }
 
     private ListenerRegistration registration;
@@ -73,64 +73,68 @@ public class RecipeDL extends FireBaseDL {
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable
                     FirebaseFirestoreException error) {
                 recipeStorage.clear();
-                if(queryDocumentSnapshots!=null)
-                for(QueryDocumentSnapshot doc: queryDocumentSnapshots)
-                {
-                    // TODO set all recipe dataums
-                    String hash = doc.getId();
-                    String title = doc.getString("Title");
-                    int prep = doc.getDouble("Prep Time").intValue();
-                    int servings = doc.getDouble("Servings").intValue();
-                    String category = doc.getString("Category");
-                    String comments = doc.getString("Comments");
-                    String photo = doc.getString("Photo");
+                if (queryDocumentSnapshots != null) {
+                    for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
+                        // TODO set all recipe dataums
+                        String hash = doc.getId();
+                        String title = doc.getString("Title");
+                        int prep = doc.getDouble("Prep Time").intValue();
+                        int servings = doc.getDouble("Servings").intValue();
+                        String category = doc.getString("Category");
+                        String comments = doc.getString("Comments");
+                        String photo = doc.getString("Photo");
 
-                    RecipeItem r = new RecipeItem();
+                        RecipeItem r = new RecipeItem();
 
-                    r.setTitle(title);
-                    r.setHashId(hash);
-                    r.setPrepTime(prep);
-                    r.setServings(servings);
-                    r.setCategory(category);
-                    r.setComments(comments);
-                    r.setPhoto(photo);
-
-
-                    fstore.collection("Users")
-                            .document(auth.getCurrentUser().getUid())
-                            .collection("Recipe Storage").document(r.getHashId())
-                            .collection("Ingredients").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                                @Override
-                                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                                    for (QueryDocumentSnapshot doc: queryDocumentSnapshots) {
-                                        String hash = doc.getId();
-                                        String name = doc.getString("Name");
-                                        String description = (String) doc.getData().get("Description");
-                                        String unit = (String) doc.getData().get("Unit");
-                                        String category = (String) doc.getData().get("Category");
-                                        String photo = doc.getString("Photo");
-                                        Double amount = 0.0;
-                                        try {
-                                            amount = (Double) doc.getDouble("Amount");
-                                        } catch (Exception e) {}
+                        r.setTitle(title);
+                        r.setHashId(hash);
+                        r.setPrepTime(prep);
+                        r.setServings(servings);
+                        r.setCategory(category);
+                        r.setComments(comments);
+                        r.setPhoto(photo);
 
 
-                                        IngredientItem i = new IngredientItem();
-                                        i.setName(name);
-                                        i.setDescription(description);
-                                        i.setAmount(amount.intValue());
-                                        i.setUnit(unit);
-                                        i.setCategory(category);
-                                        i.setHashId(hash);
-                                        i.setPhoto(photo);
-                                        r.addIngredient(i);
+                        fstore.collection("Users")
+                                .document(auth.getCurrentUser().getUid())
+                                .collection("Recipe Storage").document(r.getHashId())
+                                .collection("Ingredients").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                    @Override
+                                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                        for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
+                                            String hash = doc.getId();
+                                            String name = doc.getString("Name");
+                                            String description = (String) doc.getData().get("Description");
+                                            String unit = (String) doc.getData().get("Unit");
+                                            String category = (String) doc.getData().get("Category");
+                                            String photo = doc.getString("Photo");
+                                            Double amount = 0.0;
+                                            try {
+                                                amount = (Double) doc.getDouble("Amount");
+                                            } catch (Exception e) {
+                                            }
+
+
+                                            IngredientItem i = new IngredientItem();
+                                            i.setName(name);
+                                            i.setDescription(description);
+                                            i.setAmount(amount.intValue());
+                                            i.setUnit(unit);
+                                            i.setCategory(category);
+                                            i.setHashId(hash);
+                                            i.setPhoto(photo);
+                                            r.addIngredient(i);
+                                        }
                                     }
-                                }
-                            });
+                                });
 
-                    recipeStorage.add(r);
+                        recipeStorage.add(r);
+                    }
+                    if (listener != null) {
+                        listener.onSuccess();
+                    }
+
                 }
-                listener.onSuccess();
             }
         });
     }

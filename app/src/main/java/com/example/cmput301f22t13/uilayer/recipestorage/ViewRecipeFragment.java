@@ -248,6 +248,9 @@ public class ViewRecipeFragment extends Fragment {
         super.onCreateOptionsMenu(menu, inflater);
 
         MenuItem item = menu.findItem(R.id.menuShare);
+        MenuItem logout = menu.findItem(R.id.menuLogout);
+
+        logout.setVisible(false);
         item.setVisible(true);
     }
 

@@ -76,7 +76,7 @@ public class RecipeStorageActivity extends AppCompatActivity implements ViewReci
         super.onCreate(savedInstanceState);
         binding = ActivityRecipeStorageBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        RecipeDL.getInstance().populateStorageOnStartup();
+        //RecipeDL.getInstance().populateStorageOnStartup();
 
         RecipeItem sampleRecipe = new RecipeItem();
         sampleRecipe.setTitle("Sample Recipe");

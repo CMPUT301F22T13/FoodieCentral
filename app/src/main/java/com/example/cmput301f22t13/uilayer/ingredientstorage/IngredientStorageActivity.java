@@ -48,7 +48,7 @@ public class IngredientStorageActivity extends AppCompatActivity implements AddE
 
         binding = ActivityIngredientStorageBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        IngredientDL.getInstance().populateOnStartup();
+       // IngredientDL.getInstance().populateOnStartup();
 
 //        IngredientItem item1 = new IngredientItem();
 //        item1.setName("Apple");

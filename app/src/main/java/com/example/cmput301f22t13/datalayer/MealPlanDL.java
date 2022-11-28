@@ -57,7 +57,7 @@ public class MealPlanDL extends FireBaseDL {
 
     public MealPlanDL() {
         // Populate ingredients here
-       // populateOnStartup();
+        populateOnStartup();
     }
 
     public void deRegisterListener(){
@@ -78,32 +78,36 @@ public class MealPlanDL extends FireBaseDL {
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable
                     FirebaseFirestoreException error) {
                 mealPlanStorage.clear();
-                if(queryDocumentSnapshots!=null)
-                for(QueryDocumentSnapshot doc: queryDocumentSnapshots)
-                {
-                    String hash = doc.getId();
-                    GregorianCalendar startDate = new GregorianCalendar();
-                    GregorianCalendar endDate = new GregorianCalendar();
+                if (queryDocumentSnapshots != null) {
+                    for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
+                        String hash = doc.getId();
+                        GregorianCalendar startDate = new GregorianCalendar();
+                        GregorianCalendar endDate = new GregorianCalendar();
 
-                    try {
-                        startDate.setTimeInMillis(doc.getDouble("Start Date").longValue());
+                        try {
+                            startDate.setTimeInMillis(doc.getDouble("Start Date").longValue());
 
-                    } catch (Exception e) {}
-                    try {
-                        endDate.setTimeInMillis(doc.getDouble("End Date").longValue());
-                    } catch (Exception e) {}
+                        } catch (Exception e) {
+                        }
+                        try {
+                            endDate.setTimeInMillis(doc.getDouble("End Date").longValue());
+                        } catch (Exception e) {
+                        }
 
 
-
-                    MealPlan m = new MealPlan();
-                    m.setStartDate(startDate);
-                    m.setEndDate(endDate);
-                    m.setHashId(hash);
-                    mealPlanStorage.add(m);
+                        MealPlan m = new MealPlan();
+                        m.setStartDate(startDate);
+                        m.setEndDate(endDate);
+                        m.setHashId(hash);
+                        mealPlanStorage.add(m);
+                    }
+                    if (listener != null) {
+                        listener.onSuccess();
+                    }
                 }
-                listener.onSuccess();
             }
         });
+
     }
 
     /** Add/Edit item recieved from Domain Layer into FireStore Ingredient storage collection

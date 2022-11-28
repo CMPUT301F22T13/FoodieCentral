@@ -45,7 +45,7 @@ public class MealPlanActivity extends AppCompatActivity {
 
         binding = ActivityMealPlanBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        MealPlanDL.getInstance().populateOnStartup();
+        //MealPlanDL.getInstance().populateOnStartup();
 
         setSupportActionBar(binding.toolbar);
 
@@ -112,6 +112,7 @@ public class MealPlanActivity extends AppCompatActivity {
         Intent intent = new Intent(this, Login.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
+        MealPlanDL.getInstance().deRegisterListener();
 
     }
 

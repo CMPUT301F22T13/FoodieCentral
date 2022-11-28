@@ -23,6 +23,8 @@ import com.example.cmput301f22t13.R;
 import com.example.cmput301f22t13.datalayer.FireBaseDL;
 import com.example.cmput301f22t13.datalayer.IngredientDL;
 import com.example.cmput301f22t13.datalayer.LoginDL;
+import com.example.cmput301f22t13.datalayer.MealPlanDL;
+import com.example.cmput301f22t13.datalayer.RecipeDL;
 import com.example.cmput301f22t13.uilayer.ingredientstorage.IngredientStorageActivity;
 import com.example.cmput301f22t13.uilayer.shoppinglist.ShoppingListActivity;
 //import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -125,6 +127,7 @@ public class Login extends AppCompatActivity {
                     public void onSuccess() {
                         loginProgressBar.setVisibility(View.INVISIBLE);
                         Toast.makeText(Login.this, "Welcome back!", Toast.LENGTH_SHORT).show();
+                        initilizeDataLayer();
                         startActivity(new Intent(getApplicationContext(), IngredientStorageActivity.class));
                     }
                     @Override
@@ -189,6 +192,12 @@ public class Login extends AppCompatActivity {
         });
 
 
+    }
+
+    private void initilizeDataLayer() {
+        IngredientDL.getInstance();
+        RecipeDL.getInstance();
+        MealPlanDL.getInstance();
     }
 
 //    @Override

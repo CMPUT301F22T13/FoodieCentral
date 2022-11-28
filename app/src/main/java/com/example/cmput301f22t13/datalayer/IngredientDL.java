@@ -50,7 +50,7 @@ public class IngredientDL extends FireBaseDL {
 
     public IngredientDL() {
         // Populate ingredients here
-//        populateOnStartup();
+       populateOnStartup();
     }
 
     public void deRegisterListener(){
@@ -70,42 +70,46 @@ public class IngredientDL extends FireBaseDL {
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable
                     FirebaseFirestoreException error) {
                 ingredientStorage.clear();
-                if(queryDocumentSnapshots!=null)
-                for(QueryDocumentSnapshot doc: queryDocumentSnapshots)
-                {
-                    String hash = doc.getId();
-                    String name = doc.getString("Name");
-                    String description = (String) doc.getData().get("Description");
+                if(queryDocumentSnapshots!=null) {
+                    for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
+                        String hash = doc.getId();
+                        String name = doc.getString("Name");
+                        String description = (String) doc.getData().get("Description");
 
-                    String unit = (String) doc.getData().get("Unit");
-                    String category = (String) doc.getData().get("Category");
-                    String location = (String) doc.getData().get("Location");
-                    String photo = doc.getString("Photo");
-                    GregorianCalendar bestbefore = new GregorianCalendar();
-                    String image = (String) doc.getData().get("Image");
-                    Double amount = 0.0;
-                    try {
-                        bestbefore.setTimeInMillis(doc.getDouble("Best Before").longValue());
+                        String unit = (String) doc.getData().get("Unit");
+                        String category = (String) doc.getData().get("Category");
+                        String location = (String) doc.getData().get("Location");
+                        String photo = doc.getString("Photo");
+                        GregorianCalendar bestbefore = new GregorianCalendar();
+                        String image = (String) doc.getData().get("Image");
+                        Double amount = 0.0;
+                        try {
+                            bestbefore.setTimeInMillis(doc.getDouble("Best Before").longValue());
 
-                    } catch (Exception e) {}
-                    try {
-                        amount = (Double) doc.getDouble("Amount");
-                    } catch (Exception e) {}
+                        } catch (Exception e) {
+                        }
+                        try {
+                            amount = (Double) doc.getDouble("Amount");
+                        } catch (Exception e) {
+                        }
 
 
-                    IngredientItem i = new IngredientItem();
-                    i.setName(name);
-                    i.setDescription(description);
-                    i.setAmount(amount.intValue());
-                    i.setUnit(unit);
-                    i.setCategory(category);
-                    i.setLocation(location);
-                    i.setHashId(hash);
-                    i.setBbd(bestbefore);
-                    i.setPhoto(photo);
-                    ingredientStorage.add(i);
+                        IngredientItem i = new IngredientItem();
+                        i.setName(name);
+                        i.setDescription(description);
+                        i.setAmount(amount.intValue());
+                        i.setUnit(unit);
+                        i.setCategory(category);
+                        i.setLocation(location);
+                        i.setHashId(hash);
+                        i.setBbd(bestbefore);
+                        i.setPhoto(photo);
+                        ingredientStorage.add(i);
+                    }
                 }
-                listener.onSuccess();
+                if (listener != null) {
+                    listener.onSuccess();
+                }
             }
         });
     }
