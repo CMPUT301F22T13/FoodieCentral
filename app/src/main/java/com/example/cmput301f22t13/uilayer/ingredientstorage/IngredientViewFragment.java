@@ -28,7 +28,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import java.util.Calendar;
 
 /**
+ * {@link Fragment} to view all details of an ingredient
  *
+ * @author Logan Thimer
  */
 public class IngredientViewFragment extends Fragment {
 
