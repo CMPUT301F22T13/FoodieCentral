@@ -123,6 +123,8 @@ public class MealPlanEditFragment extends Fragment {
             }
         });
 
+//        MealPlanDL.getInstance()
+
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -218,6 +220,8 @@ public class MealPlanEditFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 MealPlanDL.getInstance().firebaseAddEdit(mealPlanItem);
+                NavHostFragment.findNavController(MealPlanEditFragment.this).popBackStack();
+
             }
         });
 

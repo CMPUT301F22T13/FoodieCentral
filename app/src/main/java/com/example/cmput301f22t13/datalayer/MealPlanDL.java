@@ -152,7 +152,7 @@ public class MealPlanDL extends FireBaseDL {
                                                                 IngredientItem i = new IngredientItem();
                                                                 i.setName(name);
                                                                 i.setDescription(description);
-                                                                i.setAmount(amount.intValue());
+                                                                i.setAmount(amount.doubleValue());
                                                                 i.setUnit(unit);
                                                                 i.setCategory(category);
                                                                 i.setHashId(hash);
@@ -194,7 +194,7 @@ public class MealPlanDL extends FireBaseDL {
                                             i.setName(name);
                                             i.setDescription(description);
                                             try {
-                                                i.setAmount(amount.intValue());
+                                                i.setAmount(amount);
                                             } catch (Exception e) { }
 
                                             i.setUnit(unit);
