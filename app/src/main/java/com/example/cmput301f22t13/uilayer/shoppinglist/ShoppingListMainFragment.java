@@ -62,7 +62,7 @@ public class ShoppingListMainFragment extends Fragment {
                 IngredientItem ingredientItem = new IngredientItem();
                 ingredientItem.setName(countedIngredient.getName());
                 ingredientItem.setAmount(countedIngredient.getCount());
-
+                ingredientItem.setHashId(countedIngredient.getHashId());
                 binding.purchasedIngredientButton.setText(Integer.toString(i));
 
                 String buttonText;

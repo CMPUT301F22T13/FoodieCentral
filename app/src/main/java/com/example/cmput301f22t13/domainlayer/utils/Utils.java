@@ -100,8 +100,10 @@ public class Utils {
 
         ArrayList<IngredientItem> storedIngredientsDL = IngredientDL.getInstance().getStorage();
         HashMap<String, Double> storedIngredient = new HashMap<>();
+        HashMap<String, String> storedIngredientHashes = new HashMap<>();
         for (IngredientItem ingredientItem : storedIngredientsDL) {
             storedIngredient.put(ingredientItem.getName().toLowerCase(), ingredientItem.getAmount());
+            storedIngredientHashes.put(ingredientItem.getName().toLowerCase(), ingredientItem.getHashId());
         }
         for (String ingredientName : mealPlanIngredients.keySet()) {
             if (storedIngredient.containsKey(ingredientName)) {
@@ -109,6 +111,7 @@ public class Utils {
                 CountedIngredient countedIngredient = new CountedIngredient();
                 countedIngredient.setName(ingredientName);
                 countedIngredient.setCount(neededIngredients);
+                countedIngredient.setHashId(storedIngredientHashes.get(ingredientName));
                 countedIngredients.add(countedIngredient);
             } else {
                 CountedIngredient countedIngredient = new CountedIngredient();
