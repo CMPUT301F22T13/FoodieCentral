@@ -30,6 +30,11 @@ public class FireBaseDL {
         fstore = FirebaseFirestore.getInstance();
     }
 
+    /**
+     * sets a specified item to firebase at the given document reference
+     * @param: Map<String, Object> fbobject - object to add
+     * @param: DocumentReference doc - reference location
+     */
     protected void addToFireBase(Map<String, Object> fbobject, DocumentReference doc) {
         doc.set(fbobject).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
@@ -44,6 +49,10 @@ public class FireBaseDL {
         });
     }
 
+    /**
+     * deletes at the given document reference
+     * @param: DocumentReference doc - reference location to delete
+     */
     protected void deleteFromFireBase(DocumentReference doc) {
         doc.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
