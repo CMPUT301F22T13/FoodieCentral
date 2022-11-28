@@ -163,16 +163,6 @@ public class AddEditViewIngredientFragment extends Fragment {
             if (getActivity() instanceof RecipeStorageActivity) {
                 binding.deleteIngredientButton.setVisibility(View.GONE);
             }
-
-            // we want the user to click the edit button first before being able to change the
-            // ingredient attributes
-            /*
-            binding.ingredientNameEdittext.setInputType(InputType.TYPE_NULL);
-            binding.ingredientDescriptionEdittext.setInputType(InputType.TYPE_NULL);
-            binding.ingredientAmountEdittext.setInputType(InputType.TYPE_NULL);
-            binding.ingredientUnitEdittext.setInputType(InputType.TYPE_NULL);
-            binding.ingredientCategoryEdittext.setInputType(InputType.TYPE_NULL);
-            binding.ingredientLocationEdittext.setInputType(InputType.TYPE_NULL);*/
         }
         else {
             ingredient = new IngredientItem();
@@ -227,21 +217,6 @@ public class AddEditViewIngredientFragment extends Fragment {
                 NavHostFragment.findNavController(AddEditViewIngredientFragment.this).popBackStack(R.id.IngredientStorageMainFragment, false);
             }
         });
-        /*
-        binding.editIngredientButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                binding.doneIngredientButton.setVisibility(View.VISIBLE);
-                binding.ingredientNameEdittext.setInputType(InputType.TYPE_CLASS_TEXT);
-                binding.ingredientDescriptionEdittext.setInputType(InputType.TYPE_TEXT_FLAG_MULTI_LINE);
-                binding.ingredientAmountEdittext.setInputType(InputType.TYPE_CLASS_NUMBER);
-                binding.ingredientUnitEdittext.setInputType(InputType.TYPE_CLASS_TEXT);
-                binding.ingredientCategoryEdittext.setInputType(InputType.TYPE_CLASS_TEXT);
-                binding.ingredientLocationEdittext.setInputType(InputType.TYPE_CLASS_TEXT);
-                binding.deleteIngredientButton.setVisibility(View.GONE);
-                binding.editIngredientButton.setVisibility(View.GONE);
-            }
-        });*/
 
         binding.ingredientBbdEdittext.setInputType(InputType.TYPE_NULL);
         binding.ingredientBbdEdittext.setOnClickListener(new View.OnClickListener() {
@@ -305,17 +280,14 @@ public class AddEditViewIngredientFragment extends Fragment {
         binding = null;
     }
 
-    /** setIngredientImage -sets the ingredient item image
-     *
-     * */
     private void setIngredientImage(Bitmap image) {
         selectedImage = image;
         binding.ingredientImageImageview.setImageBitmap(selectedImage);
     }
 
-    /** OnIngredientItemChangeListener - interface for button presses
-     *
-     * */
+    /**
+     * OnIngredientItemChangeListener - interface for button presses
+     */
     public interface OnIngredientItemChangeListener {
         void onDonePressed(IngredientItem ingredientItem);
         void onDeletePressed(IngredientItem ingredientItem);
