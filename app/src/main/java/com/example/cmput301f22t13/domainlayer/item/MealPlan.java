@@ -241,6 +241,12 @@ public class MealPlan implements Serializable {
                     " and " + formatter.format(endDate.getTime())+ ". " + formatter.format(date.getTime()) + " is not");
         }
 
+        if (mealPlanItems.containsKey(date)) {
+            ArrayList<Item> items = mealPlanItems.get(date);
+            items.add(item);
+            mealPlanItems.remove(date);
+            mealPlanItems.put(date, items);
+        }
     }
 
     /**
