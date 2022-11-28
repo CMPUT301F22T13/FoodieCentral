@@ -15,6 +15,8 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import androidx.navigation.NavController;
@@ -24,8 +26,10 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.example.cmput301f22t13.R;
 import com.example.cmput301f22t13.uilayer.shoppinglist.ShoppingListActivity;
+import com.example.cmput301f22t13.uilayer.userlogin.Login;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
+import com.google.firebase.auth.FirebaseAuth;
 
 /** Activity to handle ingredient storage,
  * utilizes 2 fragments for displaying ingredients and adding and editing ingredients
@@ -44,6 +48,7 @@ public class IngredientStorageActivity extends AppCompatActivity implements AddE
 
         binding = ActivityIngredientStorageBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        IngredientDL.getInstance().populateOnStartup();
 
 //        IngredientItem item1 = new IngredientItem();
 //        item1.setName("Apple");
@@ -99,6 +104,8 @@ public class IngredientStorageActivity extends AppCompatActivity implements AddE
 
     }
 
+
+
     @Override
     public boolean onSupportNavigateUp() {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_ingredient_storage);
@@ -119,4 +126,45 @@ public class IngredientStorageActivity extends AppCompatActivity implements AddE
         ingredientDL.firebaseDelete(ingredientItem);
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.mymenu, menu);
+        return  true;
+    }
+
+
+    /** onOptionsItemSelected - handles on click events with menu items
+     *
+     * */
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if(item.getItemId() ==R.id.menuLogout){
+            logoutUser();
+            return true;
+
+        }
+        return false;
+    }
+
+    /** logoutUser - signs current user out and sends user to the login page
+     *
+     * */
+
+    private void logoutUser() {
+
+        //Normal user logout
+        Log.d("TAG", "logoutUser: " + FirebaseAuth.getInstance().getCurrentUser().getUid());
+        FirebaseAuth.getInstance().signOut();
+        Intent intent = new Intent(this, Login.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        IngredientDL.getInstance().deRegisterListener();
+        super.onDestroy();
+    }
 }

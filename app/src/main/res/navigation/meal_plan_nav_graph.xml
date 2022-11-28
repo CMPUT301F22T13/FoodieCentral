@@ -43,5 +43,8 @@
         <action
             android:id="@+id/action_mealPlanViewFragment_to_mealPlanEditFragment"
             app:destination="@id/mealPlanEditFragment" />
+        <action
+            android:id="@+id/action_mealPlanViewFragment_to_MealPlanMainFragment"
+            app:destination="@id/MealPlanMainFragment" />
     </fragment>
 </navigation>

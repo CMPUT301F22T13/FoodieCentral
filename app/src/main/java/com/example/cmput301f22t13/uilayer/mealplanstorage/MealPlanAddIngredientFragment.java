@@ -1,5 +1,6 @@
 package com.example.cmput301f22t13.uilayer.mealplanstorage;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 
@@ -10,6 +11,9 @@ import androidx.navigation.fragment.NavHostFragment;
 import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -22,12 +26,17 @@ import com.example.cmput301f22t13.datalayer.MealPlanDL;
 import com.example.cmput301f22t13.domainlayer.item.IngredientItem;
 import com.example.cmput301f22t13.domainlayer.item.Item;
 import com.example.cmput301f22t13.uilayer.ingredientstorage.IngredientListAdapter;
+import com.example.cmput301f22t13.uilayer.userlogin.Login;
+import com.google.firebase.auth.FirebaseAuth;
 import com.example.cmput301f22t13.uilayer.userlogin.ResultListener;
 
 import java.util.ArrayList;
 
 /**
- * {@link Fragment} to add an Ingredient to a meal plan
+ * {@link Fragment} to add an Ingredient to a meal plan.
+ * User can select multiple ingredients at a time to add
+ *
+ * @author Logan Thimer
  */
 public class MealPlanAddIngredientFragment extends Fragment {
 
@@ -57,6 +66,8 @@ public class MealPlanAddIngredientFragment extends Fragment {
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+
 
         ingredients = IngredientDL.getInstance().getStorage();
         ingredientAdapter = new IngredientListAdapter(getActivity(), ingredients);

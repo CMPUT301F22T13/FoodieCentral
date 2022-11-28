@@ -9,6 +9,9 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Base64;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -26,6 +29,12 @@ import com.example.cmput301f22t13.databinding.FragmentAddEditViewRecipeBinding;
 import com.example.cmput301f22t13.datalayer.RecipeDL;
 import com.example.cmput301f22t13.domainlayer.item.IngredientItem;
 import com.example.cmput301f22t13.domainlayer.item.RecipeItem;
+import com.example.cmput301f22t13.uilayer.ingredientstorage.AddEditViewIngredientFragment;
+import com.example.cmput301f22t13.uilayer.ingredientstorage.IngredientStorageActivity;
+import com.example.cmput301f22t13.uilayer.ingredientstorage.IngredientStorageMainFragment;
+import com.example.cmput301f22t13.uilayer.userlogin.Login;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
@@ -128,6 +137,7 @@ public class AddEditViewRecipeFragment extends Fragment {
      */
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
 
         // Initializing ingredients adapter.
         ingredientsAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1);;
@@ -343,6 +353,8 @@ public class AddEditViewRecipeFragment extends Fragment {
         binding.recipeImageView.setImageBitmap(selectedImage);
     }
 
+
+
     /**
      * Interface of the listener for {@link RecipeItem} changes.
      */
@@ -354,5 +366,7 @@ public class AddEditViewRecipeFragment extends Fragment {
         void onDonePressed(IngredientItem ingredientItem);
         void recipeSelected(RecipeItem recipe);
     }
+
+
 
 }
