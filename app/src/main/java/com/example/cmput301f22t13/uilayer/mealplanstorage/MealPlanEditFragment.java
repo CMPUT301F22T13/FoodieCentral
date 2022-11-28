@@ -151,6 +151,7 @@ public class MealPlanEditFragment extends Fragment {
         binding.deleteItemButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                MealPlanDL.getInstance().deleteItem(mealPlanItem, selectedItem, selectedDate);
                 mealPlanItem.removeItemForDay(selectedDate, selectedItem);
                 selectedItem = null;
                 binding.deleteItemButton.hide();
@@ -221,7 +222,6 @@ public class MealPlanEditFragment extends Fragment {
             public void onClick(View view) {
                 MealPlanDL.getInstance().firebaseAddEdit(mealPlanItem);
                 NavHostFragment.findNavController(MealPlanEditFragment.this).popBackStack();
-
             }
         });
 

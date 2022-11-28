@@ -213,17 +213,7 @@ public class RecipeDL extends FireBaseDL {
                 .collection("Recipe Storage")
                 .document(item.getHashId());
 
-        deleteIngredient.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void unused) {
-                Log.d("tag", "Recipe item successfully deleted from Firebase");
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.d("TAG", "Recipe item not deleted");
-            }
-        });
+        deleteFromFireBase(deleteIngredient);
     }
 
     public void deleteIngredient(RecipeItem recipeItem, IngredientItem ingredientItem) {
@@ -234,17 +224,7 @@ public class RecipeDL extends FireBaseDL {
                 .collection("Ingredients")
                 .document(ingredientItem.getHashId());
 
-        deleteIngredient.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void unused) {
-                Log.d("tag", "Recipe item successfully deleted from Firebase");
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.d("TAG", "Recipe item not deleted");
-            }
-        });
+        deleteFromFireBase(deleteIngredient);
     }
 
     /** Getter for ingredient storage

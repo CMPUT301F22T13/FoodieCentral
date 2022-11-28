@@ -64,11 +64,10 @@ public class MealPlanDL extends FireBaseDL {
      * listens for db changes and updates the ingredient storage accordingly
      * */
     private void populateOnStartup() {
-        CollectionReference getIngredients = fstore.collection("Users")
+        fstore.collection("Users")
                 .document(auth.getCurrentUser().getUid())
-                .collection("MealPlan Storage");
-
-        getIngredients.addSnapshotListener(new EventListener<QuerySnapshot>() {
+                .collection("MealPlan Storage")
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable
                     FirebaseFirestoreException error) {
@@ -80,12 +79,10 @@ public class MealPlanDL extends FireBaseDL {
 
                     try {
                         startDate.setTimeInMillis(doc.getDouble("Start Date").longValue());
-                    } catch (Exception e) {
-                    }
+                    } catch (Exception e) {}
                     try {
                         endDate.setTimeInMillis(doc.getDouble("End Date").longValue());
-                    } catch (Exception e) {
-                    }
+                    } catch (Exception e) { }
 
                     MealPlan m = new MealPlan(startDate, endDate, doc.getId());
 
@@ -110,25 +107,20 @@ public class MealPlanDL extends FireBaseDL {
 
                                             String hash = doc.getId();
                                             String title = doc.getString("Title");
-                                            try {
-                                                int prep = doc.getDouble("Prep Time").intValue();
-                                                int servings = doc.getDouble("Servings").intValue();
-                                                r.setPrepTime(prep);
-                                                r.setServings(servings);
-                                            } catch (Exception e) {
-                                            }
+                                            int prep = doc.getDouble("Prep Time").intValue();
+                                            int servings = doc.getDouble("Servings").intValue();
+                                            r.setPrepTime(prep);
+                                            r.setServings(servings);
 
                                             String category = doc.getString("Category");
                                             String comments = doc.getString("Comments");
                                             String photo = doc.getString("Photo");
-
 
                                             r.setTitle(title);
                                             r.setHashId(hash);
                                             r.setCategory(category);
                                             r.setComments(comments);
                                             r.setPhoto(photo);
-
 
                                             days.document(doc.getId())
                                                     .collection("Recipe Storage").document(r.getHashId())
@@ -143,16 +135,12 @@ public class MealPlanDL extends FireBaseDL {
                                                                 String category = (String) doc.getData().get("Category");
                                                                 String photo = doc.getString("Photo");
                                                                 Double amount = 0.0;
-                                                                try {
-                                                                    amount = (Double) doc.getDouble("Amount");
-                                                                } catch (Exception e) {
-                                                                }
-
+                                                                amount = (Double) doc.getDouble("Amount");
 
                                                                 IngredientItem i = new IngredientItem();
                                                                 i.setName(name);
                                                                 i.setDescription(description);
-                                                                i.setAmount(amount.doubleValue());
+                                                                i.setAmount(amount);
                                                                 i.setUnit(unit);
                                                                 i.setCategory(category);
                                                                 i.setHashId(hash);
@@ -180,23 +168,16 @@ public class MealPlanDL extends FireBaseDL {
                                             String location = (String) doc.getData().get("Location");
                                             String photo = doc.getString("Photo");
                                             GregorianCalendar bestbefore = new GregorianCalendar();
-                                            Double amount = 0.0;
+                                            Double amount = (Double) doc.getDouble("Amount");
                                             try {
                                                 bestbefore.setTimeInMillis(doc.getDouble("Best Before").longValue());
 
                                             } catch (Exception e) { }
-                                            try {
-                                                amount = (Double) doc.getDouble("Amount");
-                                            } catch (Exception e) { }
-
 
                                             IngredientItem i = new IngredientItem();
                                             i.setName(name);
                                             i.setDescription(description);
-                                            try {
-                                                i.setAmount(amount);
-                                            } catch (Exception e) { }
-
+                                            i.setAmount(amount);
                                             i.setUnit(unit);
                                             i.setCategory(category);
                                             i.setLocation(location);
@@ -240,20 +221,9 @@ public class MealPlanDL extends FireBaseDL {
                 .collection("MealPlan Storage")
                 .document(item.getHashId());
 
-        mealPlanStorage.set(mealPlanItem).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void unused) {
-                Log.d("TAG", "firebaseAdd works as wanted");
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.d("TAG", "firebaseAdd does not work");
-            }
-        });
+        addToFireBase(mealPlanItem, mealPlanStorage);
 
-
-        // Food tings
+        // Logic area for adding the items
         for (Map.Entry<GregorianCalendar, ArrayList<Item>>
             i : item.getMealPlanItems().entrySet()) {
 
@@ -268,17 +238,8 @@ public class MealPlanDL extends FireBaseDL {
                     .collection("Days")
                     .document(hash);
 
-            daysStorage.set(day).addOnSuccessListener(new OnSuccessListener<Void>() {
-                @Override
-                public void onSuccess(Void unused) {
-                    Log.d("TAG", "firebaseAdd works as wanted");
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Log.d("TAG", "firebaseAdd does not work");
-                }
-            });
+            addToFireBase(day, daysStorage);
+
 
             // Mealplan Items
             for(Item j : i.getValue()) {
@@ -323,30 +284,10 @@ public class MealPlanDL extends FireBaseDL {
                                 .collection("Ingredients")
                                 .document(k.getHashId());
 
-                        ingredientStorage.set(ingredient).addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void unused) {
-                                Log.d("TAG", "firebaseAdd works as wanted");
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Log.d("TAG", "firebaseAdd does not work");
-                            }
-                        });
+                        addToFireBase(ingredient, ingredientStorage);
                     }
 
-                    recipeStorage.set(recipe).addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void unused) {
-                            Log.d("TAG", "firebaseAdd works as wanted");
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Log.d("TAG", "firebaseAdd does not work");
-                        }
-                    });
+                    addToFireBase(recipe, recipeStorage);
 
 
                 } else {
@@ -361,23 +302,43 @@ public class MealPlanDL extends FireBaseDL {
                             .collection("Ingredients")
                             .document(j.getHashId());
 
-                    ingredientStorage.set(ingredient).addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void unused) {
-                            Log.d("TAG", "firebaseAdd works as wanted");
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Log.d("TAG", "firebaseAdd does not work");
-                        }
-                    });
+                    addToFireBase(ingredient, ingredientStorage);
                 }
-
             }
         }
-
     }
+
+    /** Deletes data from Firestore for a particular passed in Recipe item - by doing so the recipe document is deleted from Firestore
+     *  @param item - Recipe item to be deleted from Firestore
+     * */
+    public void firebaseDelete(MealPlan item){
+        //Referencing wanted document from correct location in Firestore database
+        DocumentReference doc = fstore.collection("Users")
+                .document(auth.getCurrentUser().getUid())
+                .collection("MealPlan Storage")
+                .document(item.getHashId());
+
+        deleteFromFireBase(doc);
+    }
+
+
+    public void deleteItem(MealPlan mealPlanItem, Item item, GregorianCalendar date) {
+        String coll = "Ingredients";
+        if (item instanceof RecipeItem)
+            coll = "Recipe Storage";
+
+        DocumentReference deleteIngredient = fstore.collection("Users")
+                .document(auth.getCurrentUser().getUid())
+                .collection("MealPlan Storage")
+                .document(mealPlanItem.getHashId())
+                .collection("Days")
+                .document(String.valueOf(date.getTimeInMillis()))
+                .collection(coll)
+                .document(item.getHashId());
+
+        deleteFromFireBase(deleteIngredient);
+    }
+
 
     /** Getter for mealplan storage
      * @Returns: ArrayList<MealPlan> representing mealplans in storage
