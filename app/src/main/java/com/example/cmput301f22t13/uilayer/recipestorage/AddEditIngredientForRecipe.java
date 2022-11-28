@@ -121,9 +121,9 @@ public class AddEditIngredientForRecipe extends Fragment {
                 newIngredient.setDescription(binding.editIngredientDescriptionForRecipe.getText().toString());
 
                 try {
-                    newIngredient.setAmount(Integer.parseInt(binding.editIngredientQuantityForRecipe.getText().toString()));
+                    newIngredient.setAmount(Double.parseDouble(binding.editIngredientQuantityForRecipe.getText().toString()));
                 } catch (NumberFormatException x) {
-                    newIngredient.setAmount(0);
+                    newIngredient.setAmount(0.0);
                 }
                 newIngredient.setUnit(binding.editIngredientUnitForRecipe.getText().toString());
                 ((RecipeStorageActivity) getActivity()).onDonePressed(newIngredient);

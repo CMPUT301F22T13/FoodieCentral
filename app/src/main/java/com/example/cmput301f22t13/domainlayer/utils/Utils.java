@@ -62,11 +62,11 @@ public class Utils {
         IngredientItem mockIngredient3 = new IngredientItem();
 
         mockIngredient1.setName("Chicken");
-        mockIngredient1.setAmount(5);
+        mockIngredient1.setAmount(5.0);
         mockIngredient2.setName("Broccoli");
-        mockIngredient2.setAmount(3);
+        mockIngredient2.setAmount(3.0);
         mockIngredient3.setName("Rice");
-        mockIngredient3.setAmount(10);
+        mockIngredient3.setAmount(10.0);
 
         mockRecipe1.setName("Chicken and Rice");
         mockRecipe1.addIngredient(mockIngredient1);
@@ -101,14 +101,14 @@ public class Utils {
 
         TreeMap<GregorianCalendar, ArrayList<Item>> mealPlanItems = mealPlan.getMealPlanItems();
         Collection<ArrayList<Item>> allMealPlanItems = mealPlanItems.values();
-        HashMap<String, Integer> mealPlanIngredients = new HashMap<>();
+        HashMap<String, Double> mealPlanIngredients = new HashMap<>();
         for (ArrayList<Item> itemList : allMealPlanItems) {
             for (Item item : itemList) {
                 if (item instanceof RecipeItem) {
                     for (IngredientItem ingredient : ((RecipeItem) item).getIngredients()) {
                         if (mealPlanIngredients.containsKey(ingredient.getName().toLowerCase())) {
-                            int currentIngredientCount = mealPlanIngredients.get(ingredient.getName().toLowerCase());
-                            int newAmount = currentIngredientCount + currentIngredientCount;
+                            double currentIngredientCount = mealPlanIngredients.get(ingredient.getName().toLowerCase());
+                            double newAmount = currentIngredientCount + currentIngredientCount;
                             mealPlanIngredients.put(ingredient.getName().toLowerCase(), newAmount);
                         } else {
                             mealPlanIngredients.put(ingredient.getName().toLowerCase(), ingredient.getAmount());
@@ -116,8 +116,8 @@ public class Utils {
                     }
                 } else if (item instanceof IngredientItem) {
                     if (mealPlanIngredients.containsKey(item.getName().toLowerCase())) {
-                        int currentIngredientCount = mealPlanIngredients.get(item.getName().toLowerCase());
-                        int newAmount = currentIngredientCount + currentIngredientCount;
+                        double currentIngredientCount = mealPlanIngredients.get(item.getName().toLowerCase());
+                        double newAmount = currentIngredientCount + currentIngredientCount;
                         mealPlanIngredients.put(item.getName().toLowerCase(), newAmount);
                     } else {
                         mealPlanIngredients.put(item.getName().toLowerCase(), ((IngredientItem) item).getAmount());
@@ -127,13 +127,13 @@ public class Utils {
         }
 
         ArrayList<IngredientItem> storedIngredientsDL = IngredientDL.getInstance().getStorage();
-        HashMap<String, Integer> storedIngredient = new HashMap<>();
+        HashMap<String, Double> storedIngredient = new HashMap<>();
         for (IngredientItem ingredientItem : storedIngredientsDL) {
             storedIngredient.put(ingredientItem.getName().toLowerCase(), ingredientItem.getAmount());
         }
         for (String ingredientName : mealPlanIngredients.keySet()) {
             if (storedIngredient.containsKey(ingredientName)) {
-                int neededIngredients = mealPlanIngredients.get(ingredientName) - storedIngredient.get(ingredientName);
+                double neededIngredients = mealPlanIngredients.get(ingredientName) - storedIngredient.get(ingredientName);
                 CountedIngredient countedIngredient = new CountedIngredient();
                 countedIngredient.setName(ingredientName);
                 countedIngredient.setCount(neededIngredients);

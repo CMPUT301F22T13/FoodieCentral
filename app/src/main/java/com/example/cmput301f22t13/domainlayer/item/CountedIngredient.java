@@ -5,14 +5,14 @@ import java.util.Map;
 
 public class CountedIngredient extends IngredientItem {
 
-    private int count;
+    private double count;
 
     public CountedIngredient() {
         super();
         this.count = 0;
     }
 
-    public CountedIngredient(IngredientItem ingredient, int count) {
+    public CountedIngredient(IngredientItem ingredient, double count) {
         super(ingredient.getName(), ingredient.getDescription(), ingredient.getAmount(), ingredient.getUnit(), ingredient.getCategory(), ingredient.getBbd(), ingredient.getPhoto(), ingredient.getLocation());
         this.count = count;
     }
@@ -34,11 +34,11 @@ public class CountedIngredient extends IngredientItem {
         this.count -= decrementer;
     }
 
-    public int getCount() {
+    public double getCount() {
         return count;
     }
 
-    public void setCount(int count) {
+    public void setCount(double count) {
         this.count = count;
     }
 }
