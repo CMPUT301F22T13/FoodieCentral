@@ -48,19 +48,7 @@ public class ShoppingListMainFragment extends Fragment {
 
         binding.purchasedIngredientButton.setVisibility(View.GONE);
 
-        Utils.populateShoppingList();
-
-        IngredientItem item1 = new IngredientItem();
-        item1.setName("Apple");
-        IngredientItem item2 = new IngredientItem();
-        item2.setName("Pear");
-        CountedIngredient countedIngredient1 = new CountedIngredient(item1, 6);
-        CountedIngredient countedIngredient2 = new CountedIngredient(item2, 12);
-
-        countedIngredients = new ArrayList<>();
-
-        countedIngredients.add(countedIngredient1);
-        countedIngredients.add(countedIngredient2);
+        countedIngredients = Utils.populateShoppingList();
 
         countedIngredientListAdapter = new ShoppingListAdapter(getActivity(), countedIngredients);
         binding.shoppinglistListview.setAdapter(countedIngredientListAdapter);

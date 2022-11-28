@@ -65,16 +65,7 @@ public class ShoppingListActivity extends AppCompatActivity {
 
         setSupportActionBar(binding.toolbar);
 
-        IngredientItem item1 = new IngredientItem();
-        item1.setName("Apple");
-        IngredientItem item2 = new IngredientItem();
-        item2.setName("Pear");
-        CountedIngredient countedIngredient1 = new CountedIngredient(item1, 6);
-        CountedIngredient countedIngredient2 = new CountedIngredient(item2, 12);
-
         ArrayList<CountedIngredient> countedIngredients = new ArrayList<>();
-        countedIngredients.add(countedIngredient1);
-        countedIngredients.add(countedIngredient2);
 
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_shopping_list);
 
