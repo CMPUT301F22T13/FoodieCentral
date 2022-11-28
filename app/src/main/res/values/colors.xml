@@ -12,7 +12,9 @@
     <color name="storagebackground">#3367CF</color>
     <color name="recipelistcolor">#CAF2F0</color>
     <color name="listcolor1">#F8CBAD</color>
+    <color name="listcolor1_selected">#FAA76F</color>
+    <color name="listcolor1_light">#F8D9C5</color>
     <color name="listcolor2">#C5E0B4</color>
-    <color name="listcolor2_selected">#C5E094</color>
+    <color name="listcolor2_selected">#C5E074</color>
     <color name="listcolor3">#F6C2FF</color>
 </resources>

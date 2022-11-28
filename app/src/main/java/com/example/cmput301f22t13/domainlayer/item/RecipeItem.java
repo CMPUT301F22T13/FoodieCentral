@@ -9,6 +9,9 @@ import java.util.Date;
 
 import com.example.cmput301f22t13.domainlayer.utils.Utils;
 import com.google.firebase.Timestamp;
+
+import org.checkerframework.checker.units.qual.A;
+
 import java.util.Comparator;
 import java.util.GregorianCalendar;
 
@@ -79,6 +82,13 @@ public class RecipeItem extends Item implements Serializable {
                 recipeItem.getComments(), recipeItem.getPhoto(), recipeItem.getIngredients(), recipeItem.getHashId());
 
         setHashId(recipeItem.getHashId());
+
+        ArrayList<IngredientItem> ingredients = new ArrayList<>();
+        for (IngredientItem item : recipeItem.getIngredients()) {
+            ingredients.add(new IngredientItem(item));
+        }
+
+        setIngredients(ingredients);
     }
 
     /**

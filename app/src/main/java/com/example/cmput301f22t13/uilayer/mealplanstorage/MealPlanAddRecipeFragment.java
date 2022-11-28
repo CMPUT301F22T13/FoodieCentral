@@ -17,12 +17,15 @@ import android.widget.ArrayAdapter;
 import com.example.cmput301f22t13.R;
 import com.example.cmput301f22t13.databinding.FragmentMealPlanAddRecipeBinding;
 import com.example.cmput301f22t13.datalayer.IngredientDL;
+import com.example.cmput301f22t13.datalayer.MealPlanDL;
 import com.example.cmput301f22t13.datalayer.RecipeDL;
 import com.example.cmput301f22t13.domainlayer.item.IngredientItem;
 import com.example.cmput301f22t13.domainlayer.item.Item;
+import com.example.cmput301f22t13.domainlayer.item.MealPlan;
 import com.example.cmput301f22t13.domainlayer.item.RecipeItem;
 import com.example.cmput301f22t13.uilayer.ingredientstorage.IngredientListAdapter;
 import com.example.cmput301f22t13.uilayer.recipestorage.RecipeListArrayAdapter;
+import com.example.cmput301f22t13.uilayer.userlogin.ResultListener;
 
 import java.util.ArrayList;
 
@@ -68,6 +71,18 @@ public class MealPlanAddRecipeFragment extends Fragment {
             }
         });
 
+        MealPlanDL.getInstance().listener = new ResultListener() {
+            @Override
+            public void onSuccess() {
+                recipeAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+
+            }
+        };
+
         binding.confirmAddRecipeMealPlanButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -93,7 +108,7 @@ public class MealPlanAddRecipeFragment extends Fragment {
 
     private void setSelectedItemColors() {
         // iterate through checked items and change colors of each row based on their selected state
-        SparseBooleanArray checkedItems = binding.addRecipeMealPlanListview.getCheckedItemPositions();
+        /*SparseBooleanArray checkedItems = binding.addRecipeMealPlanListview.getCheckedItemPositions();
         for (int i = 0; i < binding.addRecipeMealPlanListview.getCount(); i++) {
             View row = binding.addRecipeMealPlanListview.getChildAt(i);
             if (checkedItems.get(i)) {
@@ -102,6 +117,6 @@ public class MealPlanAddRecipeFragment extends Fragment {
             else {
                 row.setBackgroundColor(Color.WHITE);
             }
-        }
+        }*/
     }
 }

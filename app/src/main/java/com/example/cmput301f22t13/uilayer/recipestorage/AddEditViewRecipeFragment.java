@@ -1,47 +1,33 @@
 package com.example.cmput301f22t13.uilayer.recipestorage;
 
 import android.app.Activity;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.text.InputType;
 import android.util.Base64;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Toast;
-
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.NavDeepLinkBuilder;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.cmput301f22t13.R;
 import com.example.cmput301f22t13.databinding.FragmentAddEditViewRecipeBinding;
+import com.example.cmput301f22t13.datalayer.RecipeDL;
 import com.example.cmput301f22t13.domainlayer.item.IngredientItem;
 import com.example.cmput301f22t13.domainlayer.item.RecipeItem;
-import com.example.cmput301f22t13.uilayer.ingredientstorage.AddEditViewIngredientFragment;
-import com.example.cmput301f22t13.uilayer.ingredientstorage.IngredientStorageActivity;
-import com.example.cmput301f22t13.uilayer.ingredientstorage.IngredientStorageMainFragment;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
 import java.util.ArrayList;
 
 /**
@@ -211,14 +197,8 @@ public class AddEditViewRecipeFragment extends Fragment {
             binding.addIngredientToRecipe.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    //TODO UNCOMMENT THIS IF THINGS DON'T WORK
                     NavHostFragment.findNavController(AddEditViewRecipeFragment.this)
                             .navigate(R.id.action_add_ingredient_to_recipe);
-                    /*NavHostFragment.findNavController(AddEditViewRecipeFragment.this)
-                            .navigate(R.id.action_addEditViewRecipeFragment_to_ingredient_storage_nav_graph);
-
-                    RecipeItem newRecipe = createNewRecipe();
-                    listener.changeRecipe(recipe, newRecipe);*/
                 }
             });
 
@@ -226,15 +206,13 @@ public class AddEditViewRecipeFragment extends Fragment {
             binding.listOfIngredients.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                    binding.listOfIngredients.setSelected(true);
                     binding.deleteIngredientFromRecipe.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
                             try {
-                                ingredientsAdapter.remove(recipe.getIngredients().get(i).getName());
                                 IngredientItem ingredientItem = recipe.getIngredients().get(i);
-                                //recipe.deleteIngredient(i);
-                                binding.listOfIngredients.setSelected(false);
+                                RecipeDL.getInstance().deleteIngredient(recipe, ingredientItem);
+                                ingredientsAdapter.remove(recipe.getIngredients().get(i).getName());
                                 ingredientsAdapter.notifyDataSetChanged();
                                 listener.onDeletePressed(ingredientItem);
                             } catch (IndexOutOfBoundsException e) {

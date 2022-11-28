@@ -18,9 +18,11 @@ import android.widget.ArrayAdapter;
 import com.example.cmput301f22t13.R;
 import com.example.cmput301f22t13.databinding.FragmentMealPlanAddIngredientBinding;
 import com.example.cmput301f22t13.datalayer.IngredientDL;
+import com.example.cmput301f22t13.datalayer.MealPlanDL;
 import com.example.cmput301f22t13.domainlayer.item.IngredientItem;
 import com.example.cmput301f22t13.domainlayer.item.Item;
 import com.example.cmput301f22t13.uilayer.ingredientstorage.IngredientListAdapter;
+import com.example.cmput301f22t13.uilayer.userlogin.ResultListener;
 
 import java.util.ArrayList;
 
@@ -74,33 +76,43 @@ public class MealPlanAddIngredientFragment extends Fragment {
             }
         });
 
+        MealPlanDL.getInstance().listener = new ResultListener() {
+            @Override
+            public void onSuccess() {
+                ingredientAdapter.notifyDataSetChanged();
+            }
+            @Override
+            public void onFailure(Exception e) {
+
+            }
+        };
+
+
     }
 
     private void addSelectedIngredientsToArray() {
-        // iterate through checked items and add them to the item array if they are not already present
+        // iterate through checked items and add them to the item array
         SparseBooleanArray checkedItems = binding.addIngredientMealPlanListview.getCheckedItemPositions();
         for (int i = 0; i < binding.addIngredientMealPlanListview.getCount(); i++) {
             if (checkedItems.get(i, false)) {
-                if (!items.contains((IngredientItem) binding.addIngredientMealPlanListview.getItemAtPosition(i))) {
-                    // create deep copy so that changes to the ingredient in meal plan do not affect
-                    // the ingredients in the IngredientDL and Ingredient Storage
-                    items.add(new IngredientItem((IngredientItem) binding.addIngredientMealPlanListview.getItemAtPosition(i)));
-                }
+                // create deep copy so that changes to the ingredient in meal plan do not affect
+                // the ingredients in the IngredientDL and Ingredient Storage
+                items.add(new IngredientItem((IngredientItem) binding.addIngredientMealPlanListview.getItemAtPosition(i)));
             }
         }
     }
 
     private void setSelectedItemColors() {
         // iterate through checked items and change colors of each row based on their selected state
-        SparseBooleanArray checkedItems = binding.addIngredientMealPlanListview.getCheckedItemPositions();
+        /*SparseBooleanArray checkedItems = binding.addIngredientMealPlanListview.getCheckedItemPositions();
         for (int i = 0; i < binding.addIngredientMealPlanListview.getCount(); i++) {
             View row = binding.addIngredientMealPlanListview.getChildAt(i);
             if (checkedItems.get(i)) {
-                row.setBackgroundColor(Color.LTGRAY);
+                row.setBackgroundColor(R.drawable.ingredient_list_item_selected_background);
             }
             else {
-                row.setBackgroundColor(Color.WHITE);
+                row.setBackgroundColor(R.drawable.ingredient_list_item_background);
             }
-        }
+        }*/
     }
 }

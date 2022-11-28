@@ -1,19 +1,12 @@
 package com.example.cmput301f22t13.uilayer.recipestorage;
 
-import static android.content.Context.LAYOUT_INFLATER_SERVICE;
-
-import android.content.Context;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.PopupWindow;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -21,16 +14,13 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.cmput301f22t13.R;
 import com.example.cmput301f22t13.databinding.FragmentAddIngredientToRecipeBinding;
-import com.example.cmput301f22t13.databinding.FragmentRecipeStorageBinding;
 import com.example.cmput301f22t13.datalayer.IngredientDL;
-import com.example.cmput301f22t13.datalayer.RecipeDL;
 import com.example.cmput301f22t13.domainlayer.item.IngredientItem;
 import com.example.cmput301f22t13.domainlayer.item.RecipeItem;
 import com.example.cmput301f22t13.uilayer.ingredientstorage.IngredientListAdapter;
 import com.example.cmput301f22t13.uilayer.userlogin.ResultListener;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 
 /**
  * This is the fragment class for add ingredient to a recipe. It is a subclass of {@link Fragment}
@@ -51,11 +41,6 @@ public class AddIngredientToRecipeFragment extends Fragment {
      */
     private ArrayAdapter<IngredientItem> ingredientAdapter;
 
-
-    /**
-     * This variable is a ListView for the ingredients.
-     */
-    private ListView ingredientList;
 
     /**
      * This variable is an array of {@link RecipeItem} objects
@@ -140,4 +125,3 @@ public class AddIngredientToRecipeFragment extends Fragment {
         binding = null;
     }
 }
-

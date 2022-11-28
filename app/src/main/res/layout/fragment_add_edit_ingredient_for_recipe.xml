@@ -7,18 +7,6 @@
     tools:context=".uilayer.recipestorage.AddEditIngredientForRecipe" >
 
     <TextView
-        android:id="@+id/textView6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
-        android:gravity="center_horizontal"
-        android:text="Create/Edit Ingredient for Recipe"
-        android:textSize="25dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
         android:id="@+id/ingredientname_for_recipe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -62,14 +50,14 @@
         android:id="@+id/edit_ingredient_name_for_recipe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="48dp"
         android:layout_marginEnd="16dp"
         android:ems="10"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.564"
         app:layout_constraintStart_toEndOf="@+id/ingredientname_for_recipe"
-        app:layout_constraintTop_toBottomOf="@+id/textView6" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/edit_ingredient_description_for_recipe"
@@ -87,7 +75,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:ems="10"
-        android:inputType="number"
+        android:inputType="numberDecimal"
         app:layout_constraintStart_toStartOf="@+id/edit_ingredient_description_for_recipe"
         app:layout_constraintTop_toBottomOf="@+id/edit_ingredient_description_for_recipe" />
 
@@ -108,7 +96,8 @@
         android:layout_marginTop="30dp"
         android:backgroundTint="@color/storagebackground"
         android:text="Add TO RECIPE"
-        app:layout_constraintTop_toBottomOf="@+id/edit_ingredient_unit_for_recipe"
-        tools:layout_editor_absoluteX="157dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edit_ingredient_unit_for_recipe" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -12,6 +12,7 @@ import androidx.annotation.Nullable;
 
 import com.example.cmput301f22t13.R;
 import com.example.cmput301f22t13.datalayer.MealPlanDL;
+import com.example.cmput301f22t13.domainlayer.item.Item;
 import com.example.cmput301f22t13.domainlayer.item.MealPlan;
 
 import java.text.SimpleDateFormat;
@@ -40,9 +41,24 @@ public class MealPlanArrayAdapter extends ArrayAdapter<MealPlan> {
 
         MealPlan item = mealPlans.get(position);
         TextView text = view.findViewById(R.id.meal_plan_list_item_start_date);
+        TextView unconfigured = view.findViewById(R.id.meal_plan_list_item_unconfigured_textview);
 
         SimpleDateFormat formatter = new SimpleDateFormat("EEE, MMM d");
         text.setText(formatter.format(item.getStartDate().getTime()) + " - " + formatter.format(item.getEndDate().getTime()));
+
+        int unconfiguredCount = 0;
+        for (ArrayList<Item> vals : item.getMealPlanItems().values()) {
+            if (vals.isEmpty()) {
+                unconfiguredCount++;
+            }
+        }
+
+        if (unconfiguredCount > 0) {
+            unconfigured.setText(unconfiguredCount + " empty days");
+        }
+        else {
+            unconfigured.setVisibility(View.GONE);
+        }
 
         return view;
     }

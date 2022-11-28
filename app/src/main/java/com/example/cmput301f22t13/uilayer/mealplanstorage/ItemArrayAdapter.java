@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,13 +23,18 @@ import com.example.cmput301f22t13.R;
 import com.example.cmput301f22t13.domainlayer.item.IngredientItem;
 import com.example.cmput301f22t13.domainlayer.item.Item;
 import com.example.cmput301f22t13.domainlayer.item.RecipeItem;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ItemArrayAdapter extends ArrayAdapter<Item> {
 
     private Context context;
     private ArrayList<Item> items;
+    private Map<Integer, TextWatcher> textWatchers = new HashMap<>();
 
     public ItemArrayAdapter(Context context, ArrayList<Item> items) {
         super(context, 0, items);
@@ -39,18 +45,14 @@ public class ItemArrayAdapter extends ArrayAdapter<Item> {
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        View view = convertView;
-
-        if (view == null) {
-            view = LayoutInflater.from(context).inflate(R.layout.content_item_list, parent, false);
-        }
+        convertView = LayoutInflater.from(context).inflate(R.layout.content_item_list, parent, false);
 
         Item item = items.get(position);
 
-        TextView name = view.findViewById(R.id.name_item_list_textview);
-        TextView unit = view.findViewById(R.id.unit_item_list_textview);
-        EditText amount = view.findViewById(R.id.amount_item_list_edittext);
-        ImageView image = view.findViewById(R.id.picture_item_list_imageview);
+        TextView name = convertView.findViewById(R.id.name_item_list_textview);
+        TextInputEditText amount = convertView.findViewById(R.id.amount_item_list_edittext);
+        TextInputLayout amountLayout = convertView.findViewById(R.id.amount_item_list_textinputlayout);
+        ImageView image = convertView.findViewById(R.id.picture_item_list_imageview);
 
         name.setText(item.getName());
 
@@ -68,15 +70,16 @@ public class ItemArrayAdapter extends ArrayAdapter<Item> {
         }
 
         if (item instanceof IngredientItem) {
-            unit.setText(((IngredientItem)item).getUnit());
+            amountLayout.setSuffixText(((IngredientItem)item).getUnit());
             amount.setText(((IngredientItem)item).getAmount().toString());
         }
         else if (item instanceof RecipeItem) {
             amount.setText(String.valueOf(((RecipeItem)item).getServings()));
-            unit.setText("serv");
+            amountLayout.setSuffixText("serv");
         }
 
         // using text watcher to update the amount fields when there is a change in text
+        // android is brutal since the textwatchers stack on top of each other
         amount.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -85,12 +88,28 @@ public class ItemArrayAdapter extends ArrayAdapter<Item> {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (charSequence.length() > 0) {
+                Log.d("ItemArrayAdapter", String.valueOf(i2));
+                if (charSequence.length() > 0 && i2 > 0) {
                     if (item instanceof IngredientItem) {
-                        ((IngredientItem)item).setAmount(Integer.valueOf(charSequence.toString()));
+                        ((IngredientItem)item).setAmount(Double.valueOf(charSequence.toString()));
                     }
                     else if (item instanceof RecipeItem) {
-                        ((RecipeItem)item).setServings(Integer.valueOf(charSequence.toString()));
+                        double oldServings = ((RecipeItem)item).getServings();
+                        double newServings = Integer.parseInt(charSequence.toString());
+                        Log.d("ItemArrayAdapter", String.valueOf(oldServings));
+                        Log.d("ItemArrayAdapter", String.valueOf(newServings));
+
+                        if (oldServings == newServings) {
+                            return;
+                        }
+
+                        double scalingFactor = newServings / oldServings;
+                        ((RecipeItem)item).setServings((int) newServings);
+
+                        for (IngredientItem ingredient : ((RecipeItem)item).getIngredients()) {
+                            ingredient.setAmount((ingredient.getAmount() * scalingFactor));
+                            Log.d("ItemArrayAdapter", ingredient.getName() + " " + ingredient.getAmount());
+                        }
                     }
                 }
             }
@@ -101,6 +120,6 @@ public class ItemArrayAdapter extends ArrayAdapter<Item> {
             }
         });
 
-        return view;
+        return convertView;
     }
 }

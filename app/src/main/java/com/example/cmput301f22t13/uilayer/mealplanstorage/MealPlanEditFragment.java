@@ -1,6 +1,7 @@
 package com.example.cmput301f22t13.uilayer.mealplanstorage;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,14 +14,21 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.cmput301f22t13.R;
 import com.example.cmput301f22t13.databinding.FragmentMealPlanEditBinding;
+import com.example.cmput301f22t13.datalayer.FireBaseDL;
+import com.example.cmput301f22t13.datalayer.MealPlanDL;
+import com.example.cmput301f22t13.datalayer.IngredientDL;
+import com.example.cmput301f22t13.datalayer.RecipeDL;
+import com.example.cmput301f22t13.domainlayer.item.IngredientItem;
 import com.example.cmput301f22t13.domainlayer.item.Item;
 import com.example.cmput301f22t13.domainlayer.item.MealPlan;
+import com.example.cmput301f22t13.domainlayer.item.RecipeItem;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 /**
  * {@link Fragment} that allows the user to view details of a meal plan. User can also add ingredients
@@ -93,6 +101,7 @@ public class MealPlanEditFragment extends Fragment {
                 binding.mealPlanViewDateListview.setAdapter(itemsArrayAdapters.get(selectedDate));
                 itemsArrayAdapters.get(selectedDate).notifyDataSetChanged();
                 binding.addRecipeIngredientMealPlanButton.show();
+                setAutoGenerateVisibility();
             }
         });
 
@@ -114,6 +123,29 @@ public class MealPlanEditFragment extends Fragment {
             }
         });
 
+//        MealPlanDL.getInstance()
+
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                view.requestFocus();
+                binding.mealPlanViewDateListview.setItemChecked(binding.mealPlanViewDateListview.getCheckedItemPosition(), false);
+            }
+        });
+
+        /*binding.mealPlanViewDateListview.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                selectedItem = (Item) adapterView.getItemAtPosition(i);
+                binding.deleteItemButton.show();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                binding.mealPlanViewDateListview.requestFocus();
+            }
+        });*/
+
         // only show delete button if an item is selected
         binding.deleteItemButton.setVisibility(View.GONE);
         binding.deleteItemButton.setOnClickListener(new View.OnClickListener() {
@@ -123,6 +155,7 @@ public class MealPlanEditFragment extends Fragment {
                 selectedItem = null;
                 binding.deleteItemButton.hide();
                 itemsArrayAdapters.get(selectedDate).notifyDataSetChanged();
+                setAutoGenerateVisibility();
             }
         });
 
@@ -168,12 +201,50 @@ public class MealPlanEditFragment extends Fragment {
             }
         });
 
+        setAutoGenerateVisibility();
+        binding.mealPlanAutoGenerateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ArrayList<RecipeItem> recipes = RecipeDL.getInstance().getStorage();
+
+                Random rand = new Random();
+                mealPlanItem.addItemForDay(selectedDate, new RecipeItem(recipes.get(rand.nextInt(recipes.size()))));
+                mealPlanItem.addItemForDay(selectedDate, new RecipeItem(recipes.get(rand.nextInt(recipes.size()))));
+                mealPlanItem.addItemForDay(selectedDate, new RecipeItem(recipes.get(rand.nextInt(recipes.size()))));
+                itemsArrayAdapters.get(selectedDate).notifyDataSetChanged();
+                setAutoGenerateVisibility();
+            }
+        });
+
+        binding.doneMealplanEditButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                MealPlanDL.getInstance().firebaseAddEdit(mealPlanItem);
+                NavHostFragment.findNavController(MealPlanEditFragment.this).popBackStack();
+
+            }
+        });
+
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+
+    private void setAutoGenerateVisibility() {
+        if (selectedDate != null) {
+            if (binding.mealPlanViewDateListview.getCount() == 0) {
+                binding.mealPlanAutoGenerateButton.setVisibility(View.VISIBLE);
+            }
+            else {
+                binding.mealPlanAutoGenerateButton.setVisibility(View.GONE);
+            }
+        }
+        else {
+            binding.mealPlanAutoGenerateButton.setVisibility(View.GONE);
+        }
     }
 
 }

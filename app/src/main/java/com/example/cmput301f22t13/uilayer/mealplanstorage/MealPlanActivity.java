@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import com.example.cmput301f22t13.uilayer.ingredientstorage.IngredientStorageActivity;
 import com.example.cmput301f22t13.uilayer.recipestorage.RecipeStorageActivity;
+import com.example.cmput301f22t13.uilayer.shoppinglist.ShoppingListActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.snackbar.Snackbar;
@@ -50,13 +51,16 @@ public class MealPlanActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.ingredientStorage:
-                        Intent ingrIntent = new Intent(MealPlanActivity.this, IngredientStorageActivity.class);
-                        startActivity(ingrIntent);
+                        Intent ingredientIntent = new Intent(MealPlanActivity.this, IngredientStorageActivity.class);
+                        startActivity(ingredientIntent);
                         return true;
                     case R.id.recipes:
                         Intent recipeIntent = new Intent(MealPlanActivity.this, RecipeStorageActivity.class);
                         startActivity(recipeIntent);
                         return true;
+                    case R.id.shoppingList:
+                        Intent shoppingListIntent = new Intent(MealPlanActivity.this, ShoppingListActivity.class);
+                        startActivity(shoppingListIntent);
                     case R.id.mealPlanning:
                         return true;
                 }

@@ -46,7 +46,7 @@ public class ShoppingListAdapter extends ArrayAdapter<CountedIngredient> {
         TextView ingredientCount = view.findViewById(R.id.ingredient_count);
 
         ingredientName.setText(item.getName());
-        ingredientCount.setText(Integer.toString(item.getCount()));
+        ingredientCount.setText(Double.toString(item.getCount()));
 
 //        purchasedIngredientButton.setOnClickListener(new View.OnClickListener(){
 //            @Override

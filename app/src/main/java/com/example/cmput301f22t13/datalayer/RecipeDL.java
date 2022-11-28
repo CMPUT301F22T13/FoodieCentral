@@ -68,7 +68,6 @@ public class RecipeDL extends FireBaseDL {
                 recipeStorage.clear();
                 for(QueryDocumentSnapshot doc: queryDocumentSnapshots)
                 {
-                    // TODO set all recipe dataums
                     String hash = doc.getId();
                     String title = doc.getString("Title");
                     int prep = doc.getDouble("Prep Time").intValue();
@@ -110,7 +109,7 @@ public class RecipeDL extends FireBaseDL {
                                         IngredientItem i = new IngredientItem();
                                         i.setName(name);
                                         i.setDescription(description);
-                                        i.setAmount(amount.intValue());
+                                        i.setAmount(amount);
                                         i.setUnit(unit);
                                         i.setCategory(category);
                                         i.setHashId(hash);
@@ -132,59 +131,16 @@ public class RecipeDL extends FireBaseDL {
      * @Input: IngredientItem item - item to add or edit
      * */
     public void firebaseAddEdit(RecipeItem item) {
-        //Initializing and storing data value from passed in Recipe item
-        String recipe_title = item.getTitle();
-        int recipe_prepTime = item.getPrepTime();
-        int recipe_servings = item.getServings();
-        String recipe_category = item.getCategory();
-        String recipe_comments = item.getComments();
-        String recipe_photo = item.getPhoto();
-
-
-        //Storing data collected from object in a HashMap
-        Map<String, Object> recipe = new HashMap<>();
-        recipe.put("Title", recipe_title);
-        recipe.put("Prep Time", recipe_prepTime);
-        recipe.put("Servings", recipe_servings);
-        recipe.put("Category", recipe_category);
-        recipe.put("Comments", recipe_comments);
-        recipe.put("Photo", recipe_photo);
-
-
+        Map<String, Object> recipe = GetRecipeHashMap(item);
         //Storing data in Hashmap to correct location in Firebase using uniqueKey as document reference
         DocumentReference recipeStorage = fstore.collection("Users")
                 .document(auth.getCurrentUser().getUid())
                 .collection("Recipe Storage")
                 .document(item.getHashId());
 
+        ArrayList<IngredientItem> ingredientItems = item.getIngredients();
 
-        // Clear the ingredient collection
-        fstore.collection("Users")
-                .document(auth.getCurrentUser().getUid())
-                .collection("Recipe Storage")
-                .document(item.getHashId())
-                .collection("Ingredients").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        for (QueryDocumentSnapshot doc: queryDocumentSnapshots) {
-
-                            fstore.collection("Users")
-                                    .document(auth.getCurrentUser().getUid())
-                                    .collection("Recipe Storage")
-                                    .document(item.getHashId())
-                                    .collection("Ingredients")
-                                    .document(doc.getId()).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                                        @Override
-                                        public void onSuccess(Void unused) {
-
-                                        }
-                                    });
-                        }
-                    }
-                });
-
-
-        for (IngredientItem i: item.getIngredients()) {
+        for (IngredientItem i: ingredientItems) {
             Map<String, Object> ingredient = new HashMap<>();
             ingredient.put("Name", i.getName());
             ingredient.put("Description", i.getDescription());
@@ -225,6 +181,27 @@ public class RecipeDL extends FireBaseDL {
         });
     }
 
+    public static Map<String, Object>  GetRecipeHashMap(RecipeItem item) {
+        //Initializing and storing data value from passed in Recipe item
+        String recipe_title = item.getTitle();
+        int recipe_prepTime = item.getPrepTime();
+        int recipe_servings = item.getServings();
+        String recipe_category = item.getCategory();
+        String recipe_comments = item.getComments();
+        String recipe_photo = item.getPhoto();
+
+        //Storing data collected from object in a HashMap
+        Map<String, Object> recipe = new HashMap<>();
+        recipe.put("Title", recipe_title);
+        recipe.put("Prep Time", recipe_prepTime);
+        recipe.put("Servings", recipe_servings);
+        recipe.put("Category", recipe_category);
+        recipe.put("Comments", recipe_comments);
+        recipe.put("Photo", recipe_photo);
+
+        return recipe;
+    }
+
 
     /** Deletes data from Firestore for a particular passed in Recipe item - by doing so the recipe document is deleted from Firestore
      *  @param item - Recipe item to be deleted from Firestore
@@ -235,6 +212,27 @@ public class RecipeDL extends FireBaseDL {
                 .document(auth.getCurrentUser().getUid())
                 .collection("Recipe Storage")
                 .document(item.getHashId());
+
+        deleteIngredient.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                Log.d("tag", "Recipe item successfully deleted from Firebase");
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d("TAG", "Recipe item not deleted");
+            }
+        });
+    }
+
+    public void deleteIngredient(RecipeItem recipeItem, IngredientItem ingredientItem) {
+        DocumentReference deleteIngredient = fstore.collection("Users")
+                .document(auth.getCurrentUser().getUid())
+                .collection("Recipe Storage")
+                .document(recipeItem.getHashId())
+                .collection("Ingredients")
+                .document(ingredientItem.getHashId());
 
         deleteIngredient.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
