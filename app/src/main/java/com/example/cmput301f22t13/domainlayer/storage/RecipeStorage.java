@@ -11,6 +11,7 @@ import java.util.ArrayList;
 /** Will be deleted in next sprint when RecipeDL is refactored
  *
  * */
+@Deprecated
 public class RecipeStorage {
     private static final String TAG = "RecipeStorageDL";
     /** ArrayList of RecipeItems representing the recipes in storage

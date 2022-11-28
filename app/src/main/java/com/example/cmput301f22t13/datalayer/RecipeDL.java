@@ -27,9 +27,9 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Map;
 
-/** Will become Singleton class in the future - is responsible for tasks related to adding,deleting,getting and updating Ingredient items
+/** Singelton class that implements the recipe storage functionality
+ * @extends: FirebaseDL
  * */
-
 public class RecipeDL extends FireBaseDL {
     static private RecipeDL recipeDL;
 
@@ -37,7 +37,7 @@ public class RecipeDL extends FireBaseDL {
      * */
     public static ResultListener listener;
 
-    /** Stores ingredients
+    /** Stores recipes
      * */
     public static ArrayList<RecipeItem> recipeStorage = new ArrayList<RecipeItem>();
 
@@ -47,7 +47,8 @@ public class RecipeDL extends FireBaseDL {
     public void deRegisterListener(){
         registration.remove();
     }
-    /** Gets or creates current instance of the firebase DL
+
+    /** Gets or creates current instance of the recipe DL
      * */
     public static RecipeDL getInstance(){
         if(recipeDL==null){
@@ -56,12 +57,14 @@ public class RecipeDL extends FireBaseDL {
         return recipeDL;
     }
 
+    /** Constructor calls populateStorageOnStartup
+     *  */
     public RecipeDL() {
         populateStorageOnStartup();
     }
 
-    /** populateRecipesOnStartup - called when first instance of IngredientDL is made
-     * listens for db changes and updates the ingredient storage accordingly
+    /** populateRecipesOnStartup - called when first instance of RecipeDL is made
+     * listens for db changes and updates the recipe storage accordingly
      * */
     private void populateStorageOnStartup() {
         registration = fstore.collection("Users")
@@ -136,12 +139,11 @@ public class RecipeDL extends FireBaseDL {
         });
     }
 
-
-    /** Add/Edit item recieved from Domain Layer into FireStore Ingredient storage collection
-     * @Input: IngredientItem item - item to add or edit
+    /** Add/Edit item received from Domain Layer into FireStore Recipe storage collection
+     * @param: Recipe item - item to add or edit
      * */
     public void firebaseAddEdit(RecipeItem item) {
-        Map<String, Object> recipe = GetRecipeHashMap(item);
+        Map<String, Object> recipe = getRecipeMap(item);
         //Storing data in Hashmap to correct location in Firebase using uniqueKey as document reference
         DocumentReference recipeStorage = fstore.collection("Users")
                 .document(auth.getCurrentUser().getUid())
@@ -151,12 +153,7 @@ public class RecipeDL extends FireBaseDL {
         ArrayList<IngredientItem> ingredientItems = item.getIngredients();
 
         for (IngredientItem i: ingredientItems) {
-            Map<String, Object> ingredient = new HashMap<>();
-            ingredient.put("Name", i.getName());
-            ingredient.put("Description", i.getDescription());
-            ingredient.put("Amount",i.getAmount());
-            ingredient.put("Unit", i.getUnit());
-            ingredient.put("Category", i.getCategory());
+            Map<String, Object> ingredient = IngredientDL.getIngredientMap(i);
 
             DocumentReference ingredientStorage = fstore.collection("Users")
                     .document(auth.getCurrentUser().getUid())
@@ -165,33 +162,17 @@ public class RecipeDL extends FireBaseDL {
                     .collection("Ingredients")
                     .document(i.getHashId());
 
-            ingredientStorage.set(ingredient).addOnSuccessListener(new OnSuccessListener<Void>() {
-                @Override
-                public void onSuccess(Void unused) {
-                    Log.d("TAG", "firebaseAdd works as wanted");
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Log.d("TAG", "firebaseAdd does not work");
-                }
-            });
+            addToFireBase(ingredient, ingredientStorage);
         }
 
-        recipeStorage.set(recipe).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void unused) {
-                Log.d("TAG", "firebaseAdd works as wanted");
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.d("TAG", "firebaseAdd does not work");
-            }
-        });
+        addToFireBase(recipe, recipeStorage);
     }
 
-    public static Map<String, Object>  GetRecipeHashMap(RecipeItem item) {
+    /** Creates a map for adding data to firebase
+     * @param: RecipeItem item - item to  add
+     *
+     * */
+    public static Map<String, Object>  getRecipeMap(RecipeItem item) {
         //Initializing and storing data value from passed in Recipe item
         String recipe_title = item.getTitle();
         int recipe_prepTime = item.getPrepTime();
@@ -212,7 +193,6 @@ public class RecipeDL extends FireBaseDL {
         return recipe;
     }
 
-
     /** Deletes data from Firestore for a particular passed in Recipe item - by doing so the recipe document is deleted from Firestore
      *  @param item - Recipe item to be deleted from Firestore
      * */
@@ -226,6 +206,10 @@ public class RecipeDL extends FireBaseDL {
         deleteFromFireBase(deleteIngredient);
     }
 
+    /** Deletes data from Firestore for a particular passed in Recipe item
+     *  @param recipeItem - Recipe item to with ingredient to delete
+     *  @param ingredientItem - Ingredient item to delete
+     * */
     public void deleteIngredient(RecipeItem recipeItem, IngredientItem ingredientItem) {
         DocumentReference deleteIngredient = fstore.collection("Users")
                 .document(auth.getCurrentUser().getUid())
@@ -237,8 +221,8 @@ public class RecipeDL extends FireBaseDL {
         deleteFromFireBase(deleteIngredient);
     }
 
-    /** Getter for ingredient storage
-     * @Returns: ArrayList<IngredientItem> representing ingredients in storage
+    /** Getter for Recipe storage
+     * @Returns: ArrayList<RecipeItems> representing recipes in storage
      * */
     public ArrayList<RecipeItem> getStorage() {
         return recipeStorage;
