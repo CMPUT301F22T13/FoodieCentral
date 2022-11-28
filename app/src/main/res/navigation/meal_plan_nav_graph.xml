@@ -33,7 +33,7 @@
     <fragment
         android:id="@+id/mealPlanAddRecipeFragment"
         android:name="com.example.cmput301f22t13.uilayer.mealplanstorage.MealPlanAddRecipeFragment"
-        android:label="fragment_meal_plan_add_recipe"
+        android:label="Add Recipe"
         tools:layout="@layout/fragment_meal_plan_add_recipe" />
     <fragment
         android:id="@+id/mealPlanViewFragment"

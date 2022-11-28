@@ -118,7 +118,7 @@ public class IngredientStorageMainFragment extends Fragment {
                         ingredientListAdapter.sort(new Comparator<IngredientItem>() {
                             @Override
                             public int compare(IngredientItem t1, IngredientItem t2) {
-                                return t1.getName().compareTo(t2.getName());
+                                return t1.getName().toLowerCase().compareTo(t2.getName().toLowerCase());
                             }
                         });
                         ingredientListAdapter.notifyDataSetChanged();

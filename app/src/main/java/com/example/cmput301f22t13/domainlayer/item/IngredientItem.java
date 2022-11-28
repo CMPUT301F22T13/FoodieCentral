@@ -1,18 +1,13 @@
 package com.example.cmput301f22t13.domainlayer.item;
 
-import com.example.cmput301f22t13.domainlayer.utils.Utils;
 import com.google.firebase.Timestamp;
 
 import java.io.Serializable;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.Locale;
-import java.util.TimeZone;
-import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Comparator;
 
 /** Public class representing an ingredient - options for constructing, getting and setting
 *

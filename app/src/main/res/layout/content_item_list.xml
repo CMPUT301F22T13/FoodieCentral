@@ -1,52 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/list_item_background"
-    android:orientation="horizontal">
+    android:background="@drawable/meal_plan_list_item_background">
 
-    <ImageView
-        android:id="@+id/picture_item_list_imageview"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:scaleType="fitXY" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/name_item_list_textview"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:layout_marginLeft="10dp"
-        android:layout_weight="1"
-        android:gravity="center_vertical"
-        android:text="name"
-        android:textSize="20sp" />
 
-    <EditText
-        android:id="@+id/amount_item_list_edittext"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:layout_marginLeft="10dp"
-        android:layout_weight="0.5"
-        android:ems="4"
-        android:focusable="auto"
-        android:gravity="center_vertical"
-        android:inputType="number"
-        android:text="0"
-        android:textSize="20sp" />
+        <TextView
+            android:id="@+id/name_item_list_textview"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="20dp"
+            android:gravity="center_vertical"
+            android:text="name"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/amount_item_list_textinputlayout"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/unit_item_list_textview"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:layout_weight="0.5"
-        android:gravity="right|center_vertical"
-        android:paddingRight="10dp"
-        android:text="unit"
-        android:textSize="20sp" />
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/amount_item_list_textinputlayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="4dp"
+            android:focusable="auto"
+            android:gravity="center_vertical"
+            android:hint="Amount"
+            app:boxBackgroundMode="none"
+            app:layout_constraintEnd_toStartOf="@+id/picture_item_list_imageview"
+            app:layout_constraintStart_toEndOf="@+id/name_item_list_textview"
+            app:layout_constraintTop_toTopOf="parent">
 
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/amount_item_list_edittext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusable="auto"
+                android:gravity="top|fill_vertical"
+                android:inputType="number"
+                android:maxLines="1"
+                android:paddingTop="16dp"
+                android:paddingRight="5dp"
+                android:paddingBottom="16dp"
+                android:pointerIcon="none"
+                android:singleLine="true"
+                android:textColor="@color/black" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <ImageView
+            android:id="@+id/picture_item_list_imageview"
+            style="@style/roundimageview"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:padding="3dp"
+            android:scaleType="fitXY"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/amount_item_list_textinputlayout"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </LinearLayout>
