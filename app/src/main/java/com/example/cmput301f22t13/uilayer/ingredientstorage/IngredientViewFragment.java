@@ -79,7 +79,7 @@ public class IngredientViewFragment extends Fragment {
         }
 
         if (ingredient.getName() != null) {
-            if (ingredient.getAmount() != null && ingredient.getAmount() != 0.0 && ingredient.getUnit() != null && !ingredient.getUnit().equals("")) {
+            if (ingredient.getAmount() != null && ingredient.getUnit() != null ) {
                 binding.viewIngredientHeaderTextview.setText(ingredient.getName() + " - " + ingredient.getAmount() + " " + ingredient.getUnit());
             }
             else {
