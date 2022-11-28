@@ -200,8 +200,8 @@ public class MealPlanDL extends FireBaseDL {
         });
     }
 
-    /** Add/Edit item recieved from Domain Layer into FireStore Ingredient storage collection
-     * @Input: IngredientItem item - item to add or edit
+    /** Add/Edit item recieved from Domain Layer into FireStore MealPlan storage collection
+     * @Input: MealPlan item - item to add or edit
      * */
     public void firebaseAddEdit(MealPlan item) {
         //Initializing data value from item object
@@ -240,7 +240,6 @@ public class MealPlanDL extends FireBaseDL {
 
             addToFireBase(day, daysStorage);
 
-
             // Mealplan Items
             for(Item j : i.getValue()) {
                 // If recipe set recipe storage
@@ -277,7 +276,6 @@ public class MealPlanDL extends FireBaseDL {
                         ingredient.put("Unit", k.getUnit());
                         ingredient.put("Category", k.getCategory());
 
-
                         DocumentReference ingredientStorage = daysStorage
                                 .collection("Recipe Storage")
                                 .document(item.getHashId())
@@ -286,9 +284,7 @@ public class MealPlanDL extends FireBaseDL {
 
                         addToFireBase(ingredient, ingredientStorage);
                     }
-
                     addToFireBase(recipe, recipeStorage);
-
 
                 } else {
                     Map<String, Object> ingredient = new HashMap<>();

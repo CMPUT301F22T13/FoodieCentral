@@ -89,8 +89,6 @@ public class MealPlanViewFragment extends Fragment {
                         .navigate(R.id.action_mealPlanViewFragment_to_MealPlanMainFragment);
             }
         });
-
-
     }
 
     private void addItemsToLayout() {
