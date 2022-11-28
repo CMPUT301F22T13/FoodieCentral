@@ -92,7 +92,6 @@ public class LoginDL extends FireBaseDL {
      * @param  listener - Interface that helps check if a particular method called in UI works as expected
      * Current status - Completed, one enhancement that is in progress which is to encrypt passwords in Firestore from plaintext -> encrypted value in order to preserve security
      * */
-    //TODO passwords passed in should be encrypted/hashed (also dehashed and decrypted) for proper security posture - V2
     public void userRegister(String email, String password, String name, ResultListener listener) {
         //User enters email and password for registration - adding onComplete to signify valid task completion
         auth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {

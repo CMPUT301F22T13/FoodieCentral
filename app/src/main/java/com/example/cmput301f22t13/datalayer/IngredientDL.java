@@ -8,6 +8,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
 import com.example.cmput301f22t13.domainlayer.item.IngredientItem;
+import com.example.cmput301f22t13.domainlayer.item.RecipeItem;
 import com.example.cmput301f22t13.uilayer.userlogin.ResultListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -25,7 +26,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-/** Singleton class - is responsible for tasks related to adding,deleting,getting and updating Ingredient items
+/** Singleton class - is responsible for tasks related to adding,deleting,getting and
+ *  updating Ingredient items
+ *  @extends: FirebaseDL
  * */
 public class IngredientDL extends FireBaseDL {
     static private IngredientDL ingredientDL;
@@ -48,6 +51,8 @@ public class IngredientDL extends FireBaseDL {
         return ingredientDL;
     }
 
+    /** Constructor calls populateOnStartup
+     *  */
     public IngredientDL() {
         // Populate ingredients here
         populateOnStartup();
@@ -115,35 +120,13 @@ public class IngredientDL extends FireBaseDL {
      * */
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void firebaseAddEdit(IngredientItem item) {
-        //Initializing data value from item object
-        String ing_name = item.getName();
-        String ing_description = item.getDescription();
-        GregorianCalendar ing_bestBefore = item.getBbd();
-        String ing_location = item.getLocation();
-        Double ing_amount = item.getAmount();
-        String ing_unit = item.getUnit();
-        String ing_category = item.getCategory();
-        String ing_photo = item.getPhoto();
-
-        //Storing data collected from object in a HashMap
-        Map<String, Object> ingredientItem = new HashMap<>();
-        ingredientItem.put("Name", ing_name);
-        ingredientItem.put("Description", ing_description);
-        if (ing_bestBefore != null)
-            ingredientItem.put("Best Before", ing_bestBefore.getTimeInMillis()); // ing_bestBefore.get(Calendar.DATE));
-        ingredientItem.put("Location", ing_location);
-        ingredientItem.put("Amount", ing_amount);
-        ingredientItem.put("Unit", ing_unit);
-        ingredientItem.put("Category", ing_category);
-        ingredientItem.put("Photo", ing_photo);
-
         //Storing data in Hashmap to correct location in Firebase using uniqueKey as document reference
         DocumentReference ingredientStorage = fstore.collection("Users")
                 .document(auth.getCurrentUser().getUid())
                 .collection("Ingredient Storage")
                 .document(item.getHashId());
 
-        addToFireBase(ingredientItem, ingredientStorage);
+        addToFireBase(getIngredientMap(item), ingredientStorage);
     }
 
 
@@ -166,6 +149,46 @@ public class IngredientDL extends FireBaseDL {
     public ArrayList<IngredientItem> getStorage() {
         return ingredientStorage;
     }
+
+
+    public static Map<String, Object>  getIngredientMap(IngredientItem item) {
+        //Initializing and storing data value from passed in Recipe item
+        String ing_name = item.getName();
+        String ing_description = item.getDescription();
+        GregorianCalendar ing_bestBefore = item.getBbd();
+        String ing_location = item.getLocation();
+        Double ing_amount = item.getAmount();
+        String ing_unit = item.getUnit();
+        String ing_category = item.getCategory();
+        String ing_photo = item.getPhoto();
+
+        //Storing data collected from object in a HashMap
+        Map<String, Object> ingredient = new HashMap<>();
+        ingredient.put("Name", ing_name);
+        ingredient.put("Description", ing_description);
+        if (ing_bestBefore != null)
+            ingredient.put("Best Before", ing_bestBefore.getTimeInMillis()); // ing_bestBefore.get(Calendar.DATE));
+        ingredient.put("Location", ing_location);
+        ingredient.put("Amount", ing_amount);
+        ingredient.put("Unit", ing_unit);
+        ingredient.put("Category", ing_category);
+        ingredient.put("Photo", ing_photo);
+
+        return ingredient;
+    }
+
+    public static Map<String, Object>  getRecipeIngredientMap(IngredientItem item) {
+        //Initializing and storing data value from passed in Recipe item
+        Map<String, Object> ingredient = new HashMap<>();
+        ingredient.put("Name", item.getName());
+        ingredient.put("Description", item.getDescription());
+        ingredient.put("Amount",item.getAmount());
+        ingredient.put("Unit", item.getUnit());
+        ingredient.put("Category", item.getCategory());
+
+        return ingredient;
+    }
+
 
 
 

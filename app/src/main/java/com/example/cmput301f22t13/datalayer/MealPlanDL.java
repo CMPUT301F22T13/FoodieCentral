@@ -28,14 +28,11 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * This data layer is yet to be implemented. In this section we will handle all the interactions related to the MealplanDL.
- * The actions performed in this segment would be interacting with the recipe storage and ingredient storage collections in Firestore.
- * This class will be pivitol as it will query data from Firestore to make meal plans for users
- */
 
-
-
+/** Singleton class - is responsible for tasks related to adding,deleting,getting and
+ *  updating MealPlan items
+ *  @extends: FirebaseDL
+ * */
 public class MealPlanDL extends FireBaseDL {
     static private MealPlanDL mealPlanDL;
 
@@ -43,12 +40,12 @@ public class MealPlanDL extends FireBaseDL {
      * */
     public static ResultListener listener;
 
-    /** Stores ingredients
+    /** Stores mealplans
      * */
     public static ArrayList<MealPlan> mealPlanStorage = new ArrayList<MealPlan>();
     private ListenerRegistration registration;
 
-    /** Gets or creates current instance of the firebase DL
+    /** Gets or creates current instance of the MealPlanDL
      * */
     public static MealPlanDL getInstance(){
         if(mealPlanDL==null){
@@ -57,8 +54,10 @@ public class MealPlanDL extends FireBaseDL {
         return mealPlanDL;
     }
 
+    /** Constructor calls populateOnStartup
+     *  */
     public MealPlanDL() {
-        // Populate ingredients here
+        // Populate mealplans here
         populateOnStartup();
     }
 
@@ -66,8 +65,8 @@ public class MealPlanDL extends FireBaseDL {
         registration.remove();
     }
 
-    /** populateIngredientsOnStartup - called when first instance of IngredientDL is made
-     * listens for db changes and updates the ingredient storage accordingly
+    /** populateOnStartup - called when first instance of MealPlanDL is made
+     * listens for db changes and updates the mealplan storage accordingly
      * */
     private void populateOnStartup() {
         registration = fstore.collection("Users")
@@ -86,12 +85,10 @@ public class MealPlanDL extends FireBaseDL {
 
                             try {
                                 startDate.setTimeInMillis(doc.getDouble("Start Date").longValue());
-                            } catch (Exception e) {
-                            }
+                            } catch (Exception e) { }
                             try {
                                 endDate.setTimeInMillis(doc.getDouble("End Date").longValue());
-                            } catch (Exception e) {
-                            }
+                            } catch (Exception e) { }
 
                             MealPlan m = new MealPlan(startDate, endDate, doc.getId());
 
@@ -212,7 +209,7 @@ public class MealPlanDL extends FireBaseDL {
         });
     }
 
-    /** Add/Edit item recieved from Domain Layer into FireStore MealPlan storage collection
+    /** Add/Edit item received from Domain Layer into FireStore MealPlan storage collection
      * @Input: MealPlan item - item to add or edit
      * */
     public void firebaseAddEdit(MealPlan item) {
@@ -256,22 +253,8 @@ public class MealPlanDL extends FireBaseDL {
             for(Item j : i.getValue()) {
                 // If recipe set recipe storage
                 if (j instanceof RecipeItem) {
-                    //Initializing and storing data value from passed in Recipe item
-                    String recipe_title = ((RecipeItem) j).getTitle();
-                    int recipe_prepTime = ((RecipeItem) j).getPrepTime();
-                    int recipe_servings = ((RecipeItem) j).getServings();
-                    String recipe_category = ((RecipeItem) j).getCategory();
-                    String recipe_comments = ((RecipeItem) j).getComments();
-                    String recipe_photo = j.getPhoto();
-
                     //Storing data collected from object in a HashMap
-                    Map<String, Object> recipe = new HashMap<>();
-                    recipe.put("Title", recipe_title);
-                    recipe.put("Prep Time", recipe_prepTime);
-                    recipe.put("Servings", recipe_servings);
-                    recipe.put("Category", recipe_category);
-                    recipe.put("Comments", recipe_comments);
-                    recipe.put("Photo", recipe_photo);
+                    Map<String, Object> recipe = RecipeDL.getRecipeMap((RecipeItem) j);
 
                     //Storing data in Hashmap to correct location in Firebase using uniqueKey as document reference
                     DocumentReference recipeStorage = daysStorage
@@ -281,12 +264,7 @@ public class MealPlanDL extends FireBaseDL {
                     ArrayList<IngredientItem> ingredientItems = ((RecipeItem) j).getIngredients();
 
                     for (IngredientItem k: ingredientItems) {
-                        Map<String, Object> ingredient = new HashMap<>();
-                        ingredient.put("Name", k.getName());
-                        ingredient.put("Description", k.getDescription());
-                        ingredient.put("Amount",k.getAmount());
-                        ingredient.put("Unit", k.getUnit());
-                        ingredient.put("Category", k.getCategory());
+                        Map<String, Object> ingredient = IngredientDL.getIngredientMap(k);
 
                         DocumentReference ingredientStorage = daysStorage
                                 .collection("Recipe Storage")
@@ -299,12 +277,7 @@ public class MealPlanDL extends FireBaseDL {
                     addToFireBase(recipe, recipeStorage);
 
                 } else {
-                    Map<String, Object> ingredient = new HashMap<>();
-                    ingredient.put("Name", j.getName());
-                    ingredient.put("Description", ((IngredientItem) j).getDescription());
-                    ingredient.put("Amount", ((IngredientItem) j).getAmount());
-                    ingredient.put("Unit", ((IngredientItem) j).getUnit());
-                    ingredient.put("Category", ((IngredientItem) j).getCategory());
+                    Map<String, Object> ingredient = IngredientDL.getIngredientMap((IngredientItem) j);
 
                     DocumentReference ingredientStorage = daysStorage
                             .collection("Ingredients")
@@ -316,8 +289,8 @@ public class MealPlanDL extends FireBaseDL {
         }
     }
 
-    /** Deletes data from Firestore for a particular passed in Recipe item - by doing so the recipe document is deleted from Firestore
-     *  @param item - Recipe item to be deleted from Firestore
+    /** Deletes data from Firestore for a particular passed in MealPlan item
+     *  @param item -MealPlan item to be deleted from Firestore
      * */
     public void firebaseDelete(MealPlan item){
         //Referencing wanted document from correct location in Firestore database
@@ -330,6 +303,10 @@ public class MealPlanDL extends FireBaseDL {
     }
 
 
+    /** Deletes data from Firestore for a particular passed in MealPlan item
+     *  @param mealPlanItem - MealPlan item with item to delete
+     *  @param item - Ingredient or Recipe item to delete
+     * */
     public void deleteItem(MealPlan mealPlanItem, Item item, GregorianCalendar date) {
         String coll = "Ingredients";
         if (item instanceof RecipeItem)
