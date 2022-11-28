@@ -132,7 +132,6 @@ public class RecipeDL extends FireBaseDL {
      * */
     public void firebaseAddEdit(RecipeItem item) {
         Map<String, Object> recipe = GetRecipeHashMap(item);
-
         //Storing data in Hashmap to correct location in Firebase using uniqueKey as document reference
         DocumentReference recipeStorage = fstore.collection("Users")
                 .document(auth.getCurrentUser().getUid())

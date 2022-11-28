@@ -13,6 +13,8 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.cmput301f22t13.R;
 import com.example.cmput301f22t13.databinding.FragmentMealPlanEditBinding;
+import com.example.cmput301f22t13.datalayer.FireBaseDL;
+import com.example.cmput301f22t13.datalayer.MealPlanDL;
 import com.example.cmput301f22t13.domainlayer.item.Item;
 import com.example.cmput301f22t13.domainlayer.item.MealPlan;
 
@@ -165,6 +167,13 @@ public class MealPlanEditFragment extends Fragment {
                 bundle.putSerializable(MealPlanAddRecipeFragment.ARG_ITEM_LIST, mealPlanItem.getItemsForDay(selectedDate));
                 NavHostFragment.findNavController(MealPlanEditFragment.this)
                         .navigate(R.id.action_mealPlanEditFragment_to_mealPlanAddRecipeFragment, bundle);
+            }
+        });
+
+        binding.doneMealplanEditButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                MealPlanDL.getInstance().firebaseAddEdit(mealPlanItem);
             }
         });
 
