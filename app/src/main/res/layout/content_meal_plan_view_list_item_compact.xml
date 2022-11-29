@@ -6,7 +6,7 @@
     android:paddingLeft="5dp"
     android:paddingTop="5dp"
     android:text="Butter Chicken - 3 serv"
-    android:textColor="@color/black"
-    android:textSize="16sp">
+    android:textColor="@color/light_grey"
+    android:textSize="20sp">
 
 </TextView>
