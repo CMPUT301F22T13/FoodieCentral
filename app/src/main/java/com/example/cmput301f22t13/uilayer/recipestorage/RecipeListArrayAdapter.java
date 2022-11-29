@@ -64,7 +64,9 @@ public class RecipeListArrayAdapter extends ArrayAdapter<RecipeItem> {
 
         RecipeItem item = recipes.get(position);
         TextView recipeName = view.findViewById(R.id.recipe_name_for_view);
+        TextView recipeCategory = view.findViewById(R.id.recipe_category_textview);
         recipeName.setText(item.getTitle());
+        recipeCategory.setText(item.getCategory());
 
         ImageView recipeImage = view.findViewById(R.id.recipe_image);
 

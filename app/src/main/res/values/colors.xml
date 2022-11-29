@@ -18,4 +18,5 @@
     <color name="listcolor2">#FFFFFFFF</color>
     <color name="listcolor2_selected">#8A8A8A</color>
     <color name="listcolor3">#FFFFFFFF</color>
+    <color name="header_color">#FF000000</color>
 </resources>

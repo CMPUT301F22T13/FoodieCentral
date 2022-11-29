@@ -47,7 +47,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginBottom="16dp"
         android:clickable="true"
-        android:src="@android:drawable/ic_menu_sort_alphabetically"
+        android:src="@android:drawable/ic_menu_sort_by_size"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:borderWidth="0dp"/>

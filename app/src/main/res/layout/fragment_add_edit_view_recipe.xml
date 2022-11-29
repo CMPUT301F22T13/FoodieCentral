@@ -149,7 +149,7 @@
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/add_ingredient_to_recipe"
-            style="@style/RecipeButtons"
+            style="@style/FabButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:clickable="true"

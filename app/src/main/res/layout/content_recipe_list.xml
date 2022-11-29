@@ -3,38 +3,44 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/recipe_item_background_shiv"
-    android:padding="5dp">
+    android:layout_marginLeft="0dp"
+    android:layout_marginTop="0dp"
+    android:layout_marginRight="0dp"
+    android:background="@drawable/ingredient_list_item_background"
+    android:elevation="20dp"
+    android:orientation="horizontal">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="59dp"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
-        android:layout_weight="1"
-        android:orientation="horizontal"
-        android:paddingRight="5dp">
+        android:layout_weight="0.5"
+        android:orientation="vertical"
+        android:padding="5dp">
 
         <TextView
             android:id="@+id/recipe_name_for_view"
-            style="@style/RecipeStorageListItem"
-            android:layout_width="130dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center|center_horizontal|center_vertical"
-            android:textAlignment="gravity"
-            android:textSize="25dp" />
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="name"
+            android:textColor="@color/dark_grey"
+            android:textSize="24sp"
+            android:textStyle="bold"  />
 
-        <ImageView
-            android:id="@+id/recipe_image"
-            android:layout_width="5dp"
-            android:layout_height="70dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginBottom="10dp"
-            android:layout_weight="1"
-            android:adjustViewBounds="false"
-            android:foregroundGravity="center"
-            android:scaleType="fitXY"
-            android:src="@drawable/noimage" />
+        <TextView
+            android:id="@+id/recipe_category_textview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="category"
+            android:textColor="@color/light_grey"
+            android:textSize="20sp" />
     </LinearLayout>
+
+    <ImageView
+        android:id="@+id/recipe_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:scaleType="centerCrop" />
 
 </LinearLayout>
