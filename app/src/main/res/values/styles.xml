@@ -26,7 +26,7 @@
     </style>
 
     <style name="RecipeButtons" parent="Widget.MaterialComponents.FloatingActionButton">
-        <item name="android:backgroundTint">@color/storagebackground</item>
+        <item name="android:backgroundTint">@color/purple_500</item>
         <item name="tint">@color/white</item>
     </style>
 
@@ -41,7 +41,7 @@
     </style>
 
     <style name="FabButton" parent="Widget.MaterialComponents.FloatingActionButton">
-        <item name="android:backgroundTint">@color/storagebackground</item>
+        <item name="android:backgroundTint">@color/purple_500</item>
         <item name="tint">@color/white</item>
     </style>
 
