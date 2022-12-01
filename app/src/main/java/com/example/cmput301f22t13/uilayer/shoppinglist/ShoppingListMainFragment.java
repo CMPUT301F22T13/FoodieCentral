@@ -93,6 +93,8 @@ public class ShoppingListMainFragment extends Fragment {
                         }
 
                         IngredientDL.getInstance().firebaseAddEdit(ingredientToAdd);
+                        countedIngredients.remove(i);
+                        countedIngredientListAdapter.notifyDataSetChanged();
                         binding.purchasedIngredientButton.setVisibility(View.GONE);
                     }
                 });
