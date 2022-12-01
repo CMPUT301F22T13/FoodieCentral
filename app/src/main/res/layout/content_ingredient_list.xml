@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginLeft="0dp"
+    android:layout_marginTop="0dp"
+    android:layout_marginRight="0dp"
     android:background="@drawable/ingredient_list_item_background"
-    android:orientation="horizontal"
-    android:padding="5dp">
+    android:elevation="20dp"
+    android:orientation="horizontal">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -13,22 +17,23 @@
         android:layout_marginLeft="10dp"
         android:layout_weight="0.5"
         android:orientation="vertical"
-        android:paddingRight="20dp">
+        android:padding="5dp">
 
         <TextView
             android:id="@+id/ingredient_name_textview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="name"
-            android:textColor="@color/black"
-            android:textSize="24sp" />
+            android:textColor="@color/dark_grey"
+            android:textSize="24sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/ingredient_description_textview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="description"
-            android:textColor="@color/black"
+            android:textColor="@color/light_grey"
             android:textSize="20sp" />
     </LinearLayout>
 
@@ -37,6 +42,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:scaleType="fitXY" />
+        android:scaleType="centerCrop" />
 
 </LinearLayout>
