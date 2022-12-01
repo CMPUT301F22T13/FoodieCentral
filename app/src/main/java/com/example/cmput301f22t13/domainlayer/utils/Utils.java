@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Locale;
 import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicLong;
@@ -61,6 +62,11 @@ public class Utils {
         ArrayList<CountedIngredient> countedIngredients = new ArrayList<>();
 
         ArrayList<MealPlan> mealPlans = MealPlanDL.getInstance().getStorage();
+
+        if (mealPlans.size() == 0) {
+            return countedIngredients;
+        }
+
         MealPlan mealPlan = mealPlans.get(0);
         GregorianCalendar earliestStartDate = mealPlans.get(0).getStartDate();
         for (MealPlan mealPlanItem : mealPlans) {
@@ -118,6 +124,14 @@ public class Utils {
                 countedIngredient.setName(ingredientName);
                 countedIngredient.setCount(mealPlanIngredients.get(ingredientName));
                 countedIngredients.add(countedIngredient);
+            }
+        }
+
+        Iterator<CountedIngredient> itr = countedIngredients.iterator();
+        while (itr.hasNext()) {
+            CountedIngredient ingredient = itr.next();
+            if (ingredient.getCount() <= 0) {
+                itr.remove();
             }
         }
 

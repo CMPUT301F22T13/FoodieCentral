@@ -67,17 +67,17 @@ public class ShoppingListMainFragment extends Fragment {
                 binding.purchasedIngredientButton.setVisibility(View.VISIBLE);
                 CountedIngredient countedIngredient = (CountedIngredient) adapterView.getItemAtPosition(i);
 
-                IngredientItem ingredientItem = new IngredientItem();
-                ingredientItem.setName(countedIngredient.getName());
-                ingredientItem.setAmount(countedIngredient.getCount());
-                ingredientItem.setHashId(countedIngredient.getHashId());
+                IngredientItem ingredientToAdd = new IngredientItem();
+                ingredientToAdd.setName(countedIngredient.getName());
+                ingredientToAdd.setAmount(countedIngredient.getCount());
+                ingredientToAdd.setHashId(countedIngredient.getHashId());
                 binding.purchasedIngredientButton.setText(Integer.toString(i));
 
                 String buttonText;
-                if (ingredientItem.getAmount() == 1) {
-                    buttonText = "Add " + ingredientItem.getAmount() + " " + ingredientItem.getName() + " to storage";
+                if (ingredientToAdd.getAmount() == 1) {
+                    buttonText = "Add " + ingredientToAdd.getAmount() + " " + ingredientToAdd.getName() + " to storage";
                 } else {
-                    buttonText = "Add " + ingredientItem.getAmount() + " " + ingredientItem.getName() + "s to storage";
+                    buttonText = "Add " + ingredientToAdd.getAmount() + " " + ingredientToAdd.getName() + "s to storage";
                 }
                 binding.purchasedIngredientButton.setText(buttonText);
 
@@ -85,7 +85,14 @@ public class ShoppingListMainFragment extends Fragment {
                     @RequiresApi(api = Build.VERSION_CODES.O)
                     @Override
                     public void onClick(View view) {
-                        IngredientDL.getInstance().firebaseAddEdit(ingredientItem);
+                        ArrayList<IngredientItem> storedIngredientsDL = IngredientDL.getInstance().getStorage();
+                        for (IngredientItem item : storedIngredientsDL) {
+                            if (item.getHashId() == ingredientToAdd.getHashId()) {
+                                ingredientToAdd.setAmount(ingredientToAdd.getAmount() + item.getAmount());
+                            }
+                        }
+
+                        IngredientDL.getInstance().firebaseAddEdit(ingredientToAdd);
                         binding.purchasedIngredientButton.setVisibility(View.GONE);
                     }
                 });
